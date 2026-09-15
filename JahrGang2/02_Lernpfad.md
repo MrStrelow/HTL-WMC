@@ -1,62 +1,52 @@
-# Lernpfad durch das Semester
+# Lernpfad durch das Schuljahr
 
 1) **Bis zu den Herbstferien**
 
-    *  Wiederholung **(L01 - 3 Wochen)** mit ...
+    *  Inhalte / Vorstellrunde und HTML Grundlagen **(L01 - 3 Wochen)** mit ...
         * **zwei** ``Aufgaben`` und laufend kurze Zettelübungen
-        * Alt bekanntes neu betrachtet 
-            * alt: Variablen, Werte, Referenzen, Arrays, Kontrollstrukturen, Funktionen/Methoden, Type Casting, ...
-            * neu: Formattierung, Consolen Tricks, Farben, Emojis 🤷🏻‍♂️, 2D-Arrays, Enum
+        * Fokus auf: Inhalte / Vorstellrunde und HTML Grundlagen
 
-    *  String Methoden **(L02 - 1 Woche)** mit...
-        * **einer** ``Aufgabe`` laufend kurze Zettelübungen 
-        * Character encoding (Surrogate Pairs), Kontroll-Sequenzen \u001b[, Value Tuples, komplexere Stringmanipulationen, ... 
+    *  Textauszeichnungen **(L02 - 3 Wochen)** mit...
+        * **einer** ``Aufgabe`` und laufend kurze Zettelübungen 
+        * Fokus auf: Textauszeichnungen
 
-    *  Mathematische Formeln, TryParse und File i/o **(L03 - 1 Woche)** mit... 
-        * **einer** ``Aufgabe`` laufend kurze Zettelübungen 
-        * Summennotation übersetzten, Muster in strings erkennen, Distanz zwischen 2 Punkten am Schachbrett, reader und writer ... 
-
-    *  **1. Test** über L01-03
+    *  Hyperlinks **(L03 - 2 Wochen)** mit...
+        * **einer** ``Aufgabe`` und laufend kurze Zettelübungen 
+        * Fokus auf: Hyperlinks
 
 2) **Bis zu den Weihnachtsferien**
 
-     *  Objekte und Klassen **(L04 - 5 Wochen)** mit ...
+    *  Bilder und Tabellen **(L04 - 4 Wochen)** mit ...
         * **zwei** ``Aufgaben`` und laufend kurze Zettelübungen
-        * struct vs. objekt, Klassen, Objekte, Konstruktoren, hat-beziehung (Assoziation für Delegation), Mitglieder: methoden, felder und Properties, in eigenen Klassen kapseln
+        * Fokus auf: Bilder und Tabellen
 
-    *  Zufallszahlen **(L05 - 1 Woche)** mit...
-        * **einer** ``Aufgabe`` laufend kurze Zettelübungen 
-        * lineare Kongruenzgeneratoren, Zufallszahlen erzeugen und anwenden.
+    *  HTML5 **(L05 - 1 Woche)** mit...
+        * **einer** ``Aufgabe`` und laufend kurze Zettelübungen 
+        * Fokus auf: HTML5
 
-    *  **2. Test** über L04-06
+    *  **1. Projekt:** Abgabe am Ende der Semesterferien (inklusive dedizierter Projekt-Arbeitszeiten vor Weihnachten und im Jänner).
+
+    *  **1. Test** am 22.12. über L01-L05.
 
 3) **Bis zu den Osterferien**
-    *  Listen und Dictionaries **(L06- 2 Woche)** mit...
-        * **einer** ``Aufgabe`` laufend kurze Zettelübungen 
-        * Wann verwende ich was? Anwenden der Listen und dictionaries mit den bestehenden Methoden, foreach vs. for
 
-     *  Rekursion und eigene Linked List/Ring Buffer **(L07 - 3 Wochen)** mit ...
-        * **zwei** ``Aufgaben`` und laufend kurze Zettelübungen
-        * recursion (head/tail recursion) 
-        * Datenstrukturen selbst implementieren rekursiv und iterativ
+    *  CSS Grundlagen, Selektoren und Attribute **(L06 - 4 Wochen)** mit...
+        * **zwei** ``Aufgaben`` und laufend kurze Zettelübungen 
+        * Fokus auf: CSS Grundlagen sowie CSS Selektoren und Attribute
 
-    * Test driven development **(L08 - 2 Wochen)** mit ...
-        * **einer** ``Aufgaben`` und laufend kurze Zettelübungen
-        * recursion (head/tail recursion) 
-
-    * Puffer
-
-    *  **3. Test** über L07-08
+    *  CSS Übungen **(L07 - 2 Wochen)** mit ...
+        * **einer** ``Aufgabe`` und laufend kurze Zettelübungen
+        * Fokus auf: CSS Übungen
 
 4) **Bis zu den Sommerferien**
 
-     *  Objektorientierung **(L09 - 5 Wochen)** mit ...
-        * **drei** ``Aufgaben`` 🐹 und laufend kurze Zettelübungen
-        * polymorphismus (dynamischer)
-        * base, IComparable vs. IComparer, Sortieren, Vererbung mit Interfaces und abstract classes, S.O.L.I.D
+    *  CSS Layer und CSS Layout **(L08 - 4 Wochen)** mit ...
+        * **drei** ``Aufgaben`` und laufend kurze Zettelübungen
+        * Fokus auf: CSS Layer und CSS Layout
 
-    *  neuere Sprachkonzepte **(L10 - 3 Wochen aber Puffer🤷🏻‍♂️)**
-        * **eine** ``Aufgabe`` und laufend kurze Zettelübungen
-        * Expression vs. Statement, demorgan DESTROYS nested if, Indexer, extension Methods, Datetime berechnungen.
+    *  **2. Projekt:** Abgabe am Ende des Schuljahres (Ende Mai) (inklusive dedizierter Projekt-Arbeitszeiten im Mai).
 
-    *  **4. Test** über L09-10
+    *  **2. Test** am 25.05. über L06-L08.
+
+    *  Jahresabschluss und Puffer **(L09)**
+        * Fokus auf: Päd. Reserve, Projektwoche und Jahresrückblick
