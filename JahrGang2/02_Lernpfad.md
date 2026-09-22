@@ -2,7 +2,7 @@
 
 1) **Bis zu den Herbstferien**
 
-    *  Inhalte / Vorstellrunde und HTML Grundlagen **(L01 - 3 Wochen)** mit ...
+    *  Markdown und HTML Grundlagen **(L01 - 3 Wochen)** mit ...
         * **zwei** ``Aufgaben`` und laufend kurze Zettelübungen
         * Fokus auf: Inhalte / Vorstellrunde und HTML Grundlagen
 

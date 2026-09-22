@@ -1,0 +1,35 @@
+/* Standard-Ränder vom Browser entfernen */
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+/* --- EBENE 1: VIDEO (Ganz hinten) --- */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;  /* Nimmt 100% der Bildschirmbreite ein */
+  height: 100vh; /* Nimmt 100% der Bildschirmhöhe ein */
+  
+  /* Der wichtigste Befehl: Füllt den Platz aus, ohne das Video zu verzerren */
+  object-fit: cover; 
+  
+  z-index: -2; /* Schiebt das Video in den Hintergrund */
+}
+
+/* --- EBENE 3: TEXT (Ganz vorne) --- */
+.content {
+  position: relative; 
+  z-index: 1; /* Holt den Text nach ganz vorne */
+  color: white; /* Macht den Text weiß */
+  
+  /* Optional: Zentriert den Text genau in der Mitte des Bildschirms */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  font-family: sans-serif;
+}
