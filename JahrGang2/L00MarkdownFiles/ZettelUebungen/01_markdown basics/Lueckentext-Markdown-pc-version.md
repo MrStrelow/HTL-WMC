@@ -8,7 +8,6 @@ _ _ _ _ _ _ _ _ _ _ _ _
 **Übung 1: Lückentext – Mitschrift formatieren**
 Trage die korrekten Markdown-Zeichen in die Lücken (`___`) ein, damit die in den Klammern beschriebene Formatierung angewandt wird. 
 
-```markdown
 ___ HTML Grundlagen  (Hauptüberschrift / H1)
 
 ___ 1. Was ist HTML? (Unterkapitel / H2)
@@ -39,12 +38,10 @@ _____[HTML Logo](logo.png) (Bild einbinden)
 
 Verweis auf Aufgaben:
 Siehe dazu auch unsere Aufgabe in L01HTMLGrundlagen -> Aufgabe-Fennek-Angabe.md Tags-lesen: ___Angabe.md___ (Link auf die lokale Datei 2d-Angabe.md - Tipp: ../ lässt einen einen Ordner hoch gehen.)
-```
 
 **Übung 2: Code ergänzen (HTML & LaTeX)**
 Vervollständige den folgenden Code, indem du die fehlenden Zeichen in die Lücken (`___`) einträgst, um rohes HTML und mathematische Formeln in Markdown zu integrieren.
 
-```markdown
 // 1. Manchmal reicht Markdown nicht aus. Wenn wir einen Text exakt in roter Farbe wollen, 
 // nutzen wir direkt HTML-Tags im Markdown-Dokument:
 ___span style="color: red;"___Achtung!___/span___
@@ -56,4 +53,3 @@ Die Formel für Energie ist ___E=mc^2___.
 ______
 x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
 ______
-```

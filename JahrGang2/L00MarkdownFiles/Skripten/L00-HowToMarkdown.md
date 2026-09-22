@@ -1,4 +1,7 @@
 #### Welche Begriffe werden hier verwendet?
+
+[//]: # "was sind relative lokale pfade und was sind die # im pfad?"
+
 [`Markdown`](../../../05_Glossar.md#markdown), [`LaTeX`](../../../05_Glossar.md#latex), [`Inline`](../../../05_Glossar.md#inline), [`Code-Block`](../../../05_Glossar.md#code-block), [`HTML`](../../../05_Glossar.md#html), [`Parser`](../../../05_Glossar.md#parser), [`Renderer`](../../../05_Glossar.md#renderer), [`Linter`](../../../05_Glossar.md#linter), [`WYSIWYG`](../../../05_Glossar.md#wysiwyg), [`Auszeichnungssprache`](../../../05_Glossar.md#auszeichnungssprache), [`annotieren`](../../../05_Glossar.md#annotieren), [`Datenstruktur`](../../../05_Glossar.md#datenstruktur), [`Grammatik`](../../../05_Glossar.md#grammatik), [`Compiler`](../../../05_Glossar.md#compiler), [`Syntax`](../../../05_Glossar.md#syntax), [`Fehler`](../../../05_Glossar.md#fehler), [`Parsen`](../../../05_Glossar.md#parsen), [`kompilieren`](../../../05_Glossar.md#kompilieren), [`ausführen`](../../../05_Glossar.md#ausführen), [`Semantik`](../../../05_Glossar.md#semantik), [`Warnings`](../../../05_Glossar.md#warnings), [`css`](../../../05_Glossar.md#css), [`markdown-code`](../../../05_Glossar.md#markdown-code), [`Schema`](../../../05_Glossar.md#schema), [`statische Analyse`](../../../05_Glossar.md#statische-analyse), [`Bugs`](../../../05_Glossar.md#bugs), [`Punkte`](../../../05_Glossar.md#punkte), [`Darstellung`](../../../05_Glossar.md#darstellung), [`Absätze`](../../../05_Glossar.md#absatz), [`Paragraph`](../../../05_Glossar.md#paragraph), [`Blockzitate`](../../../05_Glossar.md#blockzitate), [`Tabellen`](../../../05_Glossar.md#tabellen).
 
 ## Was sind Auszeichnungssprachen?
@@ -118,7 +121,9 @@ for (int i = 0; i < n - 1; i++)
 
 Und nun das Dokument nach dem `rendern`.
 
+[//]: # "ist das ein kommentar?"
 ---
+[//]: # "was sind die drei Striche?"
 
 # PROJEKT: C# Sortieren
 

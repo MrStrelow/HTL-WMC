@@ -8,8 +8,8 @@ Betrachte nun das ausgeteilte Skript in deinem Editor mit aktiviertem Linter (VS
 
 ### 🔍 Aufgabe 2: Neue Konzepte entdecken
 Durchsuche den rohen Markdown-Code des Skriptums auf Konzepte und Sonderzeichen, welche wir im Unterricht **noch nicht** explizit besprochen haben. 
-* Notiere dir mindestens zwei dieser "unbekannten" Markdown-Befehle.
-* Finde über eine kurze Internetrecherche (oder durch Ausprobieren im Renderer) heraus, was diese Befehle bewirken.
+* Notiere dir "unbekannte" Markdown-Befehle. Es sind hinweise im Skriptum versteckt.
+* Beschreibe in einem eigenen markdown file die neu gefunden konzepte. Recherchiere dazu im Internet (oder durch Ausprobieren im Renderer) heraus, was diese Befehle bewirken.
 
 ### 📐 Aufgabe 3: Einen echten Wikipedia-Eintrag in LaTeX nachbauen
 Nutze einen Online-LaTeX-Editor (z. B. *Overleaf* oder *latexbase.com*). Deine Aufgabe ist es, einen realen Wikipedia-Artikel in seiner Struktur nachzubauen. 
