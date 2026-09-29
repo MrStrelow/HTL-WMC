@@ -1,5 +1,5 @@
 >**Wir merken uns von [Client, Server und HTML-Überblick](L01.1ClientServerHTML-Ueberblick.md):**
->1) Der [``Client``](../../../05_Glossar.md#client) (z.B. dein Webbrowser) stellt Anfragen, und der [``Server``](../../../05_Glossar.md#server) liefert die entsprechenden Antworten.
+<!-- >1) Der [``Client``](../../../05_Glossar.md#client) (z.B. dein Webbrowser) stellt Anfragen, und der [``Server``](../../../05_Glossar.md#server) liefert die entsprechenden Antworten.
 >2) Die Kommunikation zwischen [``Client``](../../../05_Glossar.md#client) und [``Server``](../../../05_Glossar.md#server) erfolgt über das Protokoll [``HTTP``](../../../05_Glossar.md#http) (Hypertext Transfer Protocol).
 >3) Eine [``Statische Website``](../../../05_Glossar.md#statische-website) wird vom [``Server``](../../../05_Glossar.md#server) exakt so ausgeliefert, wie sie als unveränderliche HTML/CSS-Datei auf der Festplatte liegt (schnell und ideal für Infoseiten).
 >4) Eine [``Dynamische Website``](../../../05_Glossar.md#dynamische-website) wird vom [``Server``](../../../05_Glossar.md#server) auf Anfrage "on the fly" zusammengebaut (z.B. für Blogs oder Online-Shops).
@@ -21,4 +21,4 @@
 >20) Alles, was im Browserfenster sichtbar sein soll, muss zwingend im ``<body>`` stehen. Der ``<head>`` ist nur für unsichtbare Metadaten und Konfigurationen da.
 >21) **[``Semantische Tags``](../../../05_Glossar.md#semantische-tags)** geben dem Browser und Suchmaschinen die exakte Bedeutung des Inhalts vor. Beispiele: ``<h1>`` bis ``<h6>``, ``<p>``, ``<strong>``, ``<em>``, ``<a>``, ``<ul>``, ``<ol>``, ``<li>``, ``<header>``, ``<nav>``, ``<main>``, ``<article>``, ``<aside>``, ``<footer>``.
 >22) **[``Non-Closing Tags``](../../../05_Glossar.md#non-closing-tag)** (leere Elemente) stehen für sich allein, haben keinen Inhalt und kein End-Tag. Beispiele: ``<img>``, ``<br>``, ``<hr>``, ``<input>``, ``<meta>``, ``<link>``.
->23) **[``Nicht-semantische Tags``](../../../05_Glossar.md#nicht-semantische-tags)** verraten nichts über ihren Inhalt und dienen lediglich als neutrale Container für das spätere CSS-Design. Beispiele: ``<div>`` (für Block-Elemente) und ``<span>`` (für Textabschnitte).
+>23) **[``Nicht-semantische Tags``](../../../05_Glossar.md#nicht-semantische-tags)** verraten nichts über ihren Inhalt und dienen lediglich als neutrale Container für das spätere CSS-Design. Beispiele: ``<div>`` (für Block-Elemente) und ``<span>`` (für Textabschnitte). -->

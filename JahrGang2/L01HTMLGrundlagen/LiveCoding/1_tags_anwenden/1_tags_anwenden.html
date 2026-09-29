@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Das finale Dokument</title>
+</head>
+<body>
+    <!-- Ein div umschließt den gesamten sichtbaren Bereich für ein zentriertes Layout -->
+    <div id="page-wrapper">
+        <header>
+            <h1>Willkommen auf meinem Blog</h1>
+        </header>
+
+        <main>
+            <section>
+                <h2>Mein erster Beitrag</h2>
+                
+                <!-- Ein Bild (Inline, selbstschließend) mit zwingendem alt-Attribut -->
+                <img src="logo.png" alt="Das Logo der Schule">
+                
+                <!-- Ein Absatz (Block), der nur Inline-Elemente enthält -->
+                <p>Das ist ein Absatz. Er enthält <strong>sehr wichtigen Text</strong>, ein <time datetime="2026-09-29">Datum</time> und <span class="highlight-red">farblich markierten Text</span> ohne tiefere Bedeutung.</p>
+                
+                <p>Dieser Satz wird hier <br> gewaltsam umgebrochen.</p>
+
+                <!-- Eine Liste (Block), die nur Listenpunkte (Block) als Kinder hat -->
+                <ul>
+                    <li>Erster wichtiger Punkt mit einem <a href="[https://htl.at](https://htl.at)">Link zur HTL</a></li>
+                    <li>Zweiter wichtiger Punkt</li>
+                </ul>
+            </section>
+            
+            <!-- Eine horizontale Trennlinie (Block, selbstschließend) -->
+            <hr>
+            
+            <!-- Eine div-Kiste, die später als Karte (Card) designt wird -->
+            <div class="info-card">
+                <p>Zusätzliche Information ohne eigene Semantik.</p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
