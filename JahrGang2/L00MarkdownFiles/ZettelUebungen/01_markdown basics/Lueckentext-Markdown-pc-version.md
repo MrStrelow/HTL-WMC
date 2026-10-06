@@ -42,14 +42,13 @@ Siehe dazu auch unsere Aufgabe in L01HTMLGrundlagen -> Aufgabe-Fennek-Angabe.md 
 **Übung 2: Code ergänzen (HTML & LaTeX)**
 Vervollständige den folgenden Code, indem du die fehlenden Zeichen in die Lücken (`___`) einträgst, um rohes HTML und mathematische Formeln in Markdown zu integrieren.
 
-// 1. Manchmal reicht Markdown nicht aus. Wenn wir einen Text exakt in roter Farbe wollen, 
-// nutzen wir direkt HTML-Tags im Markdown-Dokument:
+1. Manchmal reicht Markdown nicht aus. Wenn wir einen Text exakt in roter Farbe wollen, nutzen wir direkt HTML-Tags im Markdown-Dokument:
 ___span style="color: red;"___Achtung!___/span___
 
-// 2. Eine kurze mathematische Formel direkt im fließenden Text (Inline):
+2. Eine kurze mathematische Formel direkt im fließenden Text (Inline):
 Die Formel für Energie ist ___E=mc^2___.
 
-// 3. Ein großer, zentrierter Code-Block für eine Formel (LaTeX):
+3. Ein großer, zentrierter Code-Block für eine Formel (LaTeX):
 ______
 x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
 ______

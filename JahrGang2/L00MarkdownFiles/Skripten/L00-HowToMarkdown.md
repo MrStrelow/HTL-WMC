@@ -39,7 +39,7 @@ Wir haben nun mehrere *Begriffe* die sehr ähnlich klingen. Unterschiden wir die
 > **Wir merken uns:**
 > 3. Ein `Compiler` übersetzt Code und ist für die ``Syntax`` zuständig.
 > 4. Ein `Schema` definiert den strengen Bauplan und die ``Semantik`` von Text *"Das ist ein gültiges Datum"*.
-> 5. Ein `Linter` überprüft Text auf *schwache* `semantische` Regeln. Er erzwingt Konsistenz und macht auf potentielle `Bugs` aufmerksam.
+> 3. Ein `Linter` überprüft Text auf *schwache* `semantische` Regeln, *Best Practices* und *Formatierung*. Dadurch werden wir auf potentielle [`Bugs`](../../../05_Glossar.md#bugs) aufmerksam.
 > 6. Der `Parser` zerlegt Text in eine ``Datenstruktur``, und der `Renderer` macht erzeugt daraus eine Darstellung dieser ``Datenstruktur``.
 
 ### Warum sollte ich Markdown verwenden? 
