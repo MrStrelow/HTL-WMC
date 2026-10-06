@@ -1,6 +1,6 @@
 # Zettelübung: Markdown und HTML5-tags
 
-## Aufgabe 5: Das unsichtbare HTML-Grundgerüst
+## Aufgabe 1
 Schreibe einen HTML Code der den Titel der Website setzt und eine `Überschrift` `Willkommen!` sowie einen `Paragraphen` der einen *sinnlosen* Text beinhaltet soll.
 Verwende dazu [folgenden Link](https://www.lipsum.com/feed/html).
 
@@ -19,7 +19,7 @@ Vergiss die **unsichtbaren Tags** nicht.
 ```
 
 
-## Aufgabe 6: Visuell okay, semantisch eine Katastrophe (Neu)
+## Aufgabe 2
 Der folgende HTML-Code sieht im Browser scheinbar "normal" aus. Allerdings verletzt er grob mehrere Schachtelungsregeln. 
 
 Analysiere den Code und benenne **drei Fehler**. Erkläre jeweils kurz, warum das in HTML ein schlechter Stil ist.
@@ -49,7 +49,7 @@ Analysiere den Code und benenne **drei Fehler**. Erkläre jeweils kurz, warum da
 3. ___
 
 
-## Aufgabe 3: Lückentext 
+## Aufgabe 3
 In der folgenden Tabelle werden Markdown-Befehle ihren direkten HTML5-Äquivalenten gegenübergestellt. 
 Fülle die markierten Lücken (`___`) in der Tabelle aus. Überlege bei der HTML-Umsetzung, ob der jeweilige Tag **semantisch** ist (also dem Browser/Screenreader eine inhaltliche *Bedeutung* oder *Struktur* vermittelt) oder ob er rein visuell wirkt, und begründe deine Entscheidung kurz in der letzten Spalte.
 
@@ -66,7 +66,7 @@ Fülle die markierten Lücken (`___`) in der Tabelle aus. Überlege bei der HTML
 | `___` | `> Zitattext` | `<blockquote>`| `___` | `___` |
 | Mathematische Formel | `$$a^2 + b^2 = c^2$$` | `___` | `___` | `___` |
 
-### Aufgabe 1.1: Recherche-Falle bei der letzten Zeile
+### Aufgabe 3.1
 Bei der Suche nach dem HTML5-Tag für die "Mathematische Formel" in der letzten Tabellenzeile wirst du auf eine Besonderheit stoßen.
 Recherchiere im Internet: Wie werden Formeln im nativen HTML5-Standard (ohne Markdown) abgebildet? Beschreibe in 2-3 eigenen Sätzen, wie dieser HTML-Code aussieht, warum ihn fast niemand per Hand schreibt und wie Webentwickler das Problem in der Realität lösen.
 
@@ -76,7 +76,7 @@ ___
 ___
 
 
-## Aufgabe 4: Markdown-Tabelle vervollständigen
+## Aufgabe 4
 Kopiere den unten stehenden rohen Markdown-Code in deinen Editor. Deine Aufgabe ist es, die Tabelle korrekt zu formatieren und alle Lücken (`___`) logisch auszufüllen.
 
 **Regeln für das Ausfüllen:**
@@ -97,9 +97,9 @@ Kopiere den unten stehenden rohen Markdown-Code in deinen Editor. Deine Aufgabe 
 | ❌ Nein | ❌ Nein | ❌ Nein | `___` |
 
 
-**Aufgabe 5: Erkläre das "Warum"**
+## Aufgabe 5
 Wähle eine der drei Zeilen, in die du `Unmöglich` eingetragen hast. Erkläre in einem kurzen Absatz (unterhalb der Tabelle), **warum** diese Kombination aus Sichtweise des Renderers (Browsers) keinen Sinn ergibt. Nutze für deine Erklärung die Markdown-Funktion für *Blockzitate* (`>`).
 
 > ___
 > ___
->
+> ___
