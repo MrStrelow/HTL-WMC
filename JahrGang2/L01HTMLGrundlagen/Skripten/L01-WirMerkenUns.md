@@ -1,4 +1,13 @@
 >**Wir merken uns von [Client, Server und HTML-Überblick](L01.1ClientServerHTML-Ueberblick.md):**
+>8) [``HTML``](../../../05_Glossar.md#html) (Hypertext Markup Language) ist keine Programmiersprache, sondern eine ``Auszeichnungssprache``, die dem Browser mitteilt, wie ein Text inhaltlich strukturiert ist.
+>9) [``Tags``](../../../05_Glossar.md#tag) werden in spitzen Klammern geschrieben. Ein [``Start-Tag``](../../../05_Glossar.md#start-tag) (z.B. ``<p>``) eröffnet das Element.
+>10) Ein [``Closing Tag``](../../../05_Glossar.md#closing-tag) beendet ein Element und hat immer einen Schrägstrich (z.B. ``</p>``).
+>11) [``Non-Closing Tags``](../../../05_Glossar.md#non-closing-tag) stehen für sich allein und umschließen keinen Inhalt, weshalb sie kein End-Tag benötigen - leere Elemente wie ``<img>`` oder ``<br>``.
+>12) [``Attribute``](../../../05_Glossar.md#attribut) stehen immer im [``Start-Tag``](../../../05_Glossar.md#start-tag), bestehen aus einem Namen und einem Wert in Anführungszeichen und liefern Zusatzinformationen (z.B. ``href="ziel.html"``).
+>13) Jedes HTML-Dokument benötigt ein zwingendes Grundgerüst bestehend aus ``<!DOCTYPE html>``, ``<html>``, ``<head>`` und ``<body>``.
+>14) In modernem Webdesign trennen wir strikt zwischen Bedeutung ([``HTML``](../../../05_Glossar.md#html)) und Aussehen ([``CSS``](../../../05_Glossar.md#css)).
+>15) [``Semantisches HTML``](../../../05_Glossar.md#semantik) bedeutet, dass wir Tags verwenden, die beschreiben, *was* der Inhalt ist (z.B. ``<em>`` für inhaltliche Betonung), und nicht, *wie* er aussehen soll (z.B. ``<b>`` für fetten text).
+
 <!-- >1) Der [``Client``](../../../05_Glossar.md#client) (z.B. dein Webbrowser) stellt Anfragen, und der [``Server``](../../../05_Glossar.md#server) liefert die entsprechenden Antworten.
 >2) Die Kommunikation zwischen [``Client``](../../../05_Glossar.md#client) und [``Server``](../../../05_Glossar.md#server) erfolgt über das Protokoll [``HTTP``](../../../05_Glossar.md#http) (Hypertext Transfer Protocol).
 >3) Eine [``Statische Website``](../../../05_Glossar.md#statische-website) wird vom [``Server``](../../../05_Glossar.md#server) exakt so ausgeliefert, wie sie als unveränderliche HTML/CSS-Datei auf der Festplatte liegt (schnell und ideal für Infoseiten).
@@ -6,14 +15,6 @@
 >5) Eine [``Single Page Application (SPA)``](../../../05_Glossar.md#spa) lädt die Seite nicht neu; die Logik liegt im ``JavaScript`` des Browsers, der Inhalte dynamisch austauscht.
 >6) Eine [``Web-API``](../../../05_Glossar.md#web-api) liefert keine fertigen Webseiten, sondern reine Rohdaten, auf die eine SPA zugreifen kann.
 >7) [``RESTful``](../../../05_Glossar.md#restful) ist ein Architektur-Standard für Web-APIs, der vorschreibt, die HTTP-Methoden (GET, POST, PUT, DELETE) logisch für Datenbank-Aktionen zu nutzen.
->8) [``HTML``](../../../05_Glossar.md#html) (Hypertext Markup Language) ist keine Programmiersprache, sondern eine ``Auszeichnungssprache``, die dem Browser mitteilt, wie ein Text inhaltlich strukturiert ist.
->9) [``Tags``](../../../05_Glossar.md#tag) werden in spitzen Klammern geschrieben. Ein [``Start-Tag``](../../../05_Glossar.md#start-tag) (z.B. ``<p>``) eröffnet das Element.
->10) Ein [``Closing Tag``](../../../05_Glossar.md#closing-tag) beendet ein Element und hat immer einen Schrägstrich (z.B. ``</p>``).
->11) [``Non-Closing Tags``](../../../05_Glossar.md#non-closing-tag) (leere Elemente wie ``<img>`` oder ``<br>``) stehen für sich allein und umschließen keinen Inhalt, weshalb sie kein End-Tag benötigen.
->12) [``Attribute``](../../../05_Glossar.md#attribut) stehen immer im Start-Tag, bestehen aus einem Namen und einem Wert in Anführungszeichen und liefern Zusatzinformationen (z.B. ``href="ziel.html"``).
->13) Jedes HTML-Dokument benötigt ein zwingendes Grundgerüst bestehend aus ``<!DOCTYPE html>``, ``<html>``, ``<head>`` und ``<body>``.
->14) In modernem Webdesign trennen wir strikt zwischen Bedeutung ([``HTML``](../../../05_Glossar.md#html)) und Aussehen ([``CSS``](../../../05_Glossar.md#css)).
->15) [``Semantisches HTML``](../../../05_Glossar.md#semantik) bedeutet, dass wir Tags verwenden, die beschreiben, *was* der Inhalt ist (z.B. ``<em>`` für inhaltliche Betonung), und nicht, *wie* er aussehen soll.
 >16) Gute [``Semantik``](../../../05_Glossar.md#semantik) verbessert die Auffindbarkeit bei Suchmaschinen (``SEO``) und hilft Menschen, die auf Screenreader angewiesen sind (Barrierefreiheit).
 >17) Vermeide die "Div-Suppe" (zu viele bedeutungslose ``<div>``-Tags). Nutze stattdessen HTML5-Zonen-Tags wie ``<main>``, ``<article>``, ``<header>`` oder ``<nav>``, wo immer es möglich ist.
 >18) Der ``<main>``-Tag umschließt den einzigartigen Hauptinhalt der Webseite und sollte nur einmal pro Dokument vorkommen.
