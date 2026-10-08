@@ -1,13 +1,15 @@
 >**Wir merken uns von [HTML](L01.1-HTML.md.md):**
 >1. [``HTML``](../../../05_Glossar.md#html) (Hypertext Markup Language) ist keine Programmiersprache, sondern eine ``Auszeichnungssprache``, die dem Browser mitteilt wie Text *strukturiert* ist.
 >2. Wir trennen *Strutkur* ([``HTML``](../../../05_Glossar.md#html)) und *Design* ([``CSS``](../../../05_Glossar.md#css)) und setzen diese in zwei verschiedene *Sprachen* um.
->2. [``Tags``](../../../05_Glossar.md#tag) werden in spitzen Klammern ``<>`` geschrieben. 
->3. Ein [``Tag``](../../../05_Glossar.md#tag) *beginnt* mit einem [``Start-Tag``](../../../05_Glossar.md#start-tag) z.B. ``<p>`` und *endet* mit einem [``Closing Tag``](../../../05_Glossar.md#closing-tag). Der [``Closing Tag``](../../../05_Glossar.md#closing-tag) z.B. ``</p>`` besitzt einen Schrägstrich.
->4. [``Semantisches HTML``](../../../05_Glossar.md#semantik) bedeutet, dass [``Tags``](../../../05_Glossar.md#tag) beschreiben *was* der Inhalt ist, und nicht *wie* dieser aussehen soll. Ein Beispiel wäre ``<h1>`` hat eine konkrete *Bedeutung* - der ``annotierte`` Text ist eine Überschrift. Wenn ein Programm das Internet durchsucht, um Überschrifte nzu suchen (TODO: warum?)  dann können wir auf ``<h1>`` filtern. ABer ``<b>`` nicht. Der Text ist *fett* aber was heißt das? Wichtig? Stilistisch? Wenn wir ein Programm verwenden um das Internet zu durchsuchen, dann bekommen wir viel verschiedenes und können nichts damit anfangen. TODO reformulate.
+>3. [``Tags``](../../../05_Glossar.md#tag) werden in spitzen Klammern ``<>`` geschrieben. 
+>4. Ein [``Tag``](../../../05_Glossar.md#tag) *beginnt* mit einem [``Start-Tag``](../../../05_Glossar.md#start-tag) z.B. ``<p>`` und *endet* mit einem [``Closing Tag``](../../../05_Glossar.md#closing-tag). Der [``Closing Tag``](../../../05_Glossar.md#closing-tag) z.B. ``</p>`` besitzt einen Schrägstrich.
 >5. [``Attribute``](../../../05_Glossar.md#attribut) stehen immer im [``Start-Tag``](../../../05_Glossar.md#start-tag), bestehen aus einem *Namen* und einem *Wert* in Anführungszeichen und liefern Zusatzinformationen z.B. ``<a href="https://www.google.com/">``.
->6. Jedes HTML-Dokument benötigt ein zwingendes Grundgerüst bestehend aus ``<!DOCTYPE html>``, ``<html>``, ``<head>`` und ``<body>``.
->7. Der ``<body>`` beinhaltet die *Struktur*, ``<head>`` beinhaltet Informationen welche nicht für die *Struktur* relevant sind.
-> Block elemente vs inline elemente
+>6. [``Elemente``](../../../05_Glossar.md#html-element) sind [``Tags``](../../../05_Glossar.md#tag) und deren *Inhalt*.
+>7. [``Semantisches HTML``](../../../05_Glossar.md#semantik) bedeutet, dass [``Tags``](../../../05_Glossar.md#tag) beschreiben *was* der Inhalt ist, und nicht *wie* dieser aussehen soll. Ein Beispiel wäre ``<h1>`` hat eine konkrete *Bedeutung* - der ``annotierte`` Text ist eine Überschrift. Wenn ein Programm das Internet nach Überschriften durchsucht, dann können wir uns auf ``<h1>`` verlassen. Aber auf ``<b>`` nicht. Der Text ist *fett* aber was heißt das? Wichtig? Nur weil wir es besser lesen kännen? Wenn wir ein Programm verwenden um das Internet zu nach fetten Text durchsuchen, dann bekommen wir verschiedene Texte welche alle eine verschiedene Bedeutung haben.
+>8. Jedes HTML-Dokument benötigt ein *zwingendes Grundgerüst* bestehend aus ``<!DOCTYPE html>``, ``<html>``, ``<head>`` und ``<body>``. Wir nennen sie ``unsichtbare`` ``Tags``.
+>9. Der ``<body>`` beinhaltet die *Struktur*, ``<head>`` beinhaltet Informationen welche nicht für die *Struktur* relevant sind.
+>10. ``Block Elemente`` können wir mit anderen ``Elementen`` *schachteln*. Eine Ausnahme ist der Paragraph ``<p>``. Wir schreiben den ``Start-Tag`` und ``Closing-Tag`` *übereinander* in verschiedenen Zeilen.
+>11. ``Inline Elemente`` können wir **nicht** mit anderen ``Elementen`` *schachteln*. Wir schreiben den ``Start-Tag`` und ``Closing-Tag`` *nebeneinander* in der gleichen Zeile.
 
 <!-- 
 >4. [``Non-Closing Tags``](../../../05_Glossar.md#non-closing-tag) stehen für sich allein und umschließen keinen Inhalt, weshalb sie kein End-Tag benötigen - leere Elemente wie ``<img>`` oder ``<br>``.
