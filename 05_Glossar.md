@@ -93,3 +93,36 @@ Hinweise eines Compilers oder Linters. Sie bedeuten: "Dein Code funktioniert tec
 
 ### WYSIWYG
 Steht für "What You See Is What You Get". Ein Editor-Prinzip (wie in MS Word), bei dem der Text am Bildschirm während der Bearbeitung exakt so dargestellt wird, wie er später im Druck aussieht. Es vermischt Inhalt und Design direkt während der Eingabe.
+
+### Attribut
+Attribute stehen immer im öffnenden Start-Tag eines HTML-Elements. Sie bestehen aus einem Namen und einem Wert (in Anführungszeichen) und liefern dem Browser zusätzliche Informationen oder Eigenschaften für dieses Element (z. B. das Ziel eines Links mit `href="URL"`).
+
+### Auszeichnungssprache
+Eine maschinenlesbare Sprache (wie HTML), die zur Gliederung und Formatierung von Texten und Daten verwendet wird. Im Gegensatz zu einer Programmiersprache enthält sie keine Logik (wie Schleifen oder Bedingungen), sondern beschreibt lediglich Struktur und Bedeutung der Inhalte.
+
+### Block-Element
+Ein HTML-Element, das standardmäßig die gesamte zur Verfügung stehende Breite seines Elternelements einnimmt und vor sowie nach sich einen Zeilenumbruch erzeugt (z. B. `<div>`, `<h1>`, `<p>`). Block-Elemente bilden die grundlegenden "Bauklötze" des Seitenlayouts.
+
+### Closing-Tag
+Der schließende Teil eines HTML-Elements. Er sieht genauso aus wie der Start-Tag, besitzt jedoch einen Schrägstrich `/` direkt nach der öffnenden spitzen Klammer (z. B. `</p>`). Er markiert das Ende des Elements.
+
+### CSS
+Cascading Style Sheets. Eine Stylesheet-Sprache, die streng von der Struktur (HTML) getrennt wird und ausschließlich für das Design, Layout und die visuelle Darstellung der Webseite zuständig ist.
+
+### HTML
+Hypertext Markup Language. Die standardisierte Auszeichnungssprache des Webs. Sie ist dafür zuständig, die Struktur und Bedeutung von Inhalten auf einer Webseite zu definieren.
+
+### HTML-Element
+Die vollständige Einheit in HTML, bestehend aus dem Start-Tag, dem umschlossenen Inhalt und dem Closing-Tag (z. B. `<p>Das ist der Inhalt.</p>`).
+
+### Inline-Element
+Ein HTML-Element, das sich in den fließenden Text einreiht, ohne einen neuen Zeilenumbruch zu erzeugen. Es nimmt nur exakt so viel Breite ein, wie sein Inhalt benötigt (z. B. `<a>`, `<span>`, `<strong>`).
+
+### Semantik
+In HTML bedeutet Semantik (oder "Semantisches HTML"), dass Tags entsprechend ihrer inhaltlichen Bedeutung gewählt werden und nicht aufgrund ihres Aussehens. Beispielsweise wird `<h1>` gewählt, weil der Text inhaltlich die Hauptüberschrift ist, nicht weil der Text groß und fett aussehen soll. Dies ist essentiell für Suchmaschinen und Barrierefreiheit.
+
+### Start-Tag
+Der öffnende Teil eines HTML-Elements, geschrieben in spitzen Klammern (z. B. `<p>`). Er markiert den Beginn des Elements und kann zusätzlich Attribute enthalten.
+
+### Tag
+Ein Schlüsselwort (Markierung) im HTML-Quelltext, das in spitzen Klammern `< >` geschrieben wird. Tags weisen den Browser an, wie der umschlossene Text zu interpretieren ist.
