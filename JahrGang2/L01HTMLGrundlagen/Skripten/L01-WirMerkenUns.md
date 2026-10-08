@@ -1,14 +1,17 @@
->**Wir merken uns von [Client, Server und HTML-Überblick](L01.1ClientServerHTML-Ueberblick.md):**
->8) [``HTML``](../../../05_Glossar.md#html) (Hypertext Markup Language) ist keine Programmiersprache, sondern eine ``Auszeichnungssprache``, die dem Browser mitteilt, wie ein Text inhaltlich strukturiert ist.
->9) [``Tags``](../../../05_Glossar.md#tag) werden in spitzen Klammern geschrieben. Ein [``Start-Tag``](../../../05_Glossar.md#start-tag) (z.B. ``<p>``) eröffnet das Element.
->10) Ein [``Closing Tag``](../../../05_Glossar.md#closing-tag) beendet ein Element und hat immer einen Schrägstrich (z.B. ``</p>``).
->11) [``Non-Closing Tags``](../../../05_Glossar.md#non-closing-tag) stehen für sich allein und umschließen keinen Inhalt, weshalb sie kein End-Tag benötigen - leere Elemente wie ``<img>`` oder ``<br>``.
->12) [``Attribute``](../../../05_Glossar.md#attribut) stehen immer im [``Start-Tag``](../../../05_Glossar.md#start-tag), bestehen aus einem Namen und einem Wert in Anführungszeichen und liefern Zusatzinformationen (z.B. ``href="ziel.html"``).
->13) Jedes HTML-Dokument benötigt ein zwingendes Grundgerüst bestehend aus ``<!DOCTYPE html>``, ``<html>``, ``<head>`` und ``<body>``.
->14) In modernem Webdesign trennen wir strikt zwischen Bedeutung ([``HTML``](../../../05_Glossar.md#html)) und Aussehen ([``CSS``](../../../05_Glossar.md#css)).
->15) [``Semantisches HTML``](../../../05_Glossar.md#semantik) bedeutet, dass wir Tags verwenden, die beschreiben, *was* der Inhalt ist (z.B. ``<em>`` für inhaltliche Betonung), und nicht, *wie* er aussehen soll (z.B. ``<b>`` für fetten text).
+>**Wir merken uns von [HTML](L01.1-HTML.md.md):**
+>1. [``HTML``](../../../05_Glossar.md#html) (Hypertext Markup Language) ist keine Programmiersprache, sondern eine ``Auszeichnungssprache``, die dem Browser mitteilt wie Text *strukturiert* ist.
+>2. Wir trennen *Strutkur* ([``HTML``](../../../05_Glossar.md#html)) und *Design* ([``CSS``](../../../05_Glossar.md#css)) und setzen diese in zwei verschiedene *Sprachen* um.
+>2. [``Tags``](../../../05_Glossar.md#tag) werden in spitzen Klammern ``<>`` geschrieben. 
+>3. Ein [``Tag``](../../../05_Glossar.md#tag) *beginnt* mit einem [``Start-Tag``](../../../05_Glossar.md#start-tag) z.B. ``<p>`` und *endet* mit einem [``Closing Tag``](../../../05_Glossar.md#closing-tag). Der [``Closing Tag``](../../../05_Glossar.md#closing-tag) z.B. ``</p>`` besitzt einen Schrägstrich.
+>4. [``Semantisches HTML``](../../../05_Glossar.md#semantik) bedeutet, dass [``Tags``](../../../05_Glossar.md#tag) beschreiben *was* der Inhalt ist, und nicht *wie* dieser aussehen soll. Ein Beispiel wäre ``<h1>`` hat eine konkrete *Bedeutung* - der ``annotierte`` Text ist eine Überschrift. Wenn ein Programm das Internet durchsucht, um Überschrifte nzu suchen (TODO: warum?)  dann können wir auf ``<h1>`` filtern. ABer ``<b>`` nicht. Der Text ist *fett* aber was heißt das? Wichtig? Stilistisch? Wenn wir ein Programm verwenden um das Internet zu durchsuchen, dann bekommen wir viel verschiedenes und können nichts damit anfangen. TODO reformulate.
+>5. [``Attribute``](../../../05_Glossar.md#attribut) stehen immer im [``Start-Tag``](../../../05_Glossar.md#start-tag), bestehen aus einem *Namen* und einem *Wert* in Anführungszeichen und liefern Zusatzinformationen z.B. ``<a href="https://www.google.com/">``.
+>6. Jedes HTML-Dokument benötigt ein zwingendes Grundgerüst bestehend aus ``<!DOCTYPE html>``, ``<html>``, ``<head>`` und ``<body>``.
+>7. Der ``<body>`` beinhaltet die *Struktur*, ``<head>`` beinhaltet Informationen welche nicht für die *Struktur* relevant sind.
+> Block elemente vs inline elemente
 
-<!-- >1) Der [``Client``](../../../05_Glossar.md#client) (z.B. dein Webbrowser) stellt Anfragen, und der [``Server``](../../../05_Glossar.md#server) liefert die entsprechenden Antworten.
+<!-- 
+>4. [``Non-Closing Tags``](../../../05_Glossar.md#non-closing-tag) stehen für sich allein und umschließen keinen Inhalt, weshalb sie kein End-Tag benötigen - leere Elemente wie ``<img>`` oder ``<br>``.
+>1) Der [``Client``](../../../05_Glossar.md#client) (z.B. dein Webbrowser) stellt Anfragen, und der [``Server``](../../../05_Glossar.md#server) liefert die entsprechenden Antworten.
 >2) Die Kommunikation zwischen [``Client``](../../../05_Glossar.md#client) und [``Server``](../../../05_Glossar.md#server) erfolgt über das Protokoll [``HTTP``](../../../05_Glossar.md#http) (Hypertext Transfer Protocol).
 >3) Eine [``Statische Website``](../../../05_Glossar.md#statische-website) wird vom [``Server``](../../../05_Glossar.md#server) exakt so ausgeliefert, wie sie als unveränderliche HTML/CSS-Datei auf der Festplatte liegt (schnell und ideal für Infoseiten).
 >4) Eine [``Dynamische Website``](../../../05_Glossar.md#dynamische-website) wird vom [``Server``](../../../05_Glossar.md#server) auf Anfrage "on the fly" zusammengebaut (z.B. für Blogs oder Online-Shops).
