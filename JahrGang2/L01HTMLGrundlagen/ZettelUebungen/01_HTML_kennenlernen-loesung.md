@@ -14,7 +14,7 @@ Vergiss die **unsichtbaren Tags** nicht.
   </head>
   <body>
     <h1>Willkommen!</h1>
-    <p>Das ist ein Test-Absatz.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tempus, nunc eu porta tempus, libero risus mattis leo, non faucibus magna dui vel orci. Nulla congue, dui vitae mollis commodo, velit nibh gravida lorem, id egestas mauris justo et urna. Sed sed leo id ligula maximus sodales non eget lectus. Nam id purus metus. Phasellus condimentum, felis eget fringilla gravida, augue libero semper ante, quis consectetur sem lectus sed mi. Maecenas maximus ullamcorper erat imperdiet feugiat. Vivamus dapibus, nibh in ullamcorper convallis, eros est tempor urna, ac ultricies lacus arcu ut lectus. Aliquam imperdiet nibh sed diam efficitur, at dictum risus convallis. Donec porta neque vel sapien tempus pretium. Donec eu justo est. Aenean ex dolor, ornare cursus quam eget, gravida fermentum nunc. Aliquam id tristique erat. Ut orci ligula, fermentum et fermentum vel, tincidunt quis nibh. Donec pellentesque suscipit turpis ac laoreet.</p>
   </body>
 </html>
 ```
