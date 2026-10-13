@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Reverse Engineering Übung</title>
+    <style>
+        /* =======================================================
+           APP UI STYLES
+           ======================================================= */
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: system-ui, sans-serif; background: #1e1e1e; color: #fff; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        .toolbar { background: #2d2d2d; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #444; }
+        .toggle-group, .slide-group { display: flex; gap: 10px; align-items: center; }
+        
+        button { background: #333; color: white; border: 2px solid #555; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; transition: 0.2s; }
+        button:hover:not(:disabled) { background: #444; }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+        
+        button.active.btn-structure { background: #2563eb; border-color: #60a5fa; }
+        button.active.btn-react { background: #059669; border-color: #34d399; }
+        button.active.btn-css { background: #d946ef; border-color: #f472b6; }
+        
+        .step-counter { font-size: 14px; font-weight: bold; color: #fbbf24; min-width: 120px; text-align: center; }
+
+        /* Arbeitsbereich (Nur noch das Render-Fenster) */
+        .workspace { display: flex; flex: 1; overflow: hidden; background: #ffffff; color: #000; position: relative; }
+        #render-window { flex: 1; padding: 40px; overflow-y: auto; background: #f9fafb; font-family: 'Times New Roman', Times, serif; }
+
+        .explanation-panel { background: #2d2d2d; border-top: 2px solid #444; padding: 20px; font-size: 15px; line-height: 1.5; height: 160px; overflow-y: auto; }
+        .explanation-panel strong { color: #facc15; }
+        .expl-step { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #555; }
+        .expl-toggles { color: #ccc; }
+
+        /* =======================================================
+           DYNAMIC RENDER WINDOW STYLES (Overlays)
+           ======================================================= */
+        .show-structure [data-type="block"] { outline: 2px solid rgba(37, 99, 235, 0.7) !important; position: relative; margin-top: 22px; margin-bottom: 2px; }
+        .show-structure [data-type="inline"] { outline: 2px dashed #f59e0b !important; position: relative; background: rgba(245, 158, 11, 0.1); }
+        .show-structure [data-tag]::before {
+            content: attr(data-tag); position: absolute; top: -18px; left: -2px; font-family: monospace; font-size: 11px; padding: 2px 6px; color: white; line-height: 1; z-index: 10;
+        }
+        .show-structure [data-type="block"]::before { background: #2563eb; }
+        .show-structure [data-type="inline"]::before { background: #f59e0b; top: -20px; }
+
+        .show-react [data-react] { outline: 4px dashed #059669 !important; outline-offset: 4px; position: relative; margin-top: 25px; }
+        .show-react [data-react]::after {
+            content: "<" attr(data-react) " />"; position: absolute; top: -25px; right: -4px; background: #059669; color: white; font-family: monospace; font-size: 13px; font-weight: bold; padding: 3px 8px; border-radius: 4px 4px 0 0; z-index: 20;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <div class="toggle-group">
+            <button id="btn-structure" class="btn-structure">1. Struktur & Boxen</button>
+            <button id="btn-react" class="btn-react">2. React Komponenten</button>
+            <button id="btn-css" class="btn-css">3. CSS Design</button>
+        </div>
+        
+        <div class="slide-group">
+            <button id="btn-prev">◀ Zurück</button>
+            <span class="step-counter" id="step-counter">Schritt 1 von 5</span>
+            <button id="btn-next">Weiter ▶</button>
+        </div>
+    </div>
+
+    <div class="workspace">
+        <style id="dynamic-css"></style>
+        <div id="render-window"></div>
+    </div>
+
+    <div class="explanation-panel" id="explanation"></div>
+
+<script>
+    /* =======================================================
+       DATEN: Aufbau-Schritte (Erweiterter Inhalt)
+       ======================================================= */
+    const htmlTop = `<!DOCTYPE html>\n<html lang="de">\n<head>\n    <meta charset="UTF-8">\n    <title>HTL Kurs - Dashboard</title>\n</head>\n<body>\n`;
+    const htmlBottom = `\n</body>\n</html>`;
+
+    const step1Header = `
+    <header>
+        <h1>Web-Programmierung: Unser Dashboard</h1>
+        <p>Willkommen zum interaktiven Lernportal für <strong>Klasse 2</strong>.</p>
+        <nav>
+            <p>Inhaltsverzeichnis:</p>
+            <ul>
+                <li><a href="#lehrplan">Lehrplan & Ziele</a></li>
+                <li><a href="#projekte">Schüler-Projekte</a></li>
+                <li><a href="#kontakt">Kontakt & Hilfe</a></li>
+            </ul>
+        </nav>
+    </header>
+    <hr>`;
+
+    const step2MainLehrplan = `
+    <main>
+        <section id="lehrplan">
+            <h2>Lehrplan & Ziele</h2>
+            <p>Hier finden Sie eine Übersicht unserer aktuellen Themen und die notwendigen Vorbereitungen.</p>
+            
+            <h3>Vorbedingungen (Bitte erledigen)</h3>
+            <ol>
+                <li>Code-Editor installieren (z.B. Visual Studio Code)</li>
+                <li>Ordnerstruktur auf dem PC anlegen</li>
+                <li>Erste <em>index.html</em> erstellen</li>
+            </ol>
+
+            <h3>Stundenplan</h3>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Tag</th>
+                        <th>Thema</th>
+                        <th>Dauer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Montag</td>
+                        <td>HTML Struktur & Box-Modell</td>
+                        <td>2 Stunden</td>
+                    </tr>
+                    <tr>
+                        <td>Mittwoch</td>
+                        <td>Tabellen, Listen & Formulare</td>
+                        <td>2 Stunden</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>`;
+
+    const step3MainProjekte = `
+        <section id="projekte">
+            <h2>Schüler-Projekte</h2>
+            <p>Diese Projekte werden am Ende des Semesters von den Schülern eigenständig entwickelt.</p>
+            
+            <article>
+                <h3>Portfolio Webseite</h3>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML5 Logo" width="60">
+                <p>Eine persönliche Webseite, die nur mit <strong>HTML</strong> strukturiert wird.</p>
+                <p>Quellen zur Recherche: <a href="https://developer.mozilla.org/de/" target="_blank">MDN Web Docs</a>.</p>
+            </article>
+
+            <article>
+                <h3>Interaktives Quiz</h3>
+                <p>Ein Quiz, das das Wissen der letzten Wochen testet. Benötigte Technologien:</p>
+                <ul>
+                    <li>HTML (Für die Struktur)</li>
+                    <li>CSS (Für das Design)</li>
+                    <li>JavaScript (Für die Logik)</li>
+                </ul>
+            </article>
+        </section>
+    </main>
+    <hr>`;
+
+    const step4Aside = `
+    <aside id="kontakt">
+        <h2>Kontakt & Hilfe</h2>
+        <p>
+            HTL Informatik<br>
+            Musterstraße 42<br>
+            1010 Wien
+        </p>
+        <h3>Nützliche Links</h3>
+        <ul>
+            <li><a href="#">Schul-Intranet</a></li>
+            <li><a href="#">Stundenplan-Portal</a></li>
+            <li><a href="#">Support kontaktieren</a></li>
+        </ul>
+    </aside>`;
+
+    const step5Footer = `
+    <footer>
+        <p>&copy; 2026 HTL Informatik. Erstellt für den Web-Programmierungskurs.</p>
+        <ul>
+            <li><a href="#">Impressum</a></li>
+            <li><a href="#">Datenschutz</a></li>
+            <li><a href="#">Nach oben springen</a></li>
+        </ul>
+    </footer>`;
+
+    const slides = [
+        {
+            desc: "<strong>Aufgabe 1: Header & Navigation.</strong> Baue den Kopfbereich nach. Achte auf die Paragraphen, die Liste und die Links. Welche Tags verbergen sich hinter dem dicken Text?",
+            raw: htmlTop + step1Header + htmlBottom
+        },
+        {
+            desc: "<strong>Aufgabe 2: Main, Section, Ordered List & Table.</strong> Wir starten den Hauptbereich mit einer Lehrplan-Sektion. Baue die nummerierte Liste und die Tabelle fehlerfrei nach!",
+            raw: htmlTop + step1Header + step2MainLehrplan + `\n    </main>` + htmlBottom
+        },
+        {
+            desc: "<strong>Aufgabe 3: Articles & Unordered List.</strong> Füge eine zweite Sektion für Projekte hinzu. Darin liegen zwei Artikel. Der zweite Artikel nutzt eine ungeordnete Liste für Technologien.",
+            raw: htmlTop + step1Header + step2MainLehrplan + step3MainProjekte + htmlBottom
+        },
+        {
+            desc: "<strong>Aufgabe 4: Die Sidebar (Aside).</strong> Verlasse den Main-Bereich! Baue den Randbereich nach. Er enthält Paragraphen mit semantischen Umbrüchen und eine kleine Link-Liste.",
+            raw: htmlTop + step1Header + step2MainLehrplan + step3MainProjekte + step4Aside + htmlBottom
+        },
+        {
+            desc: "<strong>Aufgabe 5: Der Footer.</strong> Das Ende der Seite. Auch ein Footer kann Listen enthalten (z.B. für rechtliche Links).",
+            raw: htmlTop + step1Header + step2MainLehrplan + step3MainProjekte + step4Aside + step5Footer + htmlBottom
+        }
+    ];
+
+    const rawCSS = `/* Basis CSS */
+* { box-sizing: border-box; }
+body { font-family: system-ui, sans-serif; background: #eef2f5; color: #333; line-height: 1.6; }
+
+/* Struktur-Layout */
+.app-header { background: #1e293b; color: white; padding: 30px; text-align: center; border-bottom: 4px solid #3b82f6; }
+.app-header a { color: #60a5fa; text-decoration: none; }
+.app-header ul { display: flex; justify-content: center; gap: 20px; list-style: none; padding: 0; }
+
+.dashboard-main { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+.widget { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
+.widget h2 { color: #2563eb; border-bottom: 2px solid #eff6ff; padding-bottom: 10px; }
+
+.card { border-left: 4px solid #3b82f6; padding: 15px 20px; background: #f8fafc; margin-bottom: 15px; border-radius: 0 8px 8px 0; }
+
+.data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+.data-table th, .data-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; }
+.data-table th { background: #f1f5f9; }
+
+.sidebar { max-width: 900px; margin: 0 auto 30px auto; background: #cbd5e1; padding: 25px; border-radius: 10px; }
+.sidebar ul { padding-left: 20px; }
+
+.app-footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 30px; font-size: 14px; }
+.app-footer ul { display: flex; justify-content: center; gap: 15px; list-style: none; padding: 0; }
+.app-footer a { color: #94a3b8; text-decoration: none; }`;
+
+    /* =======================================================
+       LOGIK
+       ======================================================= */
+    let currentStep = 0;
+    let isStructure = false;
+    let isReact = false;
+    let isCss = false;
+
+    function applyCSSClasses(html) {
+        return html
+            .replace(/<header>/, '<header class="app-header">')
+            .replace(/<main>/, '<main class="dashboard-main">')
+            .replace(/<section/g, '<section class="widget"')
+            .replace(/<table border="1">/, '<table class="data-table">')
+            .replace(/<article>/g, '<article class="card">')
+            .replace(/<aside id="kontakt">/, '<aside id="kontakt" class="sidebar">')
+            .replace(/<footer>/, '<footer class="app-footer">');
+    }
+
+    function updateView() {
+        document.getElementById('btn-structure').classList.toggle('active', isStructure);
+        document.getElementById('btn-react').classList.toggle('active', isReact);
+        document.getElementById('btn-css').classList.toggle('active', isCss);
+        
+        document.getElementById('btn-prev').disabled = currentStep === 0;
+        document.getElementById('btn-next').disabled = currentStep === slides.length - 1;
+        document.getElementById('step-counter').innerText = `Schritt ${currentStep + 1} von ${slides.length}`;
+
+        const currentRawHTML = slides[currentStep].raw;
+        const finalHTML = isCss ? applyCSSClasses(currentRawHTML) : currentRawHTML;
+        
+        if (isCss) {
+            document.getElementById('dynamic-css').innerHTML = rawCSS;
+            document.getElementById('render-window').style.fontFamily = 'system-ui, sans-serif';
+            document.getElementById('render-window').style.background = '#eef2f5';
+        } else {
+            document.getElementById('dynamic-css').innerHTML = '';
+            document.getElementById('render-window').style.fontFamily = "'Times New Roman', Times, serif";
+            document.getElementById('render-window').style.background = '#ffffff';
+        }
+
+        const renderWindow = document.getElementById('render-window');
+        const bodyMatch = finalHTML.match(/<body>([\s\S]*?)<\/body>/);
+        renderWindow.innerHTML = bodyMatch ? bodyMatch[1] : '';
+
+        renderWindow.className = '';
+        if (isStructure) renderWindow.classList.add('show-structure');
+        if (isReact) renderWindow.classList.add('show-react');
+
+        Array.from(renderWindow.querySelectorAll('*')).forEach(el => {
+            el.setAttribute('data-tag', el.tagName.toLowerCase());
+            const display = window.getComputedStyle(el).display;
+            if (display.includes('inline') && display !== 'inline-block' && el.tagName.toLowerCase() !== 'br') {
+                el.setAttribute('data-type', 'inline');
+            } else {
+                el.setAttribute('data-type', 'block');
+            }
+        });
+
+        // React Label Injector
+        if(renderWindow.querySelector('header')) renderWindow.querySelector('header').setAttribute('data-react', 'AppHeader');
+        if(renderWindow.querySelector('section#lehrplan')) renderWindow.querySelector('section#lehrplan').setAttribute('data-react', 'ScheduleWidget');
+        if(renderWindow.querySelector('section#projekte')) renderWindow.querySelector('section#projekte').setAttribute('data-react', 'ProjectsWidget');
+        renderWindow.querySelectorAll('article').forEach(art => art.setAttribute('data-react', 'ProjectCard'));
+        if(renderWindow.querySelector('aside')) renderWindow.querySelector('aside').setAttribute('data-react', 'Sidebar');
+        if(renderWindow.querySelector('footer')) renderWindow.querySelector('footer').setAttribute('data-react', 'AppFooter');
+
+        updateExplanation();
+    }
+
+    function updateExplanation() {
+        const expl = document.getElementById('explanation');
+        let text = `<div class="expl-step">${slides[currentStep].desc}</div>`;
+        let toggleText = "<div class='expl-toggles'>";
+        if (isStructure) toggleText += "<span style='color:#60a5fa'>▶ Hilfe:</span> Nutze die blauen/orangen Rahmen, um die Block- und Inline-Tags zu identifizieren.<br>";
+        if (isReact) toggleText += "<span style='color:#34d399'>▶ Hilfe:</span> Erkennst du die großen, grünen React-Komponenten-Blöcke?<br>";
+        if (isCss) toggleText += "<span style='color:#f472b6'>▶ Hilfe:</span> Lass dich vom CSS nicht ablenken. Die zugrundeliegende Struktur bleibt identisch!";
+        toggleText += "</div>";
+        expl.innerHTML = text + toggleText;
+    }
+
+    document.getElementById('btn-structure').addEventListener('click', () => { isStructure = !isStructure; updateView(); });
+    document.getElementById('btn-react').addEventListener('click', () => { isReact = !isReact; updateView(); });
+    document.getElementById('btn-css').addEventListener('click', () => { isCss = !isCss; updateView(); });
+    document.getElementById('btn-prev').addEventListener('click', () => { if(currentStep > 0) { currentStep--; updateView(); } });
+    document.getElementById('btn-next').addEventListener('click', () => { if(currentStep < slides.length - 1) { currentStep++; updateView(); } });
+
+    updateView();
+</script>
+</body>
+</html>

@@ -28,17 +28,20 @@ Analysiere den Code und benenne **drei Fehler**. Erkläre jeweils kurz, warum da
 ```html
 <div class="header">Mein Blog</div>
 
-<p>
-  Hier ist meine Einkaufsliste:
-  <ul>
-    <li>Äpfel</li>
-    <li>Milch</li>
-  </ul>
-</p>
+Hier ist meine Einkaufsliste:
+<ul>
+  <p>
+    Äpfel
+  </p>
+  <p>
+    <a href="https://www.google.at">Milch</a>
+  </p>
+</ul>
 
-<span>
-  <h2>Das ist ein Untertitel</h2>
-</span>
+
+<p>
+  <b><h2>Das ist ein Untertitel</h2></b>
+</p>
 
 <br><br><br>
 <b>Vielen Dank fürs Lesen!</b>

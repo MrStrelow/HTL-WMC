@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>HTL Kurs - Dashboard</title>
+</head>
+<body>
+
+    <!-- ==========================================
+         REACT-IDEE: <AppHeader/> Komponente 
+         ========================================== -->
+    <header>
+        <h1>
+            Web-Programmierung: Unser Dashboard
+        </h1>
+        <nav>
+            <p>
+                <strong>Inhaltsverzeichnis:</strong>
+            </p>
+            
+            <!-- SCHACHTELUNGSREGEL FÜR LISTEN: 
+                 In <ul> oder <ol> dürfen direkt NUR <li> stehen -->
+            <ul>
+                <li><a href="#lehrplan">Zum Lehrplan springen</a></li>
+                <li><a href="#projekte">Zu den Projekten springen</a></li>
+                <li><a href="#kontakt">Kontakt & Adresse</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <hr>
+
+    <main>
+        
+        <!-- ==========================================
+             REACT-IDEE: <ScheduleWidget/> Komponente 
+             ========================================== -->
+        <section id="lehrplan">
+            <h2>Unser aktueller Lehrplan</h2>
+            
+            <!-- SCHACHTELUNGSREGEL FÜR TABELLEN: 
+                 In <table> dürfen nur Struktur-Tags wie <thead>, <tbody>, <tr> stehen. 
+                 Text, Bilder und Links gehören immer ganz nach innen ins <th> oder <td>. -->
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Wochentag</th>
+                        <th>Thema</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- REACT-IDEE: <TableRow day="Montag" topic="HTML"/> -->
+                    <tr>
+                        <td>Montag</td>
+                        <td>HTML Struktur & Boxen</td>
+                    </tr>
+                    <tr>
+                        <td>Mittwoch</td>
+                        <td>Tabellen und Listen</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ==========================================
+             REACT-IDEE: <ProjectsWidget/> Komponente 
+             ========================================== -->
+        <section id="projekte">
+            <h2>Schüler-Projekte</h2>
+            
+            <article>
+                <h3>Projekt: HTML-Portfolio</h3>
+                
+                <!-- <img> ist ein Inline-Element. Es umschließt keinen Inhalt, daher schließt es sich selbst! -->
+                <img src="[https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg](https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg)" alt="HTML5 Logo" width="100">
+                
+                <!-- Inline-Elemente <strong> und <a> stehen direkt im Textfluss -->
+                <p>
+                    Das erste Projekt nutzt <strong>reines HTML</strong>. 
+                    Mehr Infos gibt es auf <a href="[https://developer.mozilla.org/de/docs/Web/HTML](https://developer.mozilla.org/de/docs/Web/HTML)" target="_blank">MDN Web Docs</a>.
+                </p>
+            </article>
+        </section>
+
+    </main>
+    
+    <hr>
+
+    <!-- ==========================================
+         REACT-IDEE: <Sidebar/> oder <ContactWidget/> 
+         ========================================== -->
+    <aside id="kontakt">
+        <h2>Unsere Schule</h2>
+        
+        <!-- SEMANTIK VON <br>: 
+             Wird NIEMALS für optische Abstände genutzt (dafür gibt es CSS).
+             Sondern NUR für semantische Umbrüche, z. B. bei einer Postadresse oder einem Gedicht. -->
+        <p>
+            HTL Informatik<br>
+            Musterstraße 42<br>
+            1010 Wien<br>
+            Österreich
+        </p>
+    </aside>
+
+    <!-- ==========================================
+         REACT-IDEE: <AppFooter/> Komponente 
+         ========================================== -->
+    <footer>
+        <p>
+            &copy; 2026 HTL Informatik. <a href="#">Zurück nach oben</a>
+        </p>
+    </footer>
+
+</body>
+</html>
