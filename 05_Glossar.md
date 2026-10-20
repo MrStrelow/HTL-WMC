@@ -126,3 +126,60 @@ Der öffnende Teil eines HTML-Elements, geschrieben in spitzen Klammern (z. B. `
 
 ### Tag
 Ein Schlüsselwort (Markierung) im HTML-Quelltext, das in spitzen Klammern `< >` geschrieben wird. Tags weisen den Browser an, wie der umschlossene Text zu interpretieren ist.
+
+### Inline-Element
+HTML-Elemente, die keinen eigenen Absatz oder Zeilenumbruch im Dokument erzwingen, sondern sich direkt in den laufenden Textfluss einpassen. Sie nehmen horizontal nur so viel Platz ein, wie ihr tatsächlicher Inhalt (Text oder Grafik) benötigt. Typische Beispiele sind `<a>`, `<strong>`, `<em>` und `<img>`.
+
+### Block-Element
+HTML-Elemente, die ein eigenständiges rechteckiges Kästchen im Layout aufspannen. Sie beginnen stets auf einer neuen Zeile, dehnen sich standardmäßig über die gesamte verfügbare Breite ihres übergeordneten Eltern-Elements aus und erzeugen nach sich einen Zeilenumbruch. Typische Beispiele sind `<header>`, `<main>`, `<section>`, `<article>`, `<p>` und `<ul>`.
+
+### Non-Closing Tag
+HTML-Tags, die keinen schließenden End-Tag (`</...>`) besitzen, da sie per Definition keinen inneren Text oder weitere geschachtelte Tags umschließen können (*Void Elements*). Sie stehen als in sich geschlossene Anweisung im Code – beispielsweise `<img>` zum Einbinden einer Datei, `<br>` für einen manuellen Zeilenumbruch oder `<hr>` für eine thematische Trennlinie.
+
+### Head
+Der nicht-visuelle Kopfbereich eines HTML-Dokuments (`<head>`). Er enthält technische Metadaten, Konfigurationen wie Zeichenkodierung (`UTF-8`), den Fenstertitel (`<title>`) sowie Verknüpfungen zu externen Stylesheets (`<link rel="stylesheet">`). Die Inhalte im Head werden im Inhaltsbereich des Browserfensters niemals direkt gezeichnet.
+
+### Body
+Der Dokumentkörper (`<body>`) einer Webseite. Er fungiert als übergeordneter Container für alle sichtbaren Inhalte einer Seite, darunter Texte, Bilder, Tabellen, Navigationsleisten und Formulare. Alles, was Nutzer auf dem Bildschirm sehen oder womit sie interagieren können, muss zwingend innerhalb des Body deklariert werden.
+
+### Main
+Ein semantisches Struktur-Element (`<main>`), das den zentralen, thematischen Hauptinhalt des Dokuments umschließt. Es darf pro HTML-Seite nur ein einziges Mal verwendet werden und schließt wiederkehrende, seitenübergreifende Komponenten wie Hauptmenüs (`<header>`), Seitenleisten (`<aside>`) oder Fußzeilen (`<footer>`) explizit aus.
+
+### Paragraph
+Ein strukturelles Block-Element (`<p>`), das zur Auszeichnung von Fließtextabsätzen dient. Browser versehen Paragraphen automatisch mit einem standardmäßigen Außenabstand nach oben und unten, um Textblöcke visuell voneinander zu trennen. Fließtext innerhalb semantischer Container sollte niemals unstrukturiert stehen, sondern stets in Paragraphen gekapselt werden.
+
+### Strong
+Ein semantisches Inline-Element (`<strong>`), das Textabschnitten eine besondere Wichtigkeit, Ernsthaftigkeit oder Dringlichkeit verleiht. Im Gegensatz zu rein visueller Fettformatierung (früher `<b>`) teilt `<strong>` auch Assistenztechnologien wie Screenreadern mit, dass der Inhalt mit besonderem Nachdruck gelesen werden soll.
+
+### Emphasis
+Ein semantisches Inline-Element (`<em>`), das zur Betonung einzelner Wörter oder Phrasen innerhalb eines Satzes dient. Die Betonung verändert die klangliche und inhaltliche Bedeutung der Aussage. Screenreader heben Wörter in `<em>`-Tags stimmlich hervor; visuelle Browser stellen sie standardmäßig kursiv dar.
+
+### Header
+Ein semantischer Einleitungsbereich (`<header>`), der entweder am Anfang des gesamten HTML-Dokuments steht (und dort beispielsweise Logos, Webseitentitel und Hauptnavigation bündelt) oder als Einführungskopf innerhalb eigenständiger Inhaltsabschnitte wie einem `<article>` genutzt wird (z. B. für Überschrift, Autor und Veröffentlichungsdatum).
+
+### Footer
+Ein semantischer Abschlussbereich (`<footer>`), der Metadaten, Verfasserangaben, Urheberrechtshinweise oder thematisch untergeordnete Links bereithält. Ein Footer kann sowohl global am Seitenende platziert werden als auch lokal am Ende eines einzelnen Artikels oder Kapitels stehen.
+
+### Aside
+Ein semantisches Element (`<aside>`), das Randinhalte umschließt, die mit dem umgebenden Hauptinhalt nur am Rande zusammenhängen. Es dient typischerweise für Navigationsspalten (*Sidebars*), Glossar-Einschübe, weiterführende Linksammlungen oder Kontaktinformationen und kann vom Haupttext getrennt werden, ohne dessen Kernaussage zu zerstören.
+
+### Nav
+Ein semantischer Bereich (`<nav>`), der Navigationslinks bündelt. Er wird für primäre Menüleisten, Inhaltsverzeichnisse oder Seitennummerierungen (*Pagination*) eingesetzt, um Nutzern und Suchmaschinen die gezielte Erkennung zentraler Wegweiser durch die Webpräsenz zu erleichtern.
+
+### Section
+Ein generisches, thematisch abgegrenztes Gliederungselement (`<section>`). Es dient dazu, ein Gesamtdokument in sinnvolle Kapitel, Abschnitte oder Rubriken zu unterteilen. Eine Section besitzt typischerweise eine eigene Überschrift (`<h2>`–`<h6>`) und ist im Gegensatz zu einem `<article>` außerhalb des Dokumentkontexts meist nicht als eigenständiges Werk verständlich.
+
+### Article
+Ein modularer, in sich geschlossener Inhaltsblock (`<article>`), der ein eigenständiges Werk repräsentiert. Typische Beispiele sind News-Meldungen, Forenbeiträge, Kundenbewertungen oder Blogartikel. Kennzeichnend ist, dass ein `<article>` ohne Bedeutungsverlust aus der Webseite herausgelöst und auf anderen Plattformen oder RSS-Feeds wiederverwendet werden kann.
+
+### Table
+Eine HTML-Struktur (`<table>`) zur Darstellung zweidimensionaler relationaler Daten in Zeilen und Spalten. Sie besteht semantisch aus dem Tabellenkopf (`<thead>`) für Spaltentitel, dem Tabellenkörper (`<tbody>`) für Datensätze und optional dem Fuß (`<tfoot>`). Tabellenzeilen werden mit `<tr>` deklariert; Zellen werden über `<th>` (Kopfzelle) bzw. `<td>` (Datenzelle) befüllt. Tabellen dürfen nicht für Webseitenlayouts zweckentfremdet werden.
+
+### Anchor
+Ein interaktives Verknüpfungselement (`<a>`), das einen Hyperlink deklariert. Über das Pflichtattribut `href` referenziert der Anker entweder externe Webadressen (`https://...`), lokale Dateipfade (`ueber-uns.html`), interne Sprungmarken zu HTML-IDs auf derselben Seite (`#abschnitt2`) oder Systemprotokolle wie E-Mail (`mailto:`).
+
+### Horizontal Rule
+Ein strukturelles Trennelement (`<hr>`), das einen thematischen Themenwechsel oder Bruch auf Absatzebene anzeigt. Es besitzt kein End-Tag und wird von grafischen Browsern standardmäßig als dezente durchgezogene Querlinie über die gesamte Inhaltsbreite gezeichnet.
+```<FollowUp>
+Möchtest du zu den Merksätzen noch eine kleine Schüler-Übungsaufgabe (z. B. ein Fehlersuch-Snippet, bei dem Inline/Block-Tags falsch verschachtelt sind), um das Gelernte direkt abzuprüfen?
+</FollowUp>

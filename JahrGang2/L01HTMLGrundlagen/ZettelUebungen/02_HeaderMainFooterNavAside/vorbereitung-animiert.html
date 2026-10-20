@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML-Layout Anatomie: 3 Spalten, Navigationen & Semantik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* =======================================================
+           SYNTAX HIGHLIGHTING & CODE EDITOR
+           ======================================================= */
+        .tag { color: #569cd6; }
+        .attr { color: #9cdcfe; }
+        .val { color: #ce9178; }
+        .comment { color: #6a9955; font-style: italic; }
+
+        /* =======================================================
+           1. BLOCK & INLINE OVERLAYS (RECHTES FENSTER)
+           ======================================================= */
+        .show-structure [data-type="block"] {
+            outline: 2px solid rgba(37, 99, 235, 0.8) !important;
+            position: relative;
+            margin-top: 22px !important;
+            margin-bottom: 6px !important;
+        }
+        .show-structure [data-type="inline"] {
+            outline: 2px dashed #f59e0b !important;
+            position: relative;
+            background: rgba(245, 158, 11, 0.12);
+        }
+        .show-structure [data-tag]::before {
+            content: "<" attr(data-tag) ">";
+            position: absolute;
+            top: -19px;
+            left: -2px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 5px;
+            color: white;
+            line-height: 1;
+            z-index: 10;
+            border-radius: 2px 2px 0 0;
+            pointer-events: none;
+        }
+        .show-structure [data-type="block"]::before { background: #2563eb; }
+        .show-structure [data-type="inline"]::before { background: #d97706; top: -18px; }
+
+        /* =======================================================
+           2. REACT COMPONENTS (RECHTS IM BROWSER)
+           ======================================================= */
+        .show-react [data-react] {
+            outline: 3px dashed var(--rc-color, #10b981) !important;
+            outline-offset: 4px;
+            position: relative;
+            margin-top: 26px !important;
+            margin-bottom: 8px !important;
+            background-color: var(--rc-bg, rgba(16, 185, 129, 0.05));
+        }
+        .show-react [data-react]::after {
+            content: "<" attr(data-react) " />";
+            position: absolute;
+            top: -24px;
+            right: -3px;
+            background: var(--rc-color, #10b981);
+            color: #fff;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px 4px 0 0;
+            z-index: 20;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            pointer-events: none;
+        }
+
+        /* 2b. REACT CODE-ZONEN (LINKS IM EDITOR) */
+        .react-code-zone {
+            position: relative;
+            border-left: 4px solid var(--rc-color, #10b981);
+            background: var(--rc-bg, rgba(16, 185, 129, 0.1));
+            margin: 3px 0;
+            padding: 2px 6px 2px 8px;
+            border-radius: 0 6px 6px 0;
+            display: block;
+        }
+        .react-code-badge {
+            float: right;
+            background: var(--rc-color, #10b981);
+            color: #111827;
+            font-family: ui-monospace, monospace;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 3px;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-neutral-900 text-neutral-100 h-screen flex flex-col overflow-hidden select-none font-sans">
+
+    <!-- TOP TOOLBAR -->
+    <header class="bg-neutral-800 px-5 py-3 flex flex-wrap justify-between items-center border-b-2 border-neutral-700 gap-4 shrink-0">
+        <!-- Links: Dropdown & Analyse-Modi -->
+        <div class="flex items-center gap-3 flex-wrap">
+            <select id="scenario-select" class="bg-neutral-900 text-amber-400 font-bold text-sm border-2 border-amber-500/60 rounded-lg px-3 py-1.5 cursor-pointer focus:outline-none focus:border-amber-400 transition">
+                <option value="layout">🖥️ Website-Layout (3 Spalten mit 2 Navigationen)</option>
+                <option value="merken">💡 Wir merken uns (Regeln & Best Practices)</option>
+            </select>
+
+            <div class="h-6 w-[2px] bg-neutral-600 hidden sm:block"></div>
+
+            <div id="toggle-container" class="flex gap-2 items-center">
+                <button id="btn-structure" class="px-3 py-1.5 rounded-md text-xs font-bold border-2 border-neutral-600 bg-neutral-700 hover:bg-neutral-600 transition flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-400 inline-block"></span>
+                    1. Block &amp; Inline
+                </button>
+                <button id="btn-react" class="px-3 py-1.5 rounded-md text-xs font-bold border-2 border-neutral-600 bg-neutral-700 hover:bg-neutral-600 transition flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span>
+                    2. React Komponenten
+                </button>
+                <button id="btn-css" class="px-3 py-1.5 rounded-md text-xs font-bold border-2 border-neutral-600 bg-neutral-700 hover:bg-neutral-600 transition flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-fuchsia-400 inline-block"></span>
+                    3. CSS Layout
+                </button>
+            </div>
+        </div>
+
+        <!-- Rechts: Schritt-Steuerung -->
+        <div id="step-controls" class="flex items-center gap-2">
+            <span class="text-xs text-neutral-400 hidden lg:inline mr-1">Tastatur: ◀ ▶</span>
+            <button id="btn-prev" class="px-3 py-1.5 rounded-md text-xs font-bold bg-neutral-700 border-2 border-neutral-600 hover:bg-neutral-600 disabled:opacity-30 disabled:cursor-not-allowed transition">
+                ◀ Zurück
+            </button>
+            <span id="step-counter" class="text-sm font-bold text-amber-400 min-w-[110px] text-center">
+                Schritt 1 von 6
+            </span>
+            <button id="btn-next" class="px-3 py-1.5 rounded-md text-xs font-bold bg-neutral-700 border-2 border-neutral-600 hover:bg-neutral-600 disabled:opacity-30 disabled:cursor-not-allowed transition">
+                Weiter ▶
+            </button>
+        </div>
+    </header>
+
+    <!-- SIMULATOR WORKSPACE -->
+    <main id="simulator-workspace" class="flex flex-1 overflow-hidden">
+        
+        <!-- Code-Editor Links (HTML ändert sich nie bei CSS-Klick) -->
+        <div class="w-[46%] border-r-2 border-neutral-700 flex flex-col bg-[#1e1e1e] select-text">
+            <div class="flex-1 overflow-y-auto p-4 flex flex-col">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-neutral-400 text-xs uppercase tracking-wider font-bold">index.html (Reines HTML)</h3>
+                    <span id="react-hint" class="hidden text-[11px] bg-emerald-950 text-emerald-300 border border-emerald-600 px-2 py-0.5 rounded">
+                        Zuständige React-Komponenten markiert
+                    </span>
+                </div>
+                <pre class="font-mono text-[13px] leading-relaxed text-neutral-200 overflow-x-auto"><code id="html-code"></code></pre>
+            </div>
+
+            <!-- CSS Code Panel -->
+            <div id="css-panel" class="hidden h-[40%] border-t-2 border-neutral-700 overflow-y-auto p-4 bg-[#181818] flex-col shrink-0">
+                <h3 class="text-fuchsia-400 text-xs uppercase tracking-wider font-bold mb-2">style.css (Reines CSS Grid Layout)</h3>
+                <pre class="font-mono text-[12px] leading-relaxed text-neutral-300"><code id="css-code"></code></pre>
+            </div>
+        </div>
+
+        <!-- Live Browser Rechts -->
+        <div class="w-[54%] bg-white text-neutral-900 flex flex-col relative overflow-hidden">
+            <div class="bg-neutral-200 border-b border-neutral-300 px-4 py-1 flex items-center gap-2 text-xs text-neutral-600 shrink-0">
+                <div class="flex gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-400 inline-block"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span>
+                </div>
+                <span class="font-mono text-[11px] text-neutral-500 ml-2">https://htl-portal.local/</span>
+            </div>
+
+            <style id="dynamic-css"></style>
+            <div id="render-window" class="flex-1 p-6 overflow-y-auto select-text"></div>
+        </div>
+    </main>
+
+    <!-- "WIR MERKEN UNS" WORKSPACE -->
+    <main id="merken-workspace" class="hidden flex-1 overflow-y-auto bg-neutral-900 p-8 select-text">
+        <div class="max-w-4xl mx-auto space-y-6">
+            
+            <div class="bg-gradient-to-r from-amber-500/20 via-blue-500/10 to-emerald-500/20 border-2 border-amber-500/40 rounded-xl p-5">
+                <h1 class="text-xl font-extrabold text-amber-400 mb-2">💡 Wir merken uns: Struktur, Navigationen &amp; Spalten</h1>
+                <p class="text-neutral-300 text-sm leading-relaxed">
+                    Ein sauberes HTML-Dokument trennt strikt zwischen Bedeutung (Semantik) und visuellem Gitter (CSS). Tabellen werden niemals für das Layout zweckentfremdet.
+                </p>
+            </div>
+
+            <!-- Merksätze Raster -->
+            <div class="grid md:grid-cols-2 gap-5">
+                
+                <div class="bg-neutral-800 border-l-4 border-cyan-400 p-4 rounded-r-lg">
+                    <h2 class="text-base font-bold text-cyan-300 mb-1">🧭 1. Hauptnavigation vs. Seitennavigation</h2>
+                    <p class="text-xs text-neutral-300 leading-relaxed mb-2">
+                        Eine Webseite kann mehrere <code class="text-cyan-300">&lt;nav&gt;</code>-Elemente besitzen!
+                    </p>
+                    <ul class="text-xs text-neutral-400 list-disc list-inside space-y-1">
+                        <li><strong>Im &lt;header&gt;:</strong> Die globale <em>Hauptnavigation</em> (führt zu den großen Bereichen wie Home, Fächer, Impressum).</li>
+                        <li><strong>Im &lt;aside&gt; (Sidebar):</strong> Die lokale <em>Seitennavigation</em> (führt zu Unterkapiteln des aktuellen Bereichs).</li>
+                    </ul>
+                </div>
+
+                <div class="bg-neutral-800 border-l-4 border-amber-400 p-4 rounded-r-lg">
+                    <h2 class="text-base font-bold text-amber-300 mb-1">📐 2. Warum &lt;aside&gt; für die Seitenspalten?</h2>
+                    <p class="text-xs text-neutral-300 leading-relaxed mb-2">
+                        Das <code class="text-amber-300">&lt;aside&gt;</code>-Element kapselt Inhalte, die den Hauptinhalt begleiten, aber nicht zum eigentlichen Text gehören.
+                    </p>
+                    <ul class="text-xs text-neutral-400 list-disc list-inside space-y-1">
+                        <li><strong>Linke Spalte:</strong> Seitennavigation (<code class="text-cyan-300">&lt;nav&gt;</code> im <code class="text-amber-300">&lt;aside&gt;</code>).</li>
+                        <li><strong>Rechte Spalte:</strong> Zusatzinfos, Download-Links, Infoboxen.</li>
+                        <li><strong>Wichtig:</strong> Gehört <em>neben</em> das <code class="text-emerald-300">&lt;main&gt;</code>, niemals in den <code class="text-purple-300">&lt;footer&gt;</code>!</li>
+                    </ul>
+                </div>
+
+                <div class="bg-neutral-800 border-l-4 border-emerald-400 p-4 rounded-r-lg">
+                    <h2 class="text-base font-bold text-emerald-300 mb-1">🎯 3. Genau ein &lt;main&gt; pro Dokument</h2>
+                    <p class="text-xs text-neutral-300 leading-relaxed">
+                        Das <code class="text-emerald-300">&lt;main&gt;</code>-Tag darf auf jeder HTML-Seite <strong>nur ein einziges Mal</strong> existieren. Es grenzt den einzigartigen Kerninhalt der Seite von wiederkehrenden Elementen (Header, Navigation, Sidebars, Footer) ab.
+                    </p>
+                </div>
+
+                <div class="bg-neutral-800 border-l-4 border-fuchsia-400 p-4 rounded-r-lg">
+                    <h2 class="text-base font-bold text-fuchsia-300 mb-1">🎨 4. Spalten entstehen erst durch CSS</h2>
+                    <p class="text-xs text-neutral-300 leading-relaxed">
+                        In reinem HTML stapeln sich alle Tags als Block-Elemente stur untereinander. Erst mit <strong>CSS Grid</strong> ordnen wir <code class="text-amber-300">&lt;aside&gt;</code>, <code class="text-emerald-300">&lt;main&gt;</code> und <code class="text-amber-300">&lt;aside&gt;</code> deklarativ in 3 Spalten nebeneinander an – ganz ohne veraltete Layout-Tabellen!
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- EXPLANATION FOOTER -->
+    <footer id="explanation-panel" class="bg-neutral-800 border-t-2 border-neutral-700 px-6 py-3 h-[130px] overflow-y-auto shrink-0 select-text">
+        <div id="explanation-content" class="max-w-5xl mx-auto text-sm leading-relaxed"></div>
+    </footer>
+
+<script>
+    /* REINE HTML-SCHRITTE (BLOCK-TAGS KONSEQUENT UNTEREINANDER) */
+    const rawHead = `<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>HTL Portal Layout</title>
+</head>
+<body>\n`;
+
+    const rawFoot = `\n</body>\n</html>`;
+
+    const step1 = `    <header>
+        <h1>
+            HTL Portal
+        </h1>
+    </header>`;
+
+    const step2 = `    <header>
+        <h1>
+            HTL Portal
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="#home">Home</a>
+                </li>
+                <li>
+                    <a href="#faecher">Fächer</a>
+                </li>
+            </ul>
+        </nav>
+    </header>`;
+
+    const step3 = `    <header>
+        <h1>
+            HTL Portal
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="#home">Home</a>
+                </li>
+                <li>
+                    <a href="#faecher">Fächer</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <aside id="seiten-nav">
+        <h3>
+            Seitennavigation
+        </h3>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#kapitel1">1. Grundlagen</a>
+                </li>
+                <li>
+                    <a href="#kapitel2">2. Praxisübungen</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>`;
+
+    const step4 = `    <header>
+        <h1>
+            HTL Portal
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="#home">Home</a>
+                </li>
+                <li>
+                    <a href="#faecher">Fächer</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <aside id="seiten-nav">
+        <h3>
+            Seitennavigation
+        </h3>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#kapitel1">1. Grundlagen</a>
+                </li>
+                <li>
+                    <a href="#kapitel2">2. Praxisübungen</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main id="hauptinhalt">
+        <h2>
+            HTML Struktur
+        </h2>
+        <p>
+            Der Hauptinhalt steht im Zentrum. Er kommt genau <strong>einmal</strong> vor.
+        </p>
+    </main>`;
+
+    const step5 = `    <header>
+        <h1>
+            HTL Portal
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="#home">Home</a>
+                </li>
+                <li>
+                    <a href="#faecher">Fächer</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <aside id="seiten-nav">
+        <h3>
+            Seitennavigation
+        </h3>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#kapitel1">1. Grundlagen</a>
+                </li>
+                <li>
+                    <a href="#kapitel2">2. Praxisübungen</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main id="hauptinhalt">
+        <h2>
+            HTML Struktur
+        </h2>
+        <p>
+            Der Hauptinhalt steht im Zentrum. Er kommt genau <strong>einmal</strong> vor.
+        </p>
+    </main>
+
+    <aside id="zusatz-info">
+        <h3>
+            Zusatzinfos
+        </h3>
+        <p>
+            Tipps &amp; Downloads. Begleitet den Stoff als rechte Randspalte.
+        </p>
+    </aside>`;
+
+    const step6 = `    <header>
+        <h1>
+            HTL Portal
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="#home">Home</a>
+                </li>
+                <li>
+                    <a href="#faecher">Fächer</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <aside id="seiten-nav">
+        <h3>
+            Seitennavigation
+        </h3>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#kapitel1">1. Grundlagen</a>
+                </li>
+                <li>
+                    <a href="#kapitel2">2. Praxisübungen</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main id="hauptinhalt">
+        <h2>
+            HTML Struktur
+        </h2>
+        <p>
+            Der Hauptinhalt steht im Zentrum. Er kommt genau <strong>einmal</strong> vor.
+        </p>
+    </main>
+
+    <aside id="zusatz-info">
+        <h3>
+            Zusatzinfos
+        </h3>
+        <p>
+            Tipps &amp; Downloads. Begleitet den Stoff als rechte Randspalte.
+        </p>
+    </aside>
+
+    <footer>
+        <p>
+            &copy; 2026 HTL Informatik &bull; <a href="#top">Nach oben</a>
+        </p>
+    </footer>`;
+
+    const slides = [
+        {
+            title: "Schritt 1: <header> (Kopfbereich)",
+            concept: "Startpunkt der Seite. Umschließt Logo und Titel.",
+            raw: rawHead + step1 + rawFoot
+        },
+        {
+            title: "Schritt 2: <nav> im Header (Hauptnavigation)",
+            concept: "Die seitenweite Hauptnavigation für globale Links (Home, Fächer etc.).",
+            raw: rawHead + step2 + rawFoot
+        },
+        {
+            title: "Schritt 3: <aside> mit <nav> (Seitennavigation)",
+            concept: "Die lokale Seitennavigation. Steht im eigenen <aside> links neben dem Hauptinhalt.",
+            raw: rawHead + step3 + rawFoot
+        },
+        {
+            title: "Schritt 4: <main> (Der Hauptinhalt)",
+            concept: "Der wichtigste Inhaltsblock. Steht im Zentrum und existiert nur 1x pro Seite.",
+            raw: rawHead + step4 + rawFoot
+        },
+        {
+            title: "Schritt 5: Zweites <aside> (Rechte Zusatzinfo)",
+            concept: "Zweite Randspalte rechts für Downloads, Hinweise oder Infoboxen.",
+            raw: rawHead + step5 + rawFoot
+        },
+        {
+            title: "Schritt 6: <footer> (Fußzeile)",
+            concept: "Schließt die Seite ganz unten mit Metadaten und Copyright ab.",
+            raw: rawHead + step6 + rawFoot
+        }
+    ];
+
+    /* REINES CSS GRID FÜR DAS 3-SPALTEN LAYOUT */
+    const cssContent = `/* 
+   HTML links bleibt 100% unverändert. 
+   CSS Grid ordnet die 3 Spalten (nav | main | info) sauber nebeneinander an:
+*/
+#render-window.styled {
+    display: grid;
+    grid-template-columns: 180px 1fr 180px;
+    grid-template-areas: 
+        "head head head"
+        "snav main info"
+        "foot foot foot";
+    gap: 15px;
+    background: #f8fafc;
+    font-family: system-ui, sans-serif;
+}
+
+#render-window.styled > header {
+    grid-area: head;
+    background: #1e293b;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#render-window.styled #haupt-nav ul { display: flex; gap: 15px; list-style: none; margin: 0; padding: 0; }
+#render-window.styled #haupt-nav a { color: #38bdf8; text-decoration: none; font-weight: bold; }
+
+/* Linke Spalte: Seitennavigation */
+#render-window.styled > #seiten-nav {
+    grid-area: snav;
+    background: #e2e8f0;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px;
+}
+#render-window.styled #seiten-nav ul { list-style: none; padding: 0; margin: 8px 0 0 0; }
+#render-window.styled #seiten-nav a { color: #0369a1; text-decoration: none; font-weight: 500; font-size: 13px; }
+
+/* Mittlere Spalte: Hauptinhalt */
+#render-window.styled > #hauptinhalt {
+    grid-area: main;
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 18px;
+}
+
+/* Rechte Spalte: Zusatzinfos */
+#render-window.styled > #zusatz-info {
+    grid-area: info;
+    background: #f1f5f9;
+    border: 2px dashed #94a3b8;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+#render-window.styled > footer {
+    grid-area: foot;
+    background: #0f172a;
+    color: #94a3b8;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+#render-window.styled footer a { color: #38bdf8; }`;
+
+    let currentMode = 'layout'; // 'layout' | 'merken'
+    let currentStep = 0;
+    let isStructure = false;
+    let isReact = false;
+    let isCss = false;
+
+    function highlightHTML(code, markReact = false) {
+        let escaped = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        escaped = escaped.replace(/(&lt;\!--[\s\S]*?--&gt;)/g, '<span class="comment">$1</span>');
+        escaped = escaped.replace(/(&lt;\/?)([a-zA-Z0-9-]+)([\s\S]*?)(&gt;)/g, (match, openBracket, tagName, innerAttrs, closeBracket) => {
+            let coloredAttrs = innerAttrs.replace(/([a-zA-Z0-9-]+)=(&quot;|"|')(.*?)\2/g, '<span class="attr">$1</span>=<span class="val">"$3"</span>');
+            return openBracket + '<span class="tag">' + tagName + '</span>' + coloredAttrs + closeBracket;
+        });
+
+        if (markReact) {
+            escaped = wrapTag(escaped, 'header', 'AppHeader', '#3b82f6', 'rgba(59, 130, 246, 0.15)');
+            escaped = wrapTagById(escaped, 'aside', 'seiten-nav', 'SidebarNav', '#06b6d4', 'rgba(6, 182, 212, 0.15)');
+            escaped = wrapTagById(escaped, 'main', 'hauptinhalt', 'MainContent', '#10b981', 'rgba(16, 185, 129, 0.15)');
+            escaped = wrapTagById(escaped, 'aside', 'zusatz-info', 'SidebarInfo', '#f59e0b', 'rgba(245, 158, 11, 0.15)');
+            escaped = wrapTag(escaped, 'footer', 'AppFooter', '#a855f7', 'rgba(168, 85, 247, 0.15)');
+        }
+        return escaped;
+    }
+
+    function wrapTag(code, tag, compName, color, bg) {
+        const regex = new RegExp(`([ \\t]*&lt;<span class="tag">${tag}<\\/span>[\\s\\S]*?&lt;\\/<span class="tag">${tag}<\\/span>&gt;)`, 'g');
+        return code.replace(regex, (match) => {
+            return `<span class="react-code-zone" style="--rc-color:${color}; --rc-bg:${bg};"><span class="react-code-badge">&lt;${compName} /&gt;</span>\n${match}</span>`;
+        });
+    }
+
+    function wrapTagById(code, tag, id, compName, color, bg) {
+        const regex = new RegExp(`([ \\t]*&lt;<span class="tag">${tag}<\\/span>[^>]*?id=<span class="val">"${id}"<\\/span>[\\s\\S]*?&lt;\\/<span class="tag">${tag}<\\/span>&gt;)`, 'g');
+        return code.replace(regex, (match) => {
+            return `<span class="react-code-zone" style="--rc-color:${color}; --rc-bg:${bg};"><span class="react-code-badge">&lt;${compName} /&gt;</span>\n${match}</span>`;
+        });
+    }
+
+    function updateView() {
+        const simWorkspace = document.getElementById('simulator-workspace');
+        const merkenWorkspace = document.getElementById('merken-workspace');
+        const toggleContainer = document.getElementById('toggle-container');
+        const stepControls = document.getElementById('step-controls');
+        const explContent = document.getElementById('explanation-content');
+
+        if (currentMode === 'merken') {
+            simWorkspace.classList.add('hidden');
+            merkenWorkspace.classList.remove('hidden');
+            toggleContainer.classList.add('opacity-30', 'pointer-events-none');
+            stepControls.classList.add('opacity-30', 'pointer-events-none');
+            explContent.innerHTML = `<span class="text-amber-400 font-bold">📌 Spickzettel aktiv:</span> Wähle oben im Dropdown wieder das <strong>Website-Layout</strong>, um den schrittweisen Aufbau zu simulieren.`;
+            return;
+        }
+
+        simWorkspace.classList.remove('hidden');
+        merkenWorkspace.classList.add('hidden');
+        toggleContainer.classList.remove('opacity-30', 'pointer-events-none');
+        stepControls.classList.remove('opacity-30', 'pointer-events-none');
+
+        // Buttons färben
+        document.getElementById('btn-structure').className = `px-3 py-1.5 rounded-md text-xs font-bold border-2 transition flex items-center gap-1.5 ${
+            isStructure ? 'bg-blue-600 border-blue-400 text-white' : 'border-neutral-600 bg-neutral-700 hover:bg-neutral-600 text-neutral-200'
+        }`;
+        document.getElementById('btn-react').className = `px-3 py-1.5 rounded-md text-xs font-bold border-2 transition flex items-center gap-1.5 ${
+            isReact ? 'bg-emerald-600 border-emerald-400 text-white' : 'border-neutral-600 bg-neutral-700 hover:bg-neutral-600 text-neutral-200'
+        }`;
+        document.getElementById('btn-css').className = `px-3 py-1.5 rounded-md text-xs font-bold border-2 transition flex items-center gap-1.5 ${
+            isCss ? 'bg-fuchsia-600 border-fuchsia-400 text-white' : 'border-neutral-600 bg-neutral-700 hover:bg-neutral-600 text-neutral-200'
+        }`;
+
+        // Controls
+        document.getElementById('btn-prev').disabled = currentStep === 0;
+        document.getElementById('btn-next').disabled = currentStep === slides.length - 1;
+        document.getElementById('step-counter').innerText = `Schritt ${currentStep + 1} von ${slides.length}`;
+
+        // HTML-Code links (bleibt HTML-seitig unverändert)
+        const rawCode = slides[currentStep].raw;
+        document.getElementById('html-code').innerHTML = highlightHTML(rawCode, isReact);
+        document.getElementById('react-hint').classList.toggle('hidden', !isReact);
+
+        // CSS Panel & dynamische Styles
+        const cssPanel = document.getElementById('css-panel');
+        const renderWindow = document.getElementById('render-window');
+
+        if (isCss) {
+            cssPanel.classList.remove('hidden');
+            cssPanel.classList.add('flex');
+            document.getElementById('css-code').innerText = cssContent;
+            document.getElementById('dynamic-css').innerHTML = cssContent;
+            renderWindow.classList.add('styled');
+        } else {
+            cssPanel.classList.add('hidden');
+            cssPanel.classList.remove('flex');
+            document.getElementById('dynamic-css').innerHTML = `
+                #render-window h1 { font-size: 1.8em; font-weight: bold; margin: 0.3em 0; }
+                #render-window h2 { font-size: 1.3em; font-weight: bold; margin: 0.4em 0; }
+                #render-window h3 { font-size: 1.1em; font-weight: bold; margin: 0.4em 0; }
+                #render-window ul { list-style: disc; padding-left: 20px; margin: 0.4em 0; }
+                #render-window a { color: blue; text-decoration: underline; }
+            `;
+            renderWindow.classList.remove('styled');
+            renderWindow.style.fontFamily = "'Times New Roman', Times, serif";
+            renderWindow.style.background = '#ffffff';
+        }
+
+        // Render-Window füllen
+        const bodyMatch = rawCode.match(/<body>([\s\S]*?)<\/body>/);
+        renderWindow.innerHTML = bodyMatch ? bodyMatch[1] : '';
+
+        renderWindow.classList.toggle('show-structure', isStructure);
+        renderWindow.classList.toggle('show-react', isReact);
+
+        // Overlays für Block & Inline
+        Array.from(renderWindow.querySelectorAll('*')).forEach(el => {
+            const tag = el.tagName.toLowerCase();
+            el.setAttribute('data-tag', tag);
+            const isInline = ['a', 'strong', 'em', 'span', 'img'].includes(tag);
+            el.setAttribute('data-type', isInline ? 'inline' : 'block');
+        });
+
+        // React-Komponenten Attribute im Browser setzen
+        const comps = [
+            { sel: 'header', name: 'AppHeader', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },
+            { sel: '#haupt-nav', name: 'NavbarMain', color: '#0284c7', bg: 'rgba(2, 132, 199, 0.1)' },
+            { sel: '#seiten-nav', name: 'SidebarNav', color: '#06b6d4', bg: 'rgba(6, 182, 212, 0.1)' },
+            { sel: '#hauptinhalt', name: 'MainContent', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+            { sel: '#zusatz-info', name: 'SidebarInfo', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)' },
+            { sel: 'footer', name: 'AppFooter', color: '#a855f7', bg: 'rgba(168, 85, 247, 0.1)' }
+        ];
+        comps.forEach(c => {
+            renderWindow.querySelectorAll(c.sel).forEach(el => {
+                el.setAttribute('data-react', c.name);
+                el.style.setProperty('--rc-color', c.color);
+                el.style.setProperty('--rc-bg', c.bg);
+            });
+        });
+
+        // Fußzeilen-Erklärung
+        const currentSlide = slides[currentStep];
+        explContent.innerHTML = `
+            <div class="mb-1.5 pb-1.5 border-b border-neutral-700 flex items-center justify-between">
+                <span class="text-amber-400 font-bold">${currentSlide.title}</span>
+                <span class="text-neutral-300">${currentSlide.concept}</span>
+            </div>
+            <div class="text-xs text-neutral-400">
+                ${!isStructure && !isReact && !isCss ? '💡 <em>Tipp: Aktiviere oben die Toggles oder nutze die Pfeiltasten ◀ ▶.</em>' : ''}
+                ${isStructure ? '<span class="text-blue-400 font-bold">■ Block:</span> Eigene Zeile / Box. <span class="text-amber-400 font-bold">▪ Inline:</span> Fließt im Text mit. ' : ''}
+                ${isReact ? '<span class="text-emerald-400 font-bold">⚡ React:</span> Vergleiche die markierten Boxen links im HTML mit den gerenderten Komponenten rechts. ' : ''}
+                ${isCss ? '<span class="text-fuchsia-400 font-bold">🎨 CSS Grid:</span> Das HTML links bleibt völlig unverändert! CSS Grid spannt die 3 Spalten (Seitennavi | Hauptinhalt | Zusatzinfo) auf.' : ''}
+            </div>
+        `;
+    }
+
+    // Events
+    document.getElementById('scenario-select').addEventListener('change', (e) => {
+        currentMode = e.target.value;
+        currentStep = 0;
+        updateView();
+        e.target.blur();
+    });
+
+    document.getElementById('btn-structure').addEventListener('click', () => { isStructure = !isStructure; updateView(); });
+    document.getElementById('btn-react').addEventListener('click', () => { isReact = !isReact; updateView(); });
+    document.getElementById('btn-css').addEventListener('click', () => { isCss = !isCss; updateView(); });
+
+    document.getElementById('btn-prev').addEventListener('click', () => { if (currentMode === 'layout' && currentStep > 0) { currentStep--; updateView(); } });
+    document.getElementById('btn-next').addEventListener('click', () => { if (currentMode === 'layout' && currentStep < slides.length - 1) { currentStep++; updateView(); } });
+
+    window.addEventListener('keydown', (e) => {
+        if (document.activeElement && document.activeElement.tagName === 'SELECT') return;
+        if (currentMode === 'merken') return;
+
+        if (e.key === 'ArrowRight' && currentStep < slides.length - 1) { e.preventDefault(); currentStep++; updateView(); }
+        else if (e.key === 'ArrowLeft' && currentStep > 0) { e.preventDefault(); currentStep--; updateView(); }
+    });
+
+    updateView();
+</script>
+</body>
+</html>
