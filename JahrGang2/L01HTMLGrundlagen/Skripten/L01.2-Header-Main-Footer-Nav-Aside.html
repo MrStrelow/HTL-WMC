@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L01.2 – Seitenzonen</title>
+    <link rel="stylesheet" href="slides/engine.css">
+</head>
+<body>
+
+<script type="text/plain" data-fragment="kopf">
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>HTL Lernportal</title>
+</head>
+<body>
+</script>
+
+<script type="text/plain" data-fragment="fuss">
+</body>
+</html>
+</script>
+
+<!-- =========================================================
+     TAB 1: DIE SEITENZONEN SCHRITT FÜR SCHRITT
+     ========================================================= -->
+<script type="text/plain" id="code-zonen">
+@include kopf
+1-1|    <!-- Hier kommt der sichtbare Inhalt hinein -->
+2|    <header>
+2|        <h1>
+2|            HTL Lernportal
+2|        </h1>
+3|        <nav id="haupt-nav">
+3|            <ul>
+3|                <li>
+3|                    <a href="index.html">Home</a>
+3|                </li>
+3|                <li>
+3|                    <a href="kapitel.html">Kapitel</a>
+3|                </li>
+3|                <li>
+3|                    <a href="kontakt.html">Kontakt</a>
+3|                </li>
+3|            </ul>
+3|        </nav>
+2|    </header>
+4|
+4|    <aside id="seiten-nav">
+4|        <h2>
+4|            Kapitel
+4|        </h2>
+4|        <nav>
+4|            <ul>
+4|                <li>
+4|                    <a href="grundlagen.html">1. Grundlagen</a>
+4|                </li>
+4|                <li>
+4|                    <a href="layout.html">2. Layout</a>
+4|                </li>
+4|                <li>
+4|                    <a href="formulare.html">3. Formulare</a>
+4|                </li>
+4|            </ul>
+4|        </nav>
+4|    </aside>
+5|
+5|    <main>
+5|        <h2>
+5|            Modul: HTML-Struktur
+5|        </h2>
+5|        <p>
+5|            Der Hauptinhalt kommt genau <strong>einmal</strong> pro Seite vor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+5|        </p>
+5|    </main>
+6|
+6|    <aside id="zusatz-info">
+6|        <h2>
+6|            Tipps
+6|        </h2>
+6|        <p>
+6|            Halte die <a href="https://developer.mozilla.org/de/">MDN Web Docs</a> offen.
+6|        </p>
+6|    </aside>
+7|
+7|    <footer>
+7|        <p>
+7|            &copy; 2026 HTL Lernportal &bull; <a href="impressum.html">Impressum</a>
+7|        </p>
+7|    </footer>
+@include fuss
+</script>
+
+<script src="slides/engine.js"></script>
+<script src="slides/lernportal-style.js"></script>
+<script>
+const ZONEN_KOMPONENTEN = [
+    { sel: "body > header", name: "SiteHeader" },
+    { sel: "#haupt-nav", name: "MainNav" },
+    { sel: "#seiten-nav", name: "SideNav" },
+    { sel: "main", name: "MainContent" },
+    { sel: "#zusatz-info", name: "InfoBox" },
+    { sel: "body > footer", name: "SiteFooter" }
+];
+
+SlideDeck.init({
+    title: "L01.2 · Seitenzonen",
+    subtitle: "header, nav, aside, main, footer",
+    css: window.LERNPORTAL_CSS,
+    tabs: [
+        {
+            id: "zonen", label: "1 · Zonen aufbauen", code: "code-zonen",
+            components: ZONEN_KOMPONENTEN,
+            steps: [
+                { base: true, title: "Ausgangspunkt: Grundgerüst",
+                  text: "In L01.1 haben wir Überschriften, Absätze und Listen einfach untereinander geschrieben. Jetzt teilen wir die Seite in **Zonen** auf, wie sie fast jede Webseite hat: Kopf, Navigation, Hauptinhalt, Randspalten und Fußzeile. **Ziel:** ein klassisches **3-Spalten-Design**." },
+                { title: "<header> – Der Kopfbereich der Seite",
+                  text: "`<header>` ist der **einleitende Kopfbereich der gesamten Seite**: Name, Logo, Hauptüberschrift `<h1>`. Er ist ein Block-Element und nimmt die volle Breite ein." },
+                { title: "<nav id=\"haupt-nav\"> im Header – Die Hauptnavigation",
+                  text: "Die **Hauptnavigation** führt zu den großen Bereichen der Webseite und bleibt auf allen Seiten gleich. Sie gehört deshalb in den `<header>`. Die Links stehen als `<ul>` mit `<li>` und `<a>` – eine Navigation ist inhaltlich eine **Liste von Links**." },
+                { title: "<aside id=\"seiten-nav\"> – Die Seitennavigation (linke Spalte)",
+                  text: "Die **Seitennavigation** gehört nur zum aktuellen Bereich (hier: die Kapitel). Sie **begleitet** den Hauptinhalt, deshalb steht sie in einem `<aside>`. Darin wieder ein `<nav>` – eine Seite darf **mehrere** `<nav>` haben. Das `<aside>` steht **neben** dem `<main>`, nicht darin." },
+                { title: "<main> – Der Hauptinhalt (mittlere Spalte)",
+                  text: "`<main>` umschließt den **einzigartigen** Inhalt dieser Seite. Es gibt **genau ein** `<main>` pro Seite. Alles, was auf jeder Seite gleich ist (Kopf, Navigation, Fußzeile), gehört **nicht** hinein." },
+                { title: "<aside id=\"zusatz-info\"> – Zusatzinfos (rechte Spalte)",
+                  text: "Ein zweites `<aside>` für Tipps und Links. Es hängt nur **indirekt** mit dem Hauptinhalt zusammen. Die `id` brauchen wir, um die beiden `<aside>` später unterscheiden zu können." },
+                { title: "<footer> – Die Fußzeile der Seite",
+                  text: "`<footer>` schließt die **gesamte Seite** ab: Copyright, Impressum, Kontakt. In unserer Welt gibt es genau **einen** `<header>` und **einen** `<footer>` – beide direkt im `<body>`." },
+                { title: "Wo sind die 3 Spalten? – Erst CSS ordnet an",
+                  text: "In der Vorschau steht alles **untereinander**, weil alle Zonen Block-Elemente sind. Das HTML beschreibt nur, **was** etwas ist. Schalte oben rechts auf **HTML + CSS** (Taste `2`): Mit **exakt demselben HTML** und etwas CSS werden daraus drei Spalten. CSS kommt später – hier nur als Ausblick." }
+            ]
+        }
+    ]
+});
+</script>
+</body>
+</html>

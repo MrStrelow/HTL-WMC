@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" width="120" height="140">
+  <title>HTML5 (vereinfachtes Symbol)</title>
+  <path d="M10 5h100l-9 105-41 13-41-13z" fill="#e34f26"/>
+  <path d="M60 15v98l33-9 8-89z" fill="#ef652a"/>
+  <text x="60" y="80" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="#fff" text-anchor="middle">5</text>
+  <text x="60" y="36" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#fff" text-anchor="middle">HTML</text>
+</svg>

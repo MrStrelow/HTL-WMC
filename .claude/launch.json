@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "slides",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "JahrGang2/L01HTMLGrundlagen"],
+      "port": 8765
+    }
+  ]
+}

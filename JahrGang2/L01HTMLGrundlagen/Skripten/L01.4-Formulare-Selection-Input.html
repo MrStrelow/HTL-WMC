@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L01.4 – Medien, Buttons & Formulare</title>
+    <link rel="stylesheet" href="slides/engine.css">
+</head>
+<body>
+
+<!-- =========================================================
+     FRAGMENTE: Rahmen und News-Seite aus L01.3
+     ========================================================= -->
+<script type="text/plain" data-fragment="kopf">
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>HTL Lernportal</title>
+</head>
+<body>
+</script>
+
+<script type="text/plain" data-fragment="fuss">
+</body>
+</html>
+</script>
+
+<script type="text/plain" data-fragment="header">
+<header id="top">
+    <h1>
+        HTL Lernportal
+    </h1>
+    <nav id="haupt-nav">
+        <ul>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>
+                <a href="neuigkeiten.html">Neuigkeiten</a>
+            </li>
+            <li>
+                <a href="projekte.html">Projekte</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+</script>
+
+<script type="text/plain" data-fragment="seiten">
+<aside id="seiten-nav">
+    <h2>
+        Rubriken
+    </h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="#technik">Informatik &amp; Technik</a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+</script>
+
+<script type="text/plain" data-fragment="zusatz">
+<aside id="zusatz-info">
+    <h2>
+        Tipps
+    </h2>
+    <p>
+        Halte die <a href="https://developer.mozilla.org/de/">MDN Web Docs</a> offen.
+    </p>
+</aside>
+</script>
+
+<script type="text/plain" data-fragment="footer">
+<footer>
+    <p>
+        &copy; 2026 HTL Lernportal &bull; <a href="#top">Nach oben</a>
+    </p>
+</footer>
+</script>
+
+<script type="text/plain" data-fragment="artikel2">
+<article>
+    <h4>
+        Sieg beim Coding-Contest
+    </h4>
+    <p>
+        Der <strong>2. Jahrgang</strong> gewinnt den Landespreis im Bereich <em>Algorithmen</em>.
+    </p>
+    <p>
+        Veröffentlicht am <time datetime="2026-10-18">18. Oktober 2026</time>
+    </p>
+</article>
+</script>
+
+<script type="text/plain" data-fragment="news">
+<section id="technik">
+    <h3>
+        Rubrik: Informatik &amp; Technik
+    </h3>
+    <article>
+        <h4>
+            Neuer 3D-Drucker im Labor
+        </h4>
+        <p>
+            Ab sofort steht ein <strong>3D-Drucker</strong> für alle <em>Diplomprojekte</em> bereit.
+        </p>
+        <p>
+            Veröffentlicht am <time datetime="2026-10-15">15. Oktober 2026</time>
+        </p>
+    </article>
+    @include artikel2
+</section>
+</script>
+
+<!-- =========================================================
+     TAB 1: MEDIEN & AUFKLAPPEN
+     ========================================================= -->
+<script type="text/plain" id="code-medien">
+@include kopf
+    @include header
+
+    @include seiten
+
+    <main>
+        <h2>
+            Neuigkeiten
+        </h2>
+        <section id="technik">
+            <h3>
+                Rubrik: Informatik &amp; Technik
+            </h3>
+            <article>
+                <h4>
+                    Neuer 3D-Drucker im Labor
+                </h4>
+2|                <figure>
+2|                    <img src="bilder/3d-drucker.svg" alt="Ein 3D-Drucker druckt ein blaues Bauteil">
+3|                    <figcaption>
+3|                        Abb. 1: Der neue 3D-Drucker im Labor
+3|                    </figcaption>
+2|                </figure>
+                <p>
+                    Ab sofort steht ein <strong>3D-Drucker</strong> für alle <em>Diplomprojekte</em> bereit.
+                </p>
+4|                <details>
+4|                    <summary>
+4|                        Technische Daten anzeigen
+4|                    </summary>
+5|                    <ul>
+5|                        <li>
+5|                            Bauraum: 250 &times; 210 &times; 220 mm
+5|                        </li>
+5|                        <li>
+5|                            Material: PLA und PETG
+5|                        </li>
+5|                    </ul>
+4|                </details>
+                <p>
+                    Veröffentlicht am <time datetime="2026-10-15">15. Oktober 2026</time>
+                </p>
+            </article>
+            @include artikel2
+        </section>
+    </main>
+
+    @include zusatz
+
+    @include footer
+@include fuss
+</script>
+
+<!-- =========================================================
+     TAB 2: <a> ODER <button>?
+     ========================================================= -->
+<script type="text/plain" id="code-buttons">
+@include kopf
+    <header id="top">
+        <h1>
+            HTL Lernportal
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="neuigkeiten.html">Neuigkeiten</a>
+                </li>
+            </ul>
+        </nav>
+4|        <button type="button">
+4|            Dunkles Design
+4|        </button>
+    </header>
+
+    @include seiten
+
+    <main>
+        <h2>
+            Neuigkeiten
+        </h2>
+        <section id="technik">
+            <h3>
+                Rubrik: Informatik &amp; Technik
+            </h3>
+            <article>
+                <h4>
+                    Neuer 3D-Drucker im Labor
+                </h4>
+                <p>
+                    Ab sofort steht ein <strong>3D-Drucker</strong> für alle <em>Diplomprojekte</em> bereit.
+                </p>
+                <p>
+1-1|                    Veröffentlicht am <time datetime="2026-10-15">15. Oktober 2026</time>
+2|                    Veröffentlicht am <time datetime="2026-10-15">15. Oktober 2026</time> &bull; <a href="news/3d-drucker.html">Ganzen Beitrag lesen</a>
+                </p>
+3|                <p>
+3|                    <button type="button">Beitrag merken</button>
+3|                </p>
+            </article>
+            @include artikel2
+        </section>
+    </main>
+
+    @include zusatz
+
+    @include footer
+@include fuss
+</script>
+
+<!-- =========================================================
+     TAB 3: FORMULAR MIT GET (SUCHE)
+     ========================================================= -->
+<script type="text/plain" id="code-get">
+@include kopf
+    @include header
+
+    @include seiten
+
+    <main>
+        <h2>
+            Neuigkeiten
+        </h2>
+2|        <section id="suche">
+2|            <h3>
+2|                Suche
+2|            </h3>
+2|            <form action="https://www.google.com/search" method="GET">
+3|                <p>
+3|                    <label for="suchbegriff">Suchbegriff:</label>
+3|                    <input id="suchbegriff" type="search" name="q" placeholder="z. B. HTL 3D-Drucker">
+3|                </p>
+4|                <p>
+4|                    <button type="submit">Suchen</button>
+4|                </p>
+2|            </form>
+2|        </section>
+        @include news
+    </main>
+
+    @include zusatz
+
+    @include footer
+@include fuss
+</script>
+
+<!-- =========================================================
+     TAB 4: FORMULAR MIT POST (ANMELDUNG) – INPUTS & SELECTIONS
+     ========================================================= -->
+<script type="text/plain" id="code-post">
+@include kopf
+    @include header
+
+    @include seiten
+
+    <main>
+        <h2>
+            Neuigkeiten
+        </h2>
+        @include news
+2|        <section id="anmeldung">
+2|            <h3>
+2|                Diplomprojekt anmelden
+2|            </h3>
+2|            <form action="https://httpbin.org/post" method="POST">
+3|                <p>
+3|                    <label for="titel">Projekttitel:</label>
+3|                    <input id="titel" type="text" name="titel" required>
+3|                </p>
+4|                <p>
+4|                    <label for="mail">E-Mail-Adresse:</label>
+4|                    <input id="mail" type="email" name="email" required>
+4|                </p>
+5|                <p>
+5|                    <label for="abteilung">Abteilung:</label>
+5|                    <select id="abteilung" name="abteilung">
+5|                        <option value="if">Informatik</option>
+5|                        <option value="et">Elektrotechnik</option>
+5|                        <option value="mb">Maschinenbau</option>
+5|                    </select>
+5|                </p>
+6|                <fieldset>
+6|                    <legend>
+6|                        Gruppengröße
+6|                    </legend>
+6|                    <p>
+6|                        <input id="g2" type="radio" name="gruppe" value="2" checked>
+6|                        <label for="g2">2 Personen</label>
+6|                    </p>
+6|                    <p>
+6|                        <input id="g3" type="radio" name="gruppe" value="3">
+6|                        <label for="g3">3 Personen</label>
+6|                    </p>
+6|                </fieldset>
+7|                <p>
+7|                    <label for="termin">Geplante Abgabe:</label>
+7|                    <input id="termin" type="date" name="abgabe">
+7|                </p>
+8|                <p>
+8|                    <label for="idee">Projektidee:</label>
+8|                    <textarea id="idee" name="idee" rows="4"></textarea>
+8|                </p>
+9|                <p>
+9|                    <input id="ok" type="checkbox" name="datenschutz" value="ja" required>
+9|                    <label for="ok">Ich stimme der Speicherung meiner Daten zu.</label>
+9|                </p>
+9|                <p>
+9|                    <button type="submit">Anmelden</button>
+9|                </p>
+2|            </form>
+2|        </section>
+    </main>
+
+    @include zusatz
+
+    @include footer
+@include fuss
+</script>
+
+<script src="slides/engine.js"></script>
+<script src="slides/lernportal-style.js"></script>
+<script>
+const RAHMEN = [
+    { sel: "body > header", name: "SiteHeader" },
+    { sel: "#seiten-nav", name: "SideNav" },
+    { sel: "#zusatz-info", name: "InfoBox" },
+    { sel: "body > footer", name: "SiteFooter" }
+];
+
+SlideDeck.init({
+    title: "L01.4 · Medien, Buttons & Formulare",
+    subtitle: "figure, details, a vs. button, form, input, select",
+    css: window.LERNPORTAL_CSS,
+    tabs: [
+        {
+            id: "medien", label: "1 · Bild & Aufklappen", code: "code-medien",
+            components: RAHMEN.concat([{ sel: "article", name: "NewsCard" }, { sel: "figure", name: "MediaFigure" }, { sel: "details", name: "Accordion" }]),
+            url: "file:///lernportal/neuigkeiten.html",
+            steps: [
+                { base: true, title: "Ausgangspunkt: Die Neuigkeiten-Seite aus L01.3",
+                  text: "Wir starten bei unserer Rubrik „Informatik & Technik“ mit zwei Beiträgen. Der erste Beitrag bekommt jetzt ein **Bild** und einen **aufklappbaren** Bereich." },
+                { title: "<figure> und <img> – Bild als eigene Einheit",
+                  text: "`<img>` kennen wir als Inline-Element ohne Closing-Tag. Mit `src` (Pfad) und `alt` (Beschreibung für Screenreader). Steht das Bild **für sich** – wie ein Foto in einer Zeitung – packen wir es in ein `<figure>`. `<figure>` ist ein Block." },
+                { title: "<figcaption> – Die Bildunterschrift",
+                  text: "`<figcaption>` ist die Bildunterschrift und gehört **in** das `<figure>`. Dadurch ist sie fest mit dem Bild verbunden – Bild und Text bilden zusammen **eine** Einheit." },
+                { title: "<details> und <summary> – Aufklappen ohne JavaScript",
+                  text: "`<details>` ist ein Bereich, der **zu- und aufgeklappt** werden kann. `<summary>` ist die immer sichtbare Zeile zum Anklicken. **Klicke rechts darauf!** Das funktioniert ganz ohne JavaScript." },
+                { title: "Inhalt im <details>",
+                  text: "Alles nach dem `<summary>` ist der versteckte Inhalt – hier eine Liste. Mit **HTML + CSS** (Taste `2`) siehst du, wie solche Aufklapp-Bereiche (*Akkordeon*) auf Webseiten meistens aussehen." }
+            ]
+        },
+        {
+            id: "buttons", label: "2 · a oder button?", code: "code-buttons",
+            components: RAHMEN.concat([{ sel: "article", name: "NewsCard" }]),
+            url: "file:///lernportal/neuigkeiten.html",
+            steps: [
+                { base: true, title: "Ausgangspunkt",
+                  text: "Zwei Dinge sehen später gleich aus (ein Knopf), sind aber grundverschieden: **woanders hingehen** oder **etwas tun**. Wir entscheiden **nie nach dem Aussehen**, sondern nach der **Funktion**." },
+                { title: "<a href> – Wir gehen woanders hin",
+                  text: "„Ganzen Beitrag lesen“ führt zu einer **anderen Seite** – die Adresse im Browser ändert sich. Dafür nehmen wir immer `<a href=\"...\">`. Auch Sprünge zu `#anker` sind Navigation." },
+                { title: "<button type=\"button\"> – Wir tun etwas auf dieser Seite",
+                  text: "„Beitrag merken“ wechselt **nicht** die Seite, sondern löst eine **Aktion** aus. Dafür nehmen wir `<button type=\"button\">`. Was genau passiert, programmiert man später mit JavaScript – jetzt passiert beim Klick noch nichts." },
+                { title: "Noch ein Button: Darstellung umschalten",
+                  text: "Ein Schalter für ein dunkles Design ist ebenfalls eine **Aktion** → `<button>`. Faustregel: **Adresse ändert sich → `<a>`**, **Aktion auf der Seite → `<button>`**. Auch `<button>` ist inline." }
+            ]
+        },
+        {
+            id: "get", label: "3 · Formular mit GET", code: "code-get",
+            components: RAHMEN.concat([{ sel: "#suche", name: "SearchForm" }, { sel: "article", name: "NewsCard" }]),
+            url: "file:///lernportal/neuigkeiten.html",
+            steps: [
+                { base: true, title: "Ausgangspunkt",
+                  text: "Bisher schickt unsere Seite nur Inhalte **zum** Browser. Mit einem **Formular** schickt der Browser Daten **an einen Server** – ganz ohne JavaScript. Wir beginnen mit einer Suche." },
+                { title: "<form action method=\"GET\">",
+                  text: "`<form>` ist ein Block, der alle Eingaben bündelt. `action` ist die **Adresse des Servers**, an den die Daten gehen. `method=\"GET\"` bedeutet: Die Daten werden **sichtbar an die URL** angehängt. GET verwenden wir zum **Suchen und Abfragen**." },
+                { title: "<label> und <input> – id ist nicht name!",
+                  text: "`<input>` ist ein **Non-Closing Tag** und inline. `<label for=\"suchbegriff\">` gehört zum Feld mit `id=\"suchbegriff\"` – ein Klick auf die Beschriftung setzt den Cursor ins Feld. **Wichtig:** `name=\"q\"` ist der **Schlüssel für den Server**. Ohne `name` wird der Wert **nicht** mitgeschickt!" },
+                { title: "<button type=\"submit\"> – Absenden ausprobieren!",
+                  text: "`type=\"submit\"` schickt das Formular ab. **Tippe rechts etwas ein und klicke „Suchen“.** Unten erscheint der HTTP-Request, und die Adresszeile zeigt `?q=...` – genau das ist GET: **Schlüssel=Wert** in der URL. Mit „Wirklich absenden“ geht die Suche tatsächlich an Google." }
+            ]
+        },
+        {
+            id: "post", label: "4 · Formular mit POST", code: "code-post",
+            components: RAHMEN.concat([{ sel: "#anmeldung", name: "RegistrationForm" }, { sel: "fieldset", name: "RadioGroup" }]),
+            url: "file:///lernportal/neuigkeiten.html",
+            steps: [
+                { base: true, title: "Ausgangspunkt",
+                  text: "Jetzt sollen Schüler:innen ihr Diplomprojekt **anmelden**. Hier werden Daten **gespeichert** – dafür nehmen wir `POST`. Als Server verwenden wir `httpbin.org`, einen Test-Server, der uns einfach zurückzeigt, was angekommen ist." },
+                { title: "<form method=\"POST\">",
+                  text: "Mit `method=\"POST\"` stehen die Daten **nicht** in der URL, sondern im **Body** des HTTP-Requests. POST verwenden wir, wenn etwas **gespeichert oder verändert** wird oder die Daten nicht in der Adresszeile stehen sollen (z. B. Passwörter)." },
+                { title: "Textfeld mit required",
+                  text: "`type=\"text\"` ist ein einzeiliges Textfeld. Das Attribut `required` steht allein ohne Wert: Der Browser lässt das Formular erst absenden, wenn das Feld ausgefüllt ist." },
+                { title: "type=\"email\" – der Browser prüft mit",
+                  text: "Über das Attribut `type` wird aus demselben `<input>` ein anderes Feld. Bei `type=\"email\"` prüft der Browser vor dem Absenden, ob ein `@` vorkommt." },
+                { title: "<select> und <option> – Auswahl aus einer Liste",
+                  text: "`<select>` ist ein **Auswahlmenü** (Dropdown). Jede Möglichkeit ist ein `<option>`. Der Text zwischen den Tags ist für Menschen, `value=\"if\"` wird an den Server geschickt: `abteilung=if`." },
+                { title: "Radio-Buttons in <fieldset> mit <legend>",
+                  text: "Bei `type=\"radio\"` darf man **genau eine** Möglichkeit wählen. Alle Radio-Buttons einer Gruppe haben **denselben** `name`. `<fieldset>` fasst die Gruppe zusammen, `<legend>` ist ihre Überschrift. `checked` wählt eine Möglichkeit vor." },
+                { title: "type=\"date\" – Datumsauswahl",
+                  text: "Mit `type=\"date\"` zeigt der Browser einen Kalender an. Weitere Typen: `number`, `password`, `tel`, `url`, `color` … – immer dasselbe `<input>`, nur ein anderes `type`." },
+                { title: "<textarea> – Mehrzeiliger Text",
+                  text: "Für längere Texte nehmen wir `<textarea>`. Anders als `<input>` hat es **ein Closing-Tag** – der Text zwischen den Tags wäre der Startwert. `rows` legt die sichtbare Höhe fest." },
+                { title: "Checkbox und Absenden – ausprobieren!",
+                  text: "`type=\"checkbox\"` ist ein Häkchen, das man an- oder abwählen kann. **Fülle das Formular rechts aus und klicke „Anmelden“.** Der Request unten zeigt: Bei POST bleibt die URL ohne `?` – die Daten stehen im **Body**." }
+            ]
+        }
+    ]
+});
+</script>
+</body>
+</html>

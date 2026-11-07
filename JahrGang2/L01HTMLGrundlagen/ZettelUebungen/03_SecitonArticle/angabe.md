@@ -24,7 +24,7 @@ Entscheide dich für eine der beiden Schachtelungsvarianten und überlege dir ei
 ---
 
 ## HTML-Umsetzung (15 Minuten)
-> Verwende die [HTML-Slide](vorbereitung-animiert.html) als Hilfestellung! Öffne diese in einem browser.
+> Verwende die [HTML-Slide](../../Skripten/L01.3-Section-Article.html#news/1) als Hilfestellung (Tabs „3 · article in section“ und „4 · section in article“)! Öffne diese in einem Browser.
 
 Erstelle eine Datei mit dem Namen `index.html` und setze dein gewähltes Szenario um. Kopiere dieses anschließend in ein HTML-``Code Snippet`` weiter unten ein.
 Verwende  für *Fließtext* folgdenen [Lorem-Ipsum Text](https://www.lipsum.com/feed/html). Überschriften sind mit *sinnvollen* Namen zu ertellen.

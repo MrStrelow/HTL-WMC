@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L01.1 – HTML-Grundlagen</title>
+    <link rel="stylesheet" href="slides/engine.css">
+</head>
+<body>
+
+<!-- =========================================================
+     FRAGMENTE (werden mit @include eingefügt)
+     ========================================================= -->
+<script type="text/plain" data-fragment="kopf">
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>HTL Lernportal</title>
+</head>
+<body>
+</script>
+
+<script type="text/plain" data-fragment="fuss">
+</body>
+</html>
+</script>
+
+<!-- =========================================================
+     TAB 1: GRUNDGERÜST
+     ========================================================= -->
+<script type="text/plain" id="code-geruest">
+1|<!DOCTYPE html>
+2|<html lang="de">
+3|<head>
+4|    <meta charset="UTF-8">
+5|    <title>HTL Lernportal</title>
+3|</head>
+6|<body>
+6|    <!-- Hier kommt der sichtbare Inhalt hinein -->
+6|</body>
+2|</html>
+</script>
+
+<!-- =========================================================
+     TAB 2: ÜBERSCHRIFTEN, ABSÄTZE, BETONUNG
+     ========================================================= -->
+<script type="text/plain" id="code-text">
+@include kopf
+1-1|    <!-- Hier kommt der sichtbare Inhalt hinein -->
+2|    <h1>
+2|        HTL Lernportal
+2|    </h1>
+3|    <p>
+3-3|        Willkommen im Lernportal für Web-Engineering.
+4|        Willkommen im <strong>Lernportal</strong> für <em>Web-Engineering</em>.
+3|    </p>
+5|    <h2>
+5|        Unsere Kapitel
+5|    </h2>
+5|    <p>
+5|        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+5|    </p>
+@include fuss
+</script>
+
+<!-- =========================================================
+     TAB 3: LISTEN & LINKS
+     ========================================================= -->
+<script type="text/plain" id="code-listen">
+@include kopf
+    <h1>
+        HTL Lernportal
+    </h1>
+    <p>
+        Willkommen im <strong>Lernportal</strong> für <em>Web-Engineering</em>.
+    </p>
+    <h2>
+        Unsere Kapitel
+    </h2>
+1-1|    <p>
+1-1|        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+1-1|    </p>
+2|    <ul>
+2|        <li>
+2-2|            Grundlagen
+3|            <a href="grundlagen.html">Grundlagen</a>
+2|        </li>
+2|        <li>
+2-2|            Layout mit Zonen
+3|            <a href="layout.html">Layout mit Zonen</a>
+2|        </li>
+2|        <li>
+2-2|            Formulare
+3|            <a href="formulare.html">Formulare</a>
+2|        </li>
+2|    </ul>
+4|    <p>
+4|        Zum Nachschlagen verwenden wir die <a href="https://developer.mozilla.org/de/">MDN Web Docs</a>.
+4|    </p>
+5|    <h2>
+5|        So lernen wir
+5|    </h2>
+5|    <ol>
+5|        <li>
+5|            Skriptum lesen
+5|        </li>
+5|        <li>
+5|            Slides durchklicken
+5|        </li>
+5|        <li>
+5|            Zettelübung lösen
+5|        </li>
+5|    </ol>
+@include fuss
+</script>
+
+<!-- =========================================================
+     TAB 4: BILD, TABELLE, LEERE ELEMENTE
+     ========================================================= -->
+<script type="text/plain" id="code-tabelle">
+@include kopf
+    <h1>
+        HTL Lernportal
+    </h1>
+    <p>
+2|        <img src="bilder/html5-logo.svg" alt="HTML5-Logo" width="60">
+        Willkommen im <strong>Lernportal</strong> für <em>Web-Engineering</em>.
+    </p>
+    <h2>
+        Unsere Kapitel
+    </h2>
+    <ul>
+        <li>
+            <a href="grundlagen.html">Grundlagen</a>
+        </li>
+        <li>
+            <a href="layout.html">Layout mit Zonen</a>
+        </li>
+    </ul>
+3|    <hr>
+4|    <h2>
+4|        Stundenplan
+4|    </h2>
+4|    <table>
+4|        <tr>
+4|            <th>
+4|                Tag
+4|            </th>
+4|            <th>
+4|                Thema
+4|            </th>
+4|        </tr>
+5|        <tr>
+5|            <td>
+5|                Montag
+5|            </td>
+5|            <td>
+5|                HTML-Grundgerüst
+5|            </td>
+5|        </tr>
+5|        <tr>
+5|            <td>
+5|                Mittwoch
+5|            </td>
+5|            <td>
+5|                Listen &amp; Tabellen
+5|            </td>
+5|        </tr>
+4|    </table>
+6|    <h2>
+6|        Kontakt
+6|    </h2>
+6|    <p>
+6|        HTL Musterstadt<br>
+6|        Musterstraße 42<br>
+6|        1010 Wien
+6|    </p>
+@include fuss
+</script>
+
+<!-- =========================================================
+     TAB 5 (OPTIONAL): WAS DER BROWSER HEIMLICH REPARIERT
+     ========================================================= -->
+<script type="text/plain" id="code-fehler">
+@include kopf
+1-1|    <p>
+1-1|        Unsere Kapitel:
+1-1|    </p>
+1-1|    <ul>
+1-1|        <li>
+1-1|            Grundlagen
+1-1|        </li>
+1-1|    </ul>
+2-2|!    <p>
+2-2|!        Unsere Kapitel:
+2-2|!        <ul>
+2-2|!            <li>
+2-2|!                Grundlagen
+2-2|!            </li>
+2-2|!        </ul>
+2-2|!    </p>
+2-2|?    <!-- Daraus macht der Browser: -->
+2-2|?    <p>
+2-2|?        Unsere Kapitel:
+2-2|?    </p>
+2-2|?    <ul>
+2-2|?        <li>
+2-2|?            Grundlagen
+2-2|?        </li>
+2-2|?    </ul>
+2-2|?    <p>
+2-2|?    </p>
+3-3|!    <strong>
+3-3|!        <h2>
+3-3|!            Fett und Überschrift?
+3-3|!        </h2>
+3-3|!    </strong>
+3-3|?    <!-- Daraus macht der Browser: genau dasselbe -->
+3-3|?    <strong>
+3-3|?        <h2>
+3-3|?            Fett und Überschrift?
+3-3|?        </h2>
+3-3|?    </strong>
+4|!    <p>
+4|!        Ein <strong>wichtiges</p></strong> Wort.
+4|!    </p>
+4|?    <!-- Daraus macht der Browser: -->
+4|?    <p>
+4|?        Ein <strong>wichtiges</strong>
+4|?    </p>
+4|?    Wort.
+4|?    <p>
+4|?    </p>
+@include fuss
+</script>
+
+<script src="slides/engine.js"></script>
+<script>
+const KURZ_CSS = `/* Ausblick: einfaches Styling für eine Textseite */
+body {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    font-family: system-ui, sans-serif;
+    line-height: 1.6;
+    color: #1e293b;
+    background: #f8fafc;
+}
+
+h1 {
+    color: #1d4ed8;
+    border-bottom: 3px solid #93c5fd;
+}
+
+a {
+    color: #2563eb;
+}
+
+img {
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+hr {
+    border: 0;
+    border-top: 2px dashed #cbd5e1;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+    text-align: left;
+}
+
+th {
+    background: #e2e8f0;
+}`;
+
+SlideDeck.init({
+    title: "L01.1 · HTML-Grundlagen",
+    subtitle: "Grundgerüst, Block & Inline, erste Tags",
+    css: KURZ_CSS,
+    tabs: [
+        {
+            id: "geruest", label: "1 · Grundgerüst", code: "code-geruest",
+            components: [],
+            steps: [
+                { title: "<!DOCTYPE html> – Das ist HTML5",
+                  text: "Jede Datei beginnt mit `<!DOCTYPE html>`. Das ist kein echter Tag, sondern eine **Deklaration**: Sie sagt dem Browser, dass er die Datei als modernes HTML5 lesen soll. Die Vorschau rechts bleibt leer – es gibt noch nichts Sichtbares." },
+                { title: "<html lang=\"de\"> – Das Wurzelelement",
+                  text: "`<html>` umschließt das **gesamte** Dokument. Das Attribut `lang=\"de\"` steht im Start-Tag und verrät Screenreadern und Suchmaschinen die Sprache. Achte auf den Closing-Tag `</html>` ganz unten." },
+                { title: "<head> – Der unsichtbare Kopf",
+                  text: "Im `<head>` stehen **Metadaten**: Informationen über die Datei, die nicht auf die Seite gezeichnet werden. Im Code ist er grau eingefärbt – grau bedeutet bei uns *unsichtbar*." },
+                { title: "<meta charset=\"UTF-8\"> – Der Zeichensatz",
+                  text: "`<meta>` ist ein **Non-Closing Tag** (leeres Element): Es umschließt keinen Inhalt und hat deshalb kein `</meta>`. `UTF-8` sorgt dafür, dass Umlaute wie ä, ö, ü richtig dargestellt werden." },
+                { title: "<title> – Der Text im Browser-Tab",
+                  text: "Der `<title>` erscheint nicht auf der Seite, sondern **oben im Browser-Tab**. Schau rechts in die Browserleiste: dort steht jetzt „HTL Lernportal“." },
+                { title: "<body> – Alles Sichtbare",
+                  text: "Alles, was man im Browserfenster sehen soll, muss in den `<body>`. Ein Kommentar `<!-- ... -->` ist nur für Menschen gedacht und wird nicht angezeigt. Damit ist das **Grundgerüst** fertig – in VS Code erzeugt `!` + Tab genau dieses Gerüst." }
+            ]
+        },
+        {
+            id: "text", label: "2 · Text & Betonung", code: "code-text",
+            components: [{ sel: "h1", name: "PageTitle" }, { sel: "p", name: "TextBlock" }],
+            steps: [
+                { base: true, title: "Ausgangspunkt: das leere Grundgerüst",
+                  text: "Wir starten beim fertigen Gerüst aus Tab 1. Ab jetzt schreiben wir nur noch in den `<body>`." },
+                { title: "<h1> – Die Hauptüberschrift (Block)",
+                  text: "`<h1>` ist ein **Block-Element**: Es nimmt die volle Breite ein und steht in einer eigenen Zeile. Deshalb schreiben wir Start- und Closing-Tag **untereinander** und den Inhalt eingerückt dazwischen. Schalte oben rechts **Block / Inline** zu (Taste `3`)!" },
+                { title: "<p> – Ein Absatz (Block)",
+                  text: "Fließtext steht nie „nackt“ im `<body>`, sondern immer in einem Paragraph `<p>`. Auch `<p>` ist ein Block – der Absatz beginnt automatisch in einer neuen Zeile." },
+                { title: "<strong> und <em> – Betonung (Inline)",
+                  text: "`<strong>` (wichtig) und `<em>` (betont) sind **Inline-Elemente**: Sie fließen im Text mit und erzeugen keinen Zeilenumbruch. Deshalb stehen Start- und Closing-Tag **nebeneinander in derselben Zeile**." },
+                { title: "<h2> – Unterüberschrift und Blindtext",
+                  text: "`<h2>` ist eine Überschrift der zweiten Ebene. Solange der echte Text fehlt, verwenden wir **Blindtext** (*Lorem ipsum*). Die Überschriften-Ebenen beschreiben die **Gliederung**, nicht die Schriftgröße." }
+            ]
+        },
+        {
+            id: "listen", label: "3 · Listen & Links", code: "code-listen",
+            components: [{ sel: "ul", name: "ChapterList" }, { sel: "ol", name: "StepList" }],
+            steps: [
+                { base: true, title: "Ausgangspunkt",
+                  text: "Wir ersetzen den Blindtext unter „Unsere Kapitel“ durch eine echte Liste." },
+                { title: "<ul> und <li> – Ungeordnete Liste (Block)",
+                  text: "`<ul>` (*unordered list*) enthält als direkte Kinder **ausschließlich** `<li>`-Elemente. Jedes `<li>` beginnt in einer eigenen Zeile und wird wie ein Block geschrieben. (Genau genommen hat `<li>` die Darstellung `list-item` – ein Block mit Aufzählungspunkt davor.)" },
+                { title: "<a href> – Links (Inline) im Listenpunkt",
+                  text: "`<a>` ist ein **Inline-Element** und steht deshalb in einer Zeile. Das Attribut `href` ist das Ziel – hier relative Pfade zu anderen Dateien wie `grundlagen.html`. Klickst du rechts darauf, zeigt die Vorschau nur einen Hinweis." },
+                { title: "Externer Link im Fließtext",
+                  text: "Ein Link kann mitten im Satz stehen, weil er inline ist. Für andere Webseiten verwenden wir eine **absolute URL** mit `https://`." },
+                { title: "<ol> – Geordnete Liste",
+                  text: "`<ol>` (*ordered list*) nummeriert automatisch. Wir verwenden sie, wenn die **Reihenfolge eine Bedeutung hat** – wie bei unserem Lernablauf." }
+            ]
+        },
+        {
+            id: "tabelle", label: "4 · Bild & Tabelle", code: "code-tabelle",
+            components: [{ sel: "ul", name: "ChapterList" }, { sel: "table", name: "ScheduleTable" }],
+            steps: [
+                { base: true, title: "Ausgangspunkt",
+                  text: "Unsere Seite hat Überschriften, einen Absatz und eine Linkliste. Jetzt kommen **leere Elemente** und eine Tabelle dazu." },
+                { title: "<img> – Bild (Inline, Non-Closing)",
+                  text: "`<img>` hat **kein** Closing-Tag. `src` gibt den Pfad zum Bild an, `alt` beschreibt das Bild für Screenreader und falls es nicht geladen werden kann. Weil `<img>` inline ist, steht es mitten im Absatz neben dem Text." },
+                { title: "<hr> – Thematischer Umbruch (Block, Non-Closing)",
+                  text: "`<hr>` markiert einen **thematischen Wechsel** und wird als Linie gezeichnet. Auch `<hr>` ist ein leeres Element." },
+                { title: "<table>, <tr>, <th> – Tabellenkopf",
+                  text: "Eine Tabelle ist streng aufgebaut: `<table>` enthält Zeilen `<tr>` (*table row*), und erst darin stehen die Zellen. `<th>` ist eine **Überschrift-Zelle**. Text steht nie direkt in `<table>` oder `<tr>`." },
+                { title: "<td> – Datenzellen",
+                  text: "`<td>` (*table data*) sind normale Zellen. **Wichtig:** Tabellen nur für echte Tabellen-Daten – **niemals** für das Seiten-Layout. Wie man Spalten richtig baut, sehen wir in L01.2." },
+                { title: "<br> – Zeilenumbruch (Inline, Non-Closing)",
+                  text: "`<br>` erzwingt einen Umbruch **innerhalb** eines Absatzes, z. B. bei einer Adresse. Für Abstände zwischen Blöcken verwenden wir `<br>` nie – dafür gibt es später CSS." }
+            ]
+        },
+        {
+            id: "fehler", label: "Browser repariert", code: "code-fehler", optional: true,
+            components: [],
+            steps: [
+                { base: true, title: "So ist es richtig",
+                  text: "**Für besonders Interessierte.** Ein Absatz `<p>` und danach eine Liste `<ul>`. Schalte oben rechts **Block / Inline** zu (Taste `3`): Du siehst zwei getrennte Blöcke. In den nächsten Schritten gilt: **Rot durchgestrichen** = so schreiben wir es **nicht**, **blau mit ⇒** = was der Browser daraus macht." },
+                { title: "Fehler: <ul> im <p>",
+                  text: "Ein `<p>` darf **nur Inline-Elemente** enthalten. Oben steht durchgestrichen, was wir geschrieben haben, darunter (⇒), was der Browser daraus baut: Er beendet den Absatz **heimlich vor** dem `<ul>` und macht aus dem übrigen `</p>` einen **zusätzlichen leeren** `<p>`. Mit **Block / Inline** siehst du den leeren Absatz rechts in der Vorschau." },
+                { title: "Fehler: Block in Inline",
+                  text: "Das Inline-Element `<strong>` umschließt das Block-Element `<h2>`. Hier repariert der Browser **nichts** – er übernimmt es genau so. Trotzdem verletzt es unsere Regel: **Inline schachteln wir nur mit Inline.** Dass der Browser etwas anzeigt, heißt nicht, dass es richtig ist." },
+                { title: "Fehler: Überkreuzte Tags",
+                  text: "`<strong>` wird erst nach `</p>` geschlossen – die Tags überkreuzen sich. Der Browser schließt `<strong>` und `<p>` vorzeitig, „Wort.“ landet **außerhalb** jedes Absatzes, und das letzte `</p>` wird wieder zu einem leeren Absatz. Richtig ist das **Zwiebel-Prinzip**: Was zuletzt geöffnet wurde, wird zuerst geschlossen. Ein **Linter** (z. B. HTMLHint) findet solche Fehler für uns." }
+            ]
+        }
+    ]
+});
+</script>
+</body>
+</html>

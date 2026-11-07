@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L01.3 – section, Anker, article</title>
+    <link rel="stylesheet" href="slides/engine.css">
+</head>
+<body>
+
+<!-- =========================================================
+     FRAGMENTE: der Rahmen aus L01.2 (bleibt auf jeder Seite gleich)
+     ========================================================= -->
+<script type="text/plain" data-fragment="kopf">
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>HTL Lernportal</title>
+</head>
+<body>
+</script>
+
+<script type="text/plain" data-fragment="fuss">
+</body>
+</html>
+</script>
+
+<script type="text/plain" data-fragment="header">
+<header id="top">
+    <h1>
+        HTL Lernportal
+    </h1>
+    <nav id="haupt-nav">
+        <ul>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>
+                <a href="neuigkeiten.html">Neuigkeiten</a>
+            </li>
+            <li>
+                <a href="projekte.html">Projekte</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+</script>
+
+<script type="text/plain" data-fragment="zusatz">
+<aside id="zusatz-info">
+    <h2>
+        Tipps
+    </h2>
+    <p>
+        Halte die <a href="https://developer.mozilla.org/de/">MDN Web Docs</a> offen.
+    </p>
+</aside>
+</script>
+
+<script type="text/plain" data-fragment="footer">
+<footer>
+    <p>
+        &copy; 2026 HTL Lernportal &bull; <a href="#top">Nach oben</a>
+    </p>
+</footer>
+</script>
+
+<!-- =========================================================
+     TAB 1: <section> – KAPITEL IM HAUPTINHALT
+     ========================================================= -->
+<script type="text/plain" id="code-section">
+@include kopf
+    <header>
+        <h1>
+            HTL Lernportal
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="kapitel.html">Kapitel</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <aside id="seiten-nav">
+        <h2>
+            Kapitel
+        </h2>
+        <nav>
+            <ul>
+                <li>
+                    <a href="grundlagen.html">1. Grundlagen</a>
+                </li>
+                <li>
+                    <a href="layout.html">2. Layout</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <h2>
+            Modul: HTML-Struktur
+        </h2>
+1-1|        <p>
+1-1|            Der Hauptinhalt kommt genau <strong>einmal</strong> pro Seite vor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+1-1|        </p>
+2|        <section>
+2|            <h3>
+2|                1. Einleitung
+2|            </h3>
+2|            <p>
+2|                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam commodo egestas leo.
+2|            </p>
+2|        </section>
+3|        <section>
+3|            <h3>
+3|                2. Seitenzonen
+3|            </h3>
+3|            <p>
+3|                Nam vel pulvinar erat. Duis quam erat, tempus ac lacus hendrerit, commodo vehicula mauris.
+3|            </p>
+3|        </section>
+4|        <section>
+4|            <h3>
+4|                3. Praxisaufgabe
+4|            </h3>
+4|            <p>
+4|                Aenean ac mattis lacus. Aliquam lectus odio, gravida eu mi et, gravida commodo augue.
+4|            </p>
+4|        </section>
+    </main>
+
+    @include zusatz
+
+    <footer>
+        <p>
+            &copy; 2026 HTL Lernportal &bull; <a href="impressum.html">Impressum</a>
+        </p>
+    </footer>
+@include fuss
+</script>
+
+<!-- =========================================================
+     TAB 2: ANKER – id + href="#..."
+     ========================================================= -->
+<script type="text/plain" id="code-anker">
+@include kopf
+1-3|    <header>
+4|    <header id="top">
+        <h1>
+            HTL Lernportal
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="kapitel.html">Kapitel</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <aside id="seiten-nav">
+        <h2>
+1-2|            Kapitel
+3|            Inhalt
+        </h2>
+        <nav>
+            <ul>
+1-2|                <li>
+1-2|                    <a href="grundlagen.html">1. Grundlagen</a>
+1-2|                </li>
+1-2|                <li>
+1-2|                    <a href="layout.html">2. Layout</a>
+1-2|                </li>
+3|                <li>
+3|                    <a href="#einleitung">1. Einleitung</a>
+3|                </li>
+3|                <li>
+3|                    <a href="#zonen">2. Seitenzonen</a>
+3|                </li>
+3|                <li>
+3|                    <a href="#aufgabe">3. Praxisaufgabe</a>
+3|                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <h2>
+            Modul: HTML-Struktur
+        </h2>
+1-1|        <section>
+2|        <section id="einleitung">
+            <h3>
+                1. Einleitung
+            </h3>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam commodo egestas leo, in volutpat massa venenatis bibendum. Nam vel pulvinar erat. Duis quam erat, tempus ac lacus hendrerit, commodo vehicula mauris.
+            </p>
+        </section>
+1-1|        <section>
+2|        <section id="zonen">
+            <h3>
+                2. Seitenzonen
+            </h3>
+            <p>
+                Nam vel pulvinar erat. Duis quam erat, tempus ac lacus hendrerit, commodo vehicula mauris. Aenean ac mattis lacus. Aliquam lectus odio, gravida eu mi et, gravida commodo augue. Etiam bibendum felis justo.
+            </p>
+        </section>
+1-1|        <section>
+2|        <section id="aufgabe">
+            <h3>
+                3. Praxisaufgabe
+            </h3>
+            <p>
+                Aenean ac mattis lacus. Aliquam lectus odio, gravida eu mi et, gravida commodo augue. Etiam bibendum felis justo, convallis consequat tellus auctor sit amet. In pellentesque tortor sapien, et ullamcorper massa consectetur nec.
+            </p>
+        </section>
+    </main>
+
+    <aside id="zusatz-info">
+        <h2>
+            Tipps
+        </h2>
+        <p>
+            Halte die <a href="https://developer.mozilla.org/de/">MDN Web Docs</a> offen.
+        </p>
+5|        <p>
+5|            Gleich zur <a href="#aufgabe">Praxisaufgabe</a> springen.
+5|        </p>
+    </aside>
+
+    <footer>
+        <p>
+1-3|            &copy; 2026 HTL Lernportal &bull; <a href="impressum.html">Impressum</a>
+4|            &copy; 2026 HTL Lernportal &bull; <a href="#top">Nach oben</a>
+        </p>
+    </footer>
+@include fuss
+</script>
+
+<!-- =========================================================
+     TAB 3: <article> IN <section> – DIE ZEITUNGS-RUBRIK
+     ========================================================= -->
+<script type="text/plain" id="code-news">
+@include kopf
+    @include header
+
+    <aside id="seiten-nav">
+        <h2>
+            Rubriken
+        </h2>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#technik">Informatik &amp; Technik</a>
+                </li>
+                <li>
+                    <a href="#schulleben">Schulleben</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <h2>
+            Neuigkeiten
+        </h2>
+2|        <section id="technik">
+2|            <h3>
+2|                Rubrik: Informatik &amp; Technik
+2|            </h3>
+3|            <article>
+3|                <h4>
+3|                    Neuer 3D-Drucker im Labor
+3|                </h4>
+3|                <p>
+3|                    Ab sofort steht ein <strong>3D-Drucker</strong> für alle <em>Diplomprojekte</em> bereit.
+3|                </p>
+5|                <p>
+5|                    Veröffentlicht am <time datetime="2026-10-15">15. Oktober 2026</time>
+5|                </p>
+3|            </article>
+4|            <article>
+4|                <h4>
+4|                    Sieg beim Coding-Contest
+4|                </h4>
+4|                <p>
+4|                    Der <strong>2. Jahrgang</strong> gewinnt den Landespreis im Bereich <em>Algorithmen</em>.
+4|                </p>
+5|                <p>
+5|                    Veröffentlicht am <time datetime="2026-10-18">18. Oktober 2026</time>
+5|                </p>
+4|            </article>
+2|        </section>
+6|        <section id="schulleben">
+6|            <h3>
+6|                Rubrik: Schulleben
+6|            </h3>
+6|            <article>
+6|                <h4>
+6|                    Tag der offenen Tür
+6|                </h4>
+6|                <p>
+6|                    Am <strong>Freitag</strong> zeigen wir unsere Projekte.
+6|                </p>
+6|                <p>
+6|                    Veröffentlicht am <time datetime="2026-11-02">2. November 2026</time>
+6|                </p>
+6|            </article>
+6|        </section>
+    </main>
+
+    @include zusatz
+
+    @include footer
+@include fuss
+</script>
+
+<!-- =========================================================
+     TAB 4: <section> IN <article> – DAS BUCH MIT KAPITELN
+     ========================================================= -->
+<script type="text/plain" id="code-bericht">
+@include kopf
+    @include header
+
+    <aside id="seiten-nav">
+        <h2>
+            Inhalt
+        </h2>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#problem">1. Problemstellung</a>
+                </li>
+                <li>
+                    <a href="#bauteile">2. Bauteile</a>
+                </li>
+                <li>
+                    <a href="#ergebnis">3. Ergebnis</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+1-1|        <!-- Hier entsteht der Projektbericht -->
+2|        <article>
+2|            <h2>
+2|                Projektbericht: Solar-Wetterstation
+2|            </h2>
+2|            <p>
+2|                Von <strong>Lukas &amp; Sarah</strong>, Stand: <time datetime="2026-10">Oktober 2026</time>
+2|            </p>
+3|            <p>
+3|                In diesem Bericht zeigen wir, wie wir eine <strong>Wetterstation ohne Stromkabel</strong> gebaut haben.
+3|                Zuerst beschreiben wir die <em>Problemstellung</em>, dann die verwendeten <em>Bauteile</em> und zum Schluss das <em>Ergebnis</em>.
+3|            </p>
+4|            <section id="problem">
+4|                <h3>
+4|                    1. Problemstellung
+4|                </h3>
+4|                <p>
+4|                    Messdaten im Schulgarten sollen <strong>ohne Stromkabel</strong> per <em>WLAN</em> übertragen werden.
+4|                </p>
+4|            </section>
+5|            <section id="bauteile">
+5|                <h3>
+5|                    2. Bauteile
+5|                </h3>
+5|                <ul>
+5|                    <li>
+5|                        Mikrocontroller: <strong>ESP32</strong>
+5|                    </li>
+5|                    <li>
+5|                        Sensor: <strong>BME280</strong> für Temperatur und Luftfeuchte
+5|                    </li>
+5|                </ul>
+5|            </section>
+6|            <section id="ergebnis">
+6|                <h3>
+6|                    3. Ergebnis
+6|                </h3>
+6|                <p>
+6|                    Die Station sendet alle <strong>10 Minuten</strong> einen Messwert.
+6|                </p>
+6|            </section>
+7|            <p>
+7|                Status: <strong>abgeschlossen</strong> &bull; <a href="wetterstation.zip">Quellcode herunterladen</a>
+7|            </p>
+2|        </article>
+    </main>
+
+    @include zusatz
+
+    @include footer
+@include fuss
+</script>
+
+<!-- =========================================================
+     TAB 5 (OPTIONAL): <header>/<footer> INNERHALB EINER KOMPONENTE
+     ========================================================= -->
+<script type="text/plain" id="code-optional">
+@include kopf
+    @include header
+
+    <main>
+        <section id="technik">
+            <h3>
+                Rubrik: Informatik &amp; Technik
+            </h3>
+            <article>
+2|                <header>
+1-1|                <h4>
+1-1|                    Neuer 3D-Drucker im Labor
+1-1|                </h4>
+2|                    <h4>
+2|                        Neuer 3D-Drucker im Labor
+2|                    </h4>
+2|                </header>
+                <p>
+                    Ab sofort steht ein <strong>3D-Drucker</strong> für alle <em>Diplomprojekte</em> bereit.
+                </p>
+3|                <footer>
+1-2|                <p>
+1-2|                    Veröffentlicht am <time datetime="2026-10-15">15. Oktober 2026</time>
+1-2|                </p>
+3|                    <p>
+3|                        Veröffentlicht am <time datetime="2026-10-15">15. Oktober 2026</time>
+3|                    </p>
+3|                </footer>
+            </article>
+        </section>
+    </main>
+
+    @include footer
+@include fuss
+</script>
+
+<script src="slides/engine.js"></script>
+<script src="slides/lernportal-style.js"></script>
+<script>
+const RAHMEN = [
+    { sel: "body > header", name: "SiteHeader" },
+    { sel: "#seiten-nav", name: "SideNav" },
+    { sel: "#zusatz-info", name: "InfoBox" },
+    { sel: "body > footer", name: "SiteFooter" }
+];
+
+SlideDeck.init({
+    title: "L01.3 · section, Anker & article",
+    subtitle: "Kapitel, Sprungmarken und eigenständige Beiträge",
+    css: window.LERNPORTAL_CSS,
+    tabs: [
+        {
+            id: "section", label: "1 · section", code: "code-section",
+            components: RAHMEN.concat([{ sel: "main section", name: "ChapterSection" }]),
+            steps: [
+                { base: true, title: "Ausgangspunkt: Die Seite aus L01.2",
+                  text: "Wir starten bei unserem Lernportal mit Kopf, Seitennavigation, Hauptinhalt, Tipps und Fußzeile. Bisher steht im `<main>` nur ein Absatz. Ein langes Modul soll aber in **Kapitel** gegliedert werden." },
+                { title: "<section> – Das erste Kapitel",
+                  text: "Eine `<section>` gruppiert **thematisch zusammengehörigen** Inhalt – ein Kapitel. **Daumenregel:** Eine Section hat **meistens eine Überschrift** (heading). Weil `<main>` schon ein `<h2>` hat, bekommen die Kapitel `<h3>`." },
+                { title: "Zweites Kapitel",
+                  text: "Jede weitere Section ist wieder ein eigener Block. Frage dich: Ergibt das Kapitel **ohne den Rest der Seite** Sinn? Nein – „2. Seitenzonen“ ist ein Teil des Moduls. Genau deshalb ist es eine `<section>` und kein `<article>`." },
+                { title: "Drittes Kapitel – fertig gegliedert",
+                  text: "Das `<main>` besteht jetzt aus drei Kapiteln. Mit **Block / Inline** (Taste `3`) siehst du die Schachtelung: `<main>` → `<section>` → `<h3>` + `<p>`. Als Nächstes machen wir die Kapitel über die Seitennavigation **anspringbar**." }
+            ]
+        },
+        {
+            id: "anker", label: "2 · Anker", code: "code-anker",
+            components: RAHMEN.concat([{ sel: "main section", name: "ChapterSection" }]),
+            steps: [
+                { base: true, title: "Ausgangspunkt: drei Kapitel",
+                  text: "Die Seite ist lang. Leser:innen sollen direkt zu einem Kapitel springen können – wie bei einem **Inhaltsverzeichnis**." },
+                { title: "id – Jedes Kapitel bekommt einen eindeutigen Namen",
+                  text: "Das Attribut `id` gibt einem Element einen **eindeutigen Namen** auf der Seite. Jede `id` darf pro Seite **nur einmal** vorkommen. Mit **Block / Inline** (Taste `3`) siehst du die ids direkt an den Sections." },
+                { title: "href=\"#id\" – Die Seitennavigation wird zum Inhaltsverzeichnis",
+                  text: "Ein Link mit `href=\"#einleitung\"` springt zum Element mit `id=\"einleitung\"` auf **derselben Seite**. **Probiere es rechts aus** – die Adresszeile zeigt dann `#einleitung`. Die Seitennavigation hat zwei mögliche Zwecke: ein **Inhaltsverzeichnis** der aktuellen Seite (wie hier) oder ein **Untermenü** zu anderen Seiten des Bereichs (wie in L01.2)." },
+                { title: "Nach oben: id=\"top\" am Header",
+                  text: "Der `<header>` bekommt `id=\"top\"`, der Footer-Link `href=\"#top\"` springt dorthin zurück. Klicke rechts ganz unten auf **Nach oben**." },
+                { title: "Anker funktionieren von überall",
+                  text: "Ein Anker-Link kann überall stehen, z. B. auch im `<aside>`. Von einer **anderen Seite** aus schreibt man Datei und Anker zusammen: `layout.html#aufgabe`." }
+            ]
+        },
+        {
+            id: "news", label: "3 · article in section", code: "code-news",
+            components: RAHMEN.concat([{ sel: "main section", name: "NewsSection" }, { sel: "article", name: "NewsCard" }]),
+            steps: [
+                { base: true, title: "Neue Seite: Neuigkeiten",
+                  text: "Gleicher Rahmen (Kopf, Seitennavigation, Tipps, Fußzeile), neue Seite: `neuigkeiten.html`. Hier sammeln wir Beiträge in **Rubriken** – wie in einer Zeitung." },
+                { title: "<section> – Die Rubrik",
+                  text: "Außen steht eine **thematische Rubrik**: „Informatik & Technik“. Sie ist eine `<section>`, weil sie für sich allein nur eine leere Schublade wäre." },
+                { title: "<article> – Ein eigenständiger Beitrag",
+                  text: "In die Rubrik legen wir einen **Beitrag**. Er ist ein `<article>`, weil er den **Ausschneide-Test** besteht. **Daumenregel:** Ein Article ist **einzeln verwendbar** und hat **alle Infos in sich abgeschlossen** – klebst du ihn auf eine andere Webseite oder in einen Newsletter, ergibt er immer noch vollständig Sinn." },
+                { title: "Zweiter <article> mit gleichem Aufbau",
+                  text: "Ein zweiter Beitrag mit **genau demselben Aufbau**: Überschrift, Text. Gleich aufgebaute, wiederholte Bausteine sind typisch für `<article>`. Schalte **Komponenten** zu (Taste `4`) – genau so etwas wird später zu einer wiederverwendbaren **Komponente**." },
+                { title: "Veröffentlichungsdatum als <p> mit <time>",
+                  text: "Jeder Beitrag bekommt eine Zeile mit dem Datum. `<time datetime=\"2026-10-15\">` ist inline und macht das Datum **maschinenlesbar**. Wir schreiben die Zeile als normalen **Absatz** `<p>` – **nicht** als `<footer>`: In unserer Welt gibt es `<header>` und `<footer>` nur **einmal pro Seite**." },
+                { title: "Zweite Rubrik: Schulleben",
+                  text: "**article in section** = eine Rubrik (außen) mit mehreren eigenständigen Beiträgen (innen). Klicke links in der Seitennavigation auf **Schulleben** – auch Rubriken lassen sich per Anker anspringen." }
+            ]
+        },
+        {
+            id: "bericht", label: "4 · section in article", code: "code-bericht",
+            components: RAHMEN.concat([{ sel: "article", name: "ProjectReport" }, { sel: "article section", name: "ReportChapter" }]),
+            steps: [
+                { base: true, title: "Neue Seite: ein Projektbericht",
+                  text: "Jetzt umgekehrt: Auf dieser Seite steht **ein einziges großes Werk** – ein Projektbericht. Die Seitennavigation ist schon ein Inhaltsverzeichnis, die Ziele fehlen aber noch (klicke einen Link: die Vorschau meldet, dass die `id` fehlt)." },
+                { title: "<article> – Das eigenständige Gesamtwerk",
+                  text: "Der **ganze Bericht** besteht den Ausschneide-Test – er könnte auch als PDF oder in einer Projektdatenbank stehen. Deshalb ist das **äußere** Element ein `<article>`. Titel und Autor:innen stehen als `<h2>` und `<p>` direkt am Anfang – ohne `<header>`." },
+                { title: "Einleitungstext: Worum geht es, was machen die Kapitel?",
+                  text: "**Daumenregel:** Enthält ein `<article>` mehrere `<section>`, braucht er **vor** den Kapiteln einen Text, der die **Idee des Artikels** beschreibt und sagt, **was die einzelnen Kapitel** machen. So bleibt der Artikel auch allein verständlich – er hat alle Infos in sich." },
+                { title: "<section> im <article> – Kapitel 1",
+                  text: "„1. Problemstellung“ ergibt allein **keinen** Sinn – es ist ein **Kapitel** des Berichts, also eine `<section>`. Mit `id=\"problem\"` funktioniert jetzt auch der erste Link der Seitennavigation." },
+                { title: "Kapitel 2 mit einer Liste",
+                  text: "Auch in einer Section darf jeder andere Block stehen – hier eine `<ul>`. Die Section gliedert, der Inhalt darin ist ganz normales HTML." },
+                { title: "Kapitel 3",
+                  text: "Das dritte Kapitel. Jetzt funktionieren **alle** Links im Inhaltsverzeichnis – probiere es aus!" },
+                { title: "Abschlusszeile als <p>",
+                  text: "Status und Download stehen am Ende des Berichts als normaler **Absatz** – nicht als `<footer>`. **section in article** = ein großes Werk (außen), unterteilt in Kapitel (innen). Merke: **Zeitung** = article in section, **Buch** = section in article." }
+            ]
+        },
+        {
+            id: "optional", label: "header/footer in Komponenten", code: "code-optional", optional: true,
+            components: [{ sel: "body > header", name: "SiteHeader" }, { sel: "article", name: "NewsCard" }, { sel: "article > header", name: "CardHeader" }, { sel: "article > footer", name: "CardFooter" }],
+            steps: [
+                { base: true, title: "Für Interessierte: Unser Beitrag – so wie wir ihn schreiben",
+                  text: "**Dieser Tab ist optional** und gehört nicht zum Prüfungsstoff. In unserer Welt hat ein `<article>` Überschrift, Text und eine Datumszeile als `<p>`. `<header>` und `<footer>` gibt es nur einmal pro Seite." },
+                { title: "Erlaubt in HTML: <header> im <article>",
+                  text: "Der HTML-Standard erlaubt `<header>` auch **innerhalb** von `<article>` oder `<section>`. Er ist dann der **Kopf dieses Beitrags**, nicht der Seite. Wichtig: Nur der oberste `<header>` (direkt im `<body>`) ist für Screenreader der Seitenkopf (*banner*). Ein `<header>` im article ist dafür bedeutungslos." },
+                { title: "Erlaubt in HTML: <footer> im <article>",
+                  text: "Genauso darf ein `<footer>` am Ende eines Beitrags stehen – für Autor, Datum, „Weiterlesen“. Auch hier gilt: Nur der `<footer>` direkt im `<body>` ist der Seiten-Fuß (*contentinfo*)." },
+                { title: "Warum machen das große Projekte?",
+                  text: "In großer Software (z. B. mit React) baut man die Seite aus vielen **Komponenten**. Eine `NewsCard` wird unabhängig vom Rest gebaut, getestet und überall wiederverwendet – und bekommt dann oft ihren eigenen kleinen Kopf und Fuß. **Wir machen das nicht:** Solange wir ganze Seiten schreiben, gibt es genau **einen** `<header>` und **einen** `<footer>`. Das ist eindeutig und verhindert Verwechslungen." }
+            ]
+        }
+    ]
+});
+</script>
+</body>
+</html>
