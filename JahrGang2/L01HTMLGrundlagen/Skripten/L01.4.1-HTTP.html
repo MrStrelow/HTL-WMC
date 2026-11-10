@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L01.4.1 – HTTP: GET und POST</title>
+    <link rel="stylesheet" href="slides/engine.css">
+    <style>
+        /* ---------- Bühne: Client – Leitung – Server ---------- */
+        .hx-stage { flex: 1; display: grid; grid-template-rows: minmax(230px, 1fr) auto; gap: 12px; padding: 14px; min-height: 0; overflow: auto; }
+        .hx-row { display: grid; grid-template-columns: minmax(0, 5fr) minmax(120px, 2fr) minmax(0, 4fr); gap: 0; min-height: 0; }
+        .hx-box { background: var(--panel); border: 2px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+        .hx-box h3 { margin: 0; padding: 8px 12px; font-size: 0.9rem; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; gap: 8px; }
+        .hx-box h3 b { color: var(--text); }
+        .hx-flash { animation: hxflash 0.9s; }
+        /* Geänderte Teile blinken kurz auf */
+        .hx-changed { animation: hxchg 1.6s ease-in-out 1; border-radius: 4px; }
+        #addr-neu.hx-changed { animation-name: hxtxt; }
+        @keyframes hxtxt { 0%, 100% { color: inherit; background: transparent; } 45% { color: #111827; background: #f59e0b; } }
+        @keyframes hxchg { 0%, 100% { filter: none; box-shadow: none; } 45% { filter: brightness(1.45); box-shadow: 0 0 0 2px #f59e0b; } }
+        .hx-badge { position: absolute; z-index: 20; background: #f59e0b; color: #111827; font: 700 0.7rem/1 system-ui, sans-serif; padding: 3px 7px; border-radius: 999px; pointer-events: none; animation: hxbadge 2.4s forwards; }
+        @keyframes hxbadge { 0% { opacity: 0; transform: translateY(4px); } 15%, 75% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+        @keyframes hxflash { 0% { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(245, 158, 11, .35); } 100% { border-color: var(--border); box-shadow: none; } }
+
+        /* Browser */
+        .hx-addr { margin: 8px 10px 0; background: var(--panel-2); border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px; font-family: ui-monospace, Consolas, monospace; font-size: 0.82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .hx-page { margin: 8px 10px 10px; background: #fff; color: #1e293b; border-radius: 8px; padding: 10px 14px; flex: 1; overflow: auto; font-size: 0.9rem; }
+        .hx-page h4 { margin: 0 0 6px; }
+        .hx-page .fake-input { display: inline-block; border: 1px solid #94a3b8; border-radius: 4px; padding: 2px 6px; min-width: 120px; background: #fff; }
+        .hx-page .fake-btn { display: inline-block; background: #2563eb; color: #fff; border-radius: 4px; padding: 2px 10px; margin-left: 6px; }
+        .hx-page .row { margin: 4px 0; }
+        .hx-page .warn { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 6px; padding: 6px 10px; margin-top: 8px; }
+
+        /* Leitung mit Paket */
+        .hx-wire { position: relative; display: flex; align-items: center; justify-content: center; }
+        .hx-wire::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 3px dashed var(--border); }
+        .hx-wire .lbl { position: absolute; top: calc(50% + 10px); font-size: 0.72rem; color: var(--muted); text-align: center; width: 100%; }
+        .hx-packet { position: absolute; top: calc(50% - 34px); left: 0; max-width: 95%; padding: 5px 9px; border-radius: 8px; font: 700 0.75rem/1.3 ui-monospace, Consolas, monospace; white-space: nowrap; opacity: 0; z-index: 5; box-shadow: 0 6px 16px rgba(0, 0, 0, .4); }
+        .hx-packet.req { background: #1d4ed8; color: #fff; }
+        .hx-packet.res { background: #15803d; color: #fff; }
+
+        /* Server */
+        .hx-status { margin: 8px 10px 0; padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; background: var(--panel-2); border: 1px solid var(--border); }
+        .hx-status.busy { border-color: var(--accent); color: #fde68a; }
+        .hx-db { margin: 8px 10px 10px; flex: 1; overflow: auto; background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.82rem; }
+        .hx-db b { color: var(--muted); font-weight: 600; display: block; margin-bottom: 4px; }
+        .hx-db .entry { font-family: ui-monospace, Consolas, monospace; padding: 2px 0; border-bottom: 1px dashed var(--border); }
+        .hx-db .entry.neu { color: #86efac; }
+
+        /* Inspektor: das HTTP-Paket als Text */
+        .hx-inspect { max-height: 40vh; overflow: auto; background: #0b1220; border: 2px solid var(--border); border-radius: 12px; padding: 8px 12px; font-family: ui-monospace, Consolas, monospace; font-size: 0.85rem; min-height: 120px; }
+        .hx-inspect .ttl { font-family: system-ui, sans-serif; font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; display: flex; gap: 14px; flex-wrap: wrap; }
+        .hx-inspect .ln { display: flex; gap: 10px; white-space: pre-wrap; word-break: break-all; padding: 1px 4px; border-radius: 4px; }
+        .hx-inspect .tag { flex: 0 0 120px; font-family: system-ui, sans-serif; font-size: 0.72rem; color: var(--muted); text-align: right; padding-top: 2px; }
+        .p-start { color: #93c5fd; } .p-header { color: #c4b5fd; } .p-blank { color: #475569; } .p-body { color: #86efac; }
+        .p-proto { color: #f9a8d4; } .p-host { color: #93c5fd; } .p-port { color: #c4b5fd; } .p-path { color: #fde68a; } .p-query { color: #86efac; } .p-frag { color: #fca5a5; }
+        .hx-inspect .hl { background: rgba(245, 158, 11, .18); outline: 1px solid rgba(245, 158, 11, .6); }
+        .hx-legend span { white-space: nowrap; }
+
+        /* Tabelle GET vs. POST */
+        .hx-table { width: 100%; border-collapse: collapse; color: #1e293b; font-size: 0.86rem; }
+        .hx-table th, .hx-table td { border: 1px solid #cbd5e1; padding: 5px 8px; text-align: left; vertical-align: top; }
+        .hx-table th { background: #e2e8f0; }
+        .hx-table tr.neu td { background: #dcfce7; }
+
+        /* Presenter-Navigation wie in den anderen Slides */
+        body.sd-presenter .hx-stage { padding-bottom: 60px; }
+        @media (max-width: 900px) { .hx-row { grid-template-columns: 1fr; grid-template-rows: auto 70px auto; } }
+    </style>
+</head>
+<body>
+<div class="sd-top">
+    <div class="sd-top-left">
+        <div class="sd-title"><strong>L01.4.1 · HTTP</strong><small>Request, Response, GET und POST</small></div>
+        <div class="sd-tabs" role="tablist"></div>
+    </div>
+    <div class="sd-views">
+        <button class="sd-view sd-fs" data-act="fs" title="Vollbild ein/aus (Taste F)">⛶ Vollbild<kbd>F</kbd></button>
+        <div class="sd-pres-group">
+            <button class="sd-view sd-chip" data-pres="1" title="Erklärung ausblenden (Taste P)">🎤 Presenter<kbd>P</kbd></button>
+        </div>
+    </div>
+</div>
+
+<div class="hx-stage">
+    <div class="hx-row">
+        <div class="hx-box" id="client">
+            <h3><span>🖥️ <b>Client</b> (Browser)</span><span>stellt Anfragen</span></h3>
+            <div class="hx-addr" id="addr"></div>
+            <div class="hx-page" id="page"></div>
+        </div>
+        <div class="hx-wire">
+            <div class="hx-packet" id="packet"></div>
+            <div class="lbl" id="wire-lbl">Internet</div>
+        </div>
+        <div class="hx-box" id="server">
+            <h3><span>🗄️ <b>Server</b></span><span id="srv-host"></span></h3>
+            <div class="hx-status" id="srv-status"></div>
+            <div class="hx-db" id="srv-db"></div>
+        </div>
+    </div>
+    <div class="hx-inspect">
+        <div class="ttl" id="ins-title"></div>
+        <div id="ins-body"></div>
+    </div>
+</div>
+
+<div class="sd-explain">
+    <button class="sd-nav-btn" data-dir="-1" title="Zurück (←)">‹</button>
+    <div class="sd-explain-body">
+        <div class="sd-step-label"></div>
+        <div class="sd-step-title"></div>
+        <div class="sd-step-text"></div>
+        <div class="sd-progress"></div>
+    </div>
+    <button class="sd-nav-btn" data-dir="1" title="Weiter (→)">›</button>
+</div>
+<div class="sd-pnav"><button data-go="-1" title="Zurück (←)">‹</button><span></span><button data-go="1" title="Weiter (→)">›</button></div>
+
+<script>
+/* =========================================================
+   Bausteine für Seiten, Pakete und Server-Zustände
+   ========================================================= */
+const IDLE = "💤 wartet – ein Server tut <b>von sich aus nichts</b>, er antwortet nur auf Anfragen.";
+const BUSY = (t) => "⚙️ " + t;
+
+const SUCHE_LEER = `<h4>HTL Lernportal – Suche</h4>
+<div class="row">Suchbegriff: <span class="fake-input">&nbsp;</span><span class="fake-btn">Suchen</span></div>`;
+const SUCHE_HTL = `<h4>HTL Lernportal – Suche</h4>
+<div class="row">Suchbegriff: <span class="fake-input">htl</span><span class="fake-btn">Suchen</span></div>`;
+const ERGEBNIS = `<h4>Suchergebnisse für „htl“</h4><ul><li>HTL Donaustadt</li><li>HTL Lernportal – Modul HTML</li></ul>`;
+const ANMELDUNG = `<h4>Diplomprojekt anmelden</h4>
+<div class="row">Projekttitel: <span class="fake-input">Wetterstation</span></div>
+<div class="row">E-Mail: <span class="fake-input">max@htl.at</span></div>
+<div class="row">Abteilung: <span class="fake-input">Informatik ▾</span></div>
+<div class="row"><span class="fake-btn" style="margin-left:0">Anmelden</span></div>`;
+const DANKE = `<h4>Danke für die Anmeldung!</h4><p>Dein Projekt „Wetterstation“ wurde gespeichert.</p>`;
+const NEU_SENDEN = DANKE + `<div class="warn">⚠️ <b>Formular erneut senden?</b><br>Beim Neuladen würde der Browser den POST-Request noch einmal schicken – und damit eine zweite Anmeldung anlegen.</div>`;
+const START = `<h4>HTL Lernportal</h4><p>Willkommen! Lorem ipsum dolor sit amet.</p>`;
+
+// HTTP-Nachrichten als Zeilen [Teil, Text]
+const REQ_START = [["start", "GET /index.html HTTP/1.1"], ["header", "Host: lernportal.htl.at"], ["header", "Accept: text/html"], ["blank", ""], ["body", "(leer)"]];
+const RES_START = [["start", "HTTP/1.1 200 OK"], ["header", "Content-Type: text/html; charset=UTF-8"], ["header", "Content-Length: 1532"], ["blank", ""],
+    ["body", "<!DOCTYPE html>"], ["body", "<html lang=\"de\">"], ["body", "    …  (genau der Inhalt der Datei index.html)"], ["body", "</html>"]];
+const RES_404 = [["start", "HTTP/1.1 404 Not Found"], ["header", "Content-Type: text/html; charset=UTF-8"], ["blank", ""], ["body", "<h1>Seite nicht gefunden</h1>"]];
+const REQ_GET = [["start", "GET /search?q=htl HTTP/1.1"], ["header", "Host: lernportal.htl.at"], ["header", "Accept: text/html"], ["blank", ""], ["body", "(leer – bei GET gibt es keinen Body)"]];
+const RES_GET = [["start", "HTTP/1.1 200 OK"], ["header", "Content-Type: text/html; charset=UTF-8"], ["header", "Content-Length: 412"], ["blank", ""],
+    ["body", "<!DOCTYPE html>"], ["body", "<html lang=\"de\">"], ["body", "<head>"], ["body", "    <title>Suche – HTL Lernportal</title>"], ["body", "</head>"], ["body", "<body>"],
+    ["body", "    <h4>"], ["body", "        Suchergebnisse für „htl“"], ["body", "    </h4>"], ["body", "    <ul>"], ["body", "        <li>"], ["body", "            HTL Donaustadt"], ["body", "        </li>"],
+    ["body", "        <li>"], ["body", "            HTL Lernportal – Modul HTML"], ["body", "        </li>"], ["body", "    </ul>"], ["body", "</body>"], ["body", "</html>"]];
+const REQ_POST = [["start", "POST /anmeldung HTTP/1.1"], ["header", "Host: lernportal.htl.at"], ["header", "Content-Type: application/x-www-form-urlencoded"], ["header", "Content-Length: 50"], ["blank", ""], ["body", "titel=Wetterstation&email=max%40htl.at&abteilung=if"]];
+const RES_POST = [["start", "HTTP/1.1 200 OK"], ["header", "Content-Type: text/html; charset=UTF-8"], ["blank", ""], ["body", "<h4>Danke für die Anmeldung!</h4> …"]];
+
+const URL_TEILE = [["proto", "https://"], ["host", "lernportal.htl.at"], ["port", ":443"], ["path", "/search"], ["query", "?q=htl&seite=2"], ["frag", "#treffer"]];
+const URL_NAMEN = { proto: "Protokoll", host: "Host (Server)", port: "Port", path: "Pfad (Ressource)", query: "Query-String", frag: "Fragment (Anker)" };
+const TEIL_NAMEN = { start: "Start-/Statuszeile", header: "Header", blank: "Leerzeile", body: "Body" };
+
+const DB_LEER = { title: "Datenbank: Anmeldungen", rows: [] };
+const db = (n, neu) => ({ title: "Datenbank: Anmeldungen", rows: Array.from({ length: n }, (_, i) => ({ t: `#${i + 1} titel=Wetterstation, email=max@htl.at`, neu: i >= n - (neu || 0) })) });
+const LOG = (rows) => ({ title: "Protokoll des Servers", rows: rows.map((t) => ({ t })) });
+
+/* =========================================================
+   Tabs und Schritte
+   Felder: addr, page, server(status), busy, db, send ("req"/"res"), packet, ins (Inspektor), insTitle, hl
+   ========================================================= */
+const TABS = [
+    {
+        id: "prinzip", label: "1 · Anfrage & Antwort",
+        steps: [
+            { title: "Zwei Rollen: Client und Server",
+              text: "Links der **Client** – unser Browser. Rechts der **Server** – ein Computer im Internet, auf dem die Dateien der Website liegen. Schau auf den Server: Er **wartet**. Ein Server macht von sich aus **nie** etwas, er **antwortet nur**, wenn er gefragt wird.",
+              addr: "", page: "<p style='color:#64748b'>(leere Seite – noch nichts geladen)</p>", server: IDLE, db: LOG([]), ins: null, insTitle: "Noch keine Nachricht unterwegs." },
+            { title: "So ist ein Request aufgebaut: die Startzeile",
+              text: "Bevor wir etwas schicken: Jeder Request ist **Text** und hat immer denselben Aufbau. Die erste Zeile ist die **Startzeile** mit drei Teilen: der **Methode** (`GET` = „gib mir“), dem **Pfad** (`/index.html` = welche Datei) und der **HTTP-Version**.",
+              addr: "", page: "<p style='color:#64748b'>(noch nicht abgeschickt)</p>", server: IDLE, db: LOG([]), ins: REQ_START, hl: ["start"], insTitle: "🧩 Aufbau eines Requests" },
+            { title: "Danach: die Header",
+              text: "Jede weitere Zeile ist ein **Header** im Format `Name: Wert`. Header sind Zusatzinfos: `Host` sagt, **welcher Server** gemeint ist, `Accept`, **was der Browser als Antwort versteht** (hier HTML).",
+              addr: "", page: "<p style='color:#64748b'>(noch nicht abgeschickt)</p>", server: IDLE, db: LOG([]), ins: REQ_START, hl: ["header"], insTitle: "🧩 Aufbau eines Requests" },
+            { title: "Leerzeile und Body",
+              text: "Eine **Leerzeile** trennt die Header vom **Body**. Im Body stehen Daten, die mitgeschickt werden – z. B. Formulardaten bei POST. Wenn wir nur eine Seite **holen** (GET), ist der Body **leer**.",
+              addr: "", page: "<p style='color:#64748b'>(noch nicht abgeschickt)</p>", server: IDLE, db: LOG([]), ins: REQ_START, hl: ["blank", "body"], insTitle: "🧩 Aufbau eines Requests" },
+            { title: "Der Client schickt einen Request (Anfrage)",
+              text: "Wir tippen `lernportal.htl.at/index.html` in die Adresszeile und drücken Enter. Der Browser schickt genau diesen Text als **HTTP-Request** an den Server.",
+              addr: "https://lernportal.htl.at/index.html", page: "<p style='color:#64748b'>⏳ lädt …</p>", server: IDLE, db: LOG([]), send: "req", packet: "GET /index.html", ins: REQ_START, insTitle: "📤 Request (Client → Server)" },
+            { title: "Der Server arbeitet – aber nur, weil er gefragt wurde",
+              text: "Der Request ist angekommen. Erst **jetzt** wird der Server aktiv: Er sucht die Datei `index.html`. Ohne Anfrage hätte er nichts getan.",
+              addr: "https://lernportal.htl.at/index.html", page: "<p style='color:#64748b'>⏳ lädt …</p>", server: BUSY("bearbeitet: GET /index.html – Datei suchen …"), busy: true, db: LOG(["GET /index.html"]), ins: REQ_START, insTitle: "📥 Request angekommen" },
+            { title: "Der Server schickt eine Response (Antwort)",
+              text: "Die **Response** ist genauso aufgebaut: **Statuszeile** mit **Statuscode** (`200 OK` = alles in Ordnung), **Header** (`Content-Type: text/html` = „im Body folgt HTML“), **Leerzeile** und **Body**. Im **Body steht das HTML der Seite** – genau der Code aus `index.html`. Der Browser liest ihn und zeichnet daraus die Seite links.", hl: ["body"],
+              addr: "https://lernportal.htl.at/index.html", page: START, server: IDLE, db: LOG(["GET /index.html → 200 OK"]), send: "res", packet: "200 OK + HTML", ins: RES_START, insTitle: "📩 Response (Server → Client)" },
+            { title: "Gibt es die Seite nicht: 404",
+              text: "Fragen wir nach `/gibtsnicht.html`, antwortet der Server trotzdem – mit dem Statuscode `404 Not Found`. Der Statuscode sagt, **ob** die Anfrage geklappt hat: `2xx` = ok, `3xx` = Weiterleitung, `4xx` = Fehler des Clients, `5xx` = Fehler des Servers.",
+              addr: "https://lernportal.htl.at/gibtsnicht.html", page: "<h4>Seite nicht gefunden</h4>", server: IDLE, db: LOG(["GET /index.html → 200 OK", "GET /gibtsnicht.html → 404 Not Found"]), send: "res", packet: "404 Not Found", ins: RES_404, insTitle: "📩 Response (Server → Client)" },
+            { title: "Das Wesentliche an HTTP",
+              text: "**1. Request → Response:** Der Client fragt, der Server antwortet – immer genau eine Antwort pro Anfrage, nie umgekehrt. **2. Zustandslos:** Jeder Request steht für sich, der Server merkt sich von sich aus nichts zwischen zwei Anfragen. **3. Textbasiert:** Startzeile, Header, Leerzeile, Body – lesbarer Text. **4. Methoden** sagen, *was* der Client will (`GET`, `POST`, …), **Statuscodes**, *wie* es ausgegangen ist.",
+              addr: "https://lernportal.htl.at/index.html", page: START, server: IDLE, db: LOG(["GET /index.html → 200 OK", "GET /gibtsnicht.html → 404 Not Found"]), ins: [["start", "<Methode> <Pfad> HTTP/1.1          bzw.   HTTP/1.1 <Statuscode> <Text>"], ["header", "Name: Wert"], ["blank", ""], ["body", "Inhalt (z. B. HTML oder Formulardaten)"]], insTitle: "🧩 Aufbau jeder HTTP-Nachricht" }
+        ]
+    },
+    {
+        id: "url", label: "2 · Aufbau einer URL",
+        steps: [
+            { title: "Eine URL besteht aus Teilen",
+              text: "Die Adresse in der Adresszeile heißt **URL**. Unten ist sie in ihre Teile zerlegt – in den nächsten Schritten schauen wir sie einzeln an.",
+              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2#treffer", page: ERGEBNIS, server: IDLE, db: LOG([]), url: true, insTitle: "🔗 Die Teile einer URL" },
+            { title: "Protokoll, Host und Port",
+              text: "`https://` ist das **Protokoll** – HTTP, verschlüsselt (das S steht für *secure*). Der **Host** `lernportal.htl.at` sagt, **welcher Server** gefragt wird. Der **Port** `:443` ist die „Tür“ am Server; bei https ist 443 Standard und wird meistens weggelassen.",
+              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2#treffer", page: ERGEBNIS, server: IDLE, db: LOG([]), url: true, hl: ["proto", "host", "port"], insTitle: "🔗 Die Teile einer URL" },
+            { title: "Pfad: welche Ressource?",
+              text: "Der **Pfad** `/search` sagt dem Server, **was** wir wollen – eine Datei oder eine Funktion. Er landet in der Startzeile des Requests: `GET /search?q=htl&seite=2 HTTP/1.1`.",
+              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2#treffer", page: ERGEBNIS, server: IDLE, db: LOG([]), url: true, hl: ["path"], insTitle: "🔗 Die Teile einer URL" },
+            { title: "Query-String: Daten in der URL",
+              text: "Alles nach dem `?` ist der **Query-String**: Paare aus **Schlüssel=Wert**, getrennt mit `&`. Genau hier landen bei **GET** die Formulardaten – `q` ist der `name` des Eingabefelds, `htl` der eingetippte Wert.",
+              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2#treffer", page: ERGEBNIS, server: IDLE, db: LOG([]), url: true, hl: ["query"], insTitle: "🔗 Die Teile einer URL" },
+            { title: "Fragment: der Anker",
+              text: "Das **Fragment** `#treffer` kennen wir aus L01.3: Es springt zum Element mit `id=\"treffer\"`. Das Fragment wird **nie an den Server geschickt** – der Browser erledigt den Sprung allein.",
+              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2#treffer", page: ERGEBNIS, server: IDLE, db: LOG([]), url: true, hl: ["frag"], insTitle: "🔗 Die Teile einer URL" }
+        ]
+    },
+    {
+        id: "get", label: "3 · GET-Request",
+        steps: [
+            { title: "Ein Suchformular mit method=\"GET\"",
+              text: "Unser Formular aus L01.4: `<form action=\"/search\" method=\"GET\">` mit einem Feld `name=\"q\"`. Die Benutzerin tippt „htl“ ein. Der Server wartet – noch hat ihn niemand gefragt.",
+              addr: "https://lernportal.htl.at/suche.html", page: SUCHE_HTL, server: IDLE, db: LOG([]), ins: null, insTitle: "Noch kein Request." },
+            { title: "Absenden: Die Daten wandern in die URL",
+              text: "Klick auf „Suchen“: Der Browser baut aus `name` und Wert das Paar `q=htl` und hängt es mit `?` **an die URL**. Schau in die Adresszeile! Der Request hat eine Startzeile mit dieser URL und **keinen Body**.",
+              addr: "https://lernportal.htl.at/search?q=htl", page: "<p style='color:#64748b'>⏳ lädt …</p>", server: IDLE, db: LOG([]), send: "req", packet: "GET /search?q=htl", ins: REQ_GET, hl: ["start"], insTitle: "📤 GET-Request" },
+            { title: "Der Server liest die Daten aus der URL",
+              text: "Der Server bekommt die Anfrage, liest `q=htl` aus dem **Query-String** und sucht. Er **verändert nichts** – er liest nur.",
+              addr: "https://lernportal.htl.at/search?q=htl", page: "<p style='color:#64748b'>⏳ lädt …</p>", server: BUSY("liest q=htl aus der URL und sucht …"), busy: true, db: LOG(["GET /search?q=htl"]), ins: REQ_GET, hl: ["start"], insTitle: "📥 GET-Request angekommen" },
+            { title: "Response mit den Suchergebnissen",
+              text: "Der Server antwortet mit `200 OK`. Die **Antwort auf einen GET-Request ist eine HTML-Seite**: Sie steht vollständig im **Body der Response** (unten hervorgehoben) – der Server hat sie extra für `q=htl` erzeugt. Der Browser zeichnet daraus die Ergebnisseite links.", hl: ["body"],
+              addr: "https://lernportal.htl.at/search?q=htl", page: ERGEBNIS, server: IDLE, db: LOG(["GET /search?q=htl → 200 OK"]), send: "res", packet: "200 OK + HTML", ins: RES_GET, insTitle: "📩 Response – das HTML steht im Body" },
+            { title: "Request und Response im Vergleich",
+              text: "**Request:** Die Suchdaten stehen in der **URL** (`?q=htl`), der Body ist leer. **Response:** Das Ergebnis – die fertige **HTML-Seite** – steht im **Body**. Weil die Daten in der URL stehen, kann man die Ergebnisseite **als Lesezeichen speichern oder als Link teilen**; sie steht auch im **Verlauf**.",
+              addr: "https://lernportal.htl.at/search?q=htl", page: ERGEBNIS, server: IDLE, db: LOG(["GET /search?q=htl → 200 OK"]), ins: REQ_GET.concat([["blank", ""]]).concat(RES_GET), hl: ["start", "body"], insTitle: "📤 Request (oben) und 📩 Response (unten)" }
+        ]
+    },
+    {
+        id: "post", label: "4 · POST-Request",
+        steps: [
+            { title: "Ein Anmeldeformular mit method=\"POST\"",
+              text: "Jetzt sollen Daten **gespeichert** werden: `<form action=\"/anmeldung\" method=\"POST\">`. Rechts die Datenbank des Servers – sie ist noch leer.",
+              addr: "https://lernportal.htl.at/anmeldung.html", page: ANMELDUNG, server: IDLE, db: DB_LEER, ins: null, insTitle: "Noch kein Request." },
+            { title: "Absenden: Die Daten wandern in den Body",
+              text: "Die **URL bleibt ohne `?`** – schau in die Adresszeile. Die Formulardaten stehen als `name=Wert`-Paare im **Body** des Requests, nach der Leerzeile. Zwei Header beschreiben den Body: `Content-Type` (welches Format) und `Content-Length` (wie lang).",
+              addr: "https://lernportal.htl.at/anmeldung", page: "<p style='color:#64748b'>⏳ sendet …</p>", server: IDLE, db: DB_LEER, send: "req", packet: "POST /anmeldung + Body", ins: REQ_POST, hl: ["body"], insTitle: "📤 POST-Request" },
+            { title: "Der Server speichert – der Zustand ändert sich",
+              text: "Der Server liest den Body und **legt einen neuen Eintrag an**. Anders als bei GET verändert dieser Request etwas am Server.",
+              addr: "https://lernportal.htl.at/anmeldung", page: "<p style='color:#64748b'>⏳ sendet …</p>", server: BUSY("liest den Body und speichert …"), busy: true, db: db(1, 1), ins: REQ_POST, hl: ["body"], insTitle: "📥 POST-Request angekommen" },
+            { title: "Response: Bestätigung",
+              text: "Antwort `200 OK` mit einer Bestätigungsseite. **Achtung:** Die Daten sind nicht „geheim“, nur weil sie nicht in der URL stehen – lesbar sind sie im Body trotzdem. Geschützt werden URL **und** Body erst durch **https** (Verschlüsselung).",
+              addr: "https://lernportal.htl.at/anmeldung", page: DANKE, server: IDLE, db: db(1, 0), send: "res", packet: "200 OK + Bestätigung", ins: RES_POST, insTitle: "📩 Response" },
+            { title: "Neu laden? „Formular erneut senden?“",
+              text: "Lädt man diese Seite neu, fragt der Browser nach: Er müsste den POST-Request **noch einmal** schicken – und das würde eine **zweite Anmeldung** anlegen. Bei einer GET-Seite fragt er nie, Neuladen ist dort harmlos.",
+              addr: "https://lernportal.htl.at/anmeldung", page: NEU_SENDEN, server: IDLE, db: db(1, 0), ins: RES_POST, insTitle: "📩 Response" }
+        ]
+    },
+    {
+        id: "idempotent", label: "5 · Idempotent?",
+        steps: [
+            { title: "Was heißt idempotent?",
+              text: "Ein Request ist **idempotent**, wenn es **egal ist, wie oft** man ihn schickt: Einmal oder zehnmal – am Server kommt **derselbe Zustand** heraus. Wir testen das: Zuerst schicken wir die Suche dreimal.",
+              addr: "https://lernportal.htl.at/search?q=htl", page: ERGEBNIS, server: IDLE, db: db(1, 0), ins: REQ_GET, insTitle: "📤 GET-Request" },
+            { title: "GET dreimal geschickt …",
+              text: "Dreimal `GET /search?q=htl` – dreimal dieselbe Antwort. Die **Datenbank bleibt unverändert** (weiter genau 1 Anmeldung). GET ist **idempotent** und außerdem **sicher**: es liest nur und verändert nichts. Deshalb darf der Browser GET-Antworten auch **zwischenspeichern** (Cache).",
+              addr: "https://lernportal.htl.at/search?q=htl", page: ERGEBNIS, server: IDLE, db: db(1, 0), send: "req3", packet: "GET /search?q=htl", ins: REQ_GET, insTitle: "📤 3 × GET – Datenbank unverändert" },
+            { title: "… und POST dreimal geschickt",
+              text: "Dreimal `POST /anmeldung` mit demselben Body – jetzt stehen **drei** neue Anmeldungen in der Datenbank. POST ist **nicht idempotent**: Jeder Request verändert den Zustand erneut. Darum warnt der Browser vor dem erneuten Senden.",
+              addr: "https://lernportal.htl.at/anmeldung", page: DANKE, server: IDLE, db: db(4, 3), send: "req3", packet: "POST /anmeldung + Body", ins: REQ_POST, hl: ["body"], insTitle: "📤 3 × POST – drei neue Einträge" }
+        ]
+    },
+    {
+        id: "vergleich", label: "6 · GET vs. POST",
+        steps: [
+            { title: "Der Vergleich", text: "Zum Schluss alles nebeneinander. Mit → kommt Zeile für Zeile dazu.", table: 1 },
+            { title: "Wo liegen die Daten?", text: "**GET:** in der URL (Query-String nach `?`). **POST:** im Body des Requests.", table: 2 },
+            { title: "Was sieht man?", text: "GET-Daten stehen in der **Adresszeile**, im **Verlauf** und in **Lesezeichen**. POST-Daten nicht – lesbar sind sie im Body trotzdem, Schutz bringt erst **https**.", table: 3 },
+            { title: "Länge und Format", text: "URLs sind in der Länge begrenzt, deshalb eignet sich GET nur für **kurze** Daten. Im Body von POST haben auch lange Texte oder Dateien Platz.", table: 4 },
+            { title: "Idempotent, sicher, Cache", text: "GET ist **idempotent** und **sicher** (verändert nichts) und darf **zwischengespeichert** werden. POST ist **nicht idempotent**, verändert den Server und wird nicht zwischengespeichert.", table: 5 },
+            { title: "Wofür verwenden wir was?", text: "**GET:** Daten **holen** – Seiten laden, suchen, filtern. **POST:** Daten **schicken, die etwas verändern** – anmelden, registrieren, speichern, Passwörter.", table: 6 }
+        ]
+    }
+];
+
+const TABELLE = [
+    ["", "GET", "POST"],
+    ["Daten liegen …", "in der URL (Query-String nach <code>?</code>)", "im Body des Requests"],
+    ["sichtbar in Adresszeile, Verlauf, Lesezeichen", "ja", "nein (lesbar trotzdem – Schutz nur durch https)"],
+    ["Länge", "begrenzt (URL)", "praktisch unbegrenzt, auch Dateien"],
+    ["idempotent / sicher / Cache", "ja / ja / ja", "nein / nein / nein"],
+    ["Zweck", "Daten holen: laden, suchen, filtern", "Daten schicken, die etwas verändern: anmelden, speichern"]
+];
+
+/* =========================================================
+   Ablauf
+   ========================================================= */
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const mini = (t) => esc(t).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/\*([^*]+)\*/g, "<em>$1</em>");
+let tabIndex = 0, step = 1, presenter = false, timers = [];
+
+function buildTabs() {
+    TABS.forEach((t, i) => {
+        const b = document.createElement("button");
+        b.className = "sd-tab"; b.textContent = t.label;
+        b.onclick = () => { tabIndex = i; step = 1; render(); };
+        $(".sd-tabs").appendChild(b);
+    });
+}
+
+function inspector(st) {
+    const body = $("#ins-body");
+    $("#ins-title").innerHTML = "<span>" + (st.insTitle || "") + "</span>" + (st.table ? "" : st.url
+        ? '<span class="hx-legend">' + URL_TEILE.map(([k]) => `<span class="p-${k}">■ ${URL_NAMEN[k]}</span>`).join(" ") + "</span>"
+        : '<span class="hx-legend"><span class="p-start">■ Startzeile</span> <span class="p-header">■ Header</span> <span class="p-blank">■ Leerzeile</span> <span class="p-body">■ Body</span></span>');
+    if (st.url) {
+        body.innerHTML = '<div class="ln" style="font-size:1.05rem">' + URL_TEILE.map(([k, v]) =>
+            `<span class="p-${k}${st.hl && st.hl.includes(k) ? " hl" : ""}" title="${URL_NAMEN[k]}">${esc(v)}</span>`).join("") + "</div>"
+            + '<div class="ln" style="margin-top:6px;color:var(--muted)">' + (st.hl ? st.hl.map((k) => URL_NAMEN[k]).join(" · ") : "Protokoll · Host · Port · Pfad · Query-String · Fragment") + "</div>";
+        return;
+    }
+    if (st.table) {
+        body.innerHTML = '<div style="background:#fff;border-radius:8px;padding:6px"><table class="hx-table">' + TABELLE.slice(0, st.table).map((r, i) =>
+            `<tr class="${i === st.table - 1 && i > 0 ? "neu" : ""}">` + r.map((c) => i === 0 ? `<th>${c}</th>` : `<td>${c}</td>`).join("") + "</tr>").join("") + "</table></div>";
+        return;
+    }
+    if (!st.ins) { body.innerHTML = '<div class="ln" style="color:var(--muted)">–</div>'; return; }
+    body.innerHTML = st.ins.map(([p, t], i) =>
+        `<div class="ln${st.hl && st.hl.includes(p) ? " hl" : ""}"><span class="tag">${i > 0 && st.ins[i - 1][0] === p ? "" : TEIL_NAMEN[p]}</span><span class="p-${p}">${esc(t) || "&nbsp;"}</span></div>`).join("");
+    const box = document.querySelector(".hx-inspect"), first = body.querySelector(".hl");
+    box.scrollTop = first && !st.hl.includes("start") ? Math.max(0, first.offsetTop - box.offsetTop - 40) : 0;
+}
+
+function server(st) {
+    $("#srv-host").textContent = "lernportal.htl.at";
+    const s = $("#srv-status");
+    s.innerHTML = st.server || IDLE;
+    s.classList.toggle("busy", !!st.busy);
+    const d = st.db || LOG([]);
+    $("#srv-db").innerHTML = `<b>${d.title}</b>` + (d.rows.length ? d.rows.map((r) => `<div class="entry${r.neu ? " neu" : ""}">${esc(r.t)}</div>`).join("") : '<div class="entry" style="color:var(--muted)">(leer)</div>');
+}
+
+function markiere(sel, text, delay) {
+    const el = document.querySelector(sel);
+    timers.push(setTimeout(() => {
+        el.classList.remove("hx-changed"); void el.offsetWidth; el.classList.add("hx-changed");
+        const r = el.getBoundingClientRect(), b = document.createElement("div");
+        b.className = "hx-badge"; b.textContent = "● " + text;
+        b.style.left = (r.left + 8) + "px"; b.style.top = Math.max(4, r.top - 10) + "px";
+        document.body.appendChild(b); setTimeout(() => b.remove(), 2500);
+    }, delay));
+}
+
+function animate(st, start) {
+    start = start || 0;
+    const p = $("#packet");
+    p.style.transition = "none"; p.style.opacity = 0;
+    if (!st.send) return;
+    const wire = p.parentElement;
+    const runs = st.send === "req3" ? 3 : 1;
+    const toServer = st.send.startsWith("req");
+    p.className = "hx-packet " + (toServer ? "req" : "res");
+    p.textContent = (toServer ? "➜ " : "⬅ ") + st.packet;
+    for (let r = 0; r < runs; r++) {
+        timers.push(setTimeout(() => {
+            const max = Math.max(0, wire.clientWidth - p.offsetWidth);
+            p.style.transition = "none";
+            p.style.left = (toServer ? 0 : max) + "px"; p.style.opacity = 1;
+            void p.offsetWidth;
+            p.style.transition = "left 1.1s ease-in-out, opacity .3s";
+            p.style.left = (toServer ? max : 0) + "px";
+            timers.push(setTimeout(() => {
+                p.style.opacity = 0;
+                const box = $(toServer ? "#server" : "#client");
+                box.classList.remove("hx-flash"); void box.offsetWidth; box.classList.add("hx-flash");
+            }, 1150));
+        }, start + r * 1400 + 150));
+    }
+}
+
+function render() {
+    const tab = TABS[tabIndex], st = tab.steps[step - 1], n = tab.steps.length;
+    [...$(".sd-tabs").children].forEach((b, i) => b.classList.toggle("active", i === tabIndex));
+    $(".sd-step-label").textContent = tab.label + " · Schritt " + step + " / " + n;
+    $(".sd-pnav span").textContent = $(".sd-step-label").textContent;
+    $(".sd-step-title").textContent = st.title;
+    $(".sd-step-text").innerHTML = mini(st.text);
+    const prog = $(".sd-progress"); prog.innerHTML = "";
+    for (let i = 1; i <= n; i++) {
+        const b = document.createElement("button");
+        b.className = i === step ? "current" : (i < step ? "done" : "");
+        b.onclick = () => { step = i; render(); };
+        prog.appendChild(b);
+    }
+    const h = document.createElement("span"); h.className = "sd-hint";
+    h.textContent = "← → Schritte · ↑ ↓ Tabs · P Presenter · F Vollbild"; prog.appendChild(h);
+    $('[data-dir="-1"]').disabled = tabIndex === 0 && step === 1;
+    $('[data-dir="1"]').disabled = tabIndex === TABS.length - 1 && step === n;
+
+    timers.forEach(clearTimeout); timers = [];
+    document.querySelectorAll(".hx-badge").forEach((b) => b.remove());
+    const vorher = window.__hxPrev || {};
+    const isTable = !!st.table;
+    $(".hx-row").style.display = isTable ? "none" : "";
+    $("#addr").textContent = st.addr || "about:blank";
+    $("#page").innerHTML = st.page || "";
+    server(st);
+    inspector(st);
+    const jetzt = { addr: $("#addr").textContent, page: $("#page").innerHTML, status: $("#srv-status").innerHTML, db: $("#srv-db").innerHTML, ins: $("#ins-body").innerHTML, key: tabIndex };
+    const urlNeu = vorher.key === tabIndex && vorher.addr !== jetzt.addr;
+    if (vorher.key === tabIndex) {
+        // Reihenfolge: zuerst die URL, dann fliegt das Paket, danach ändern sich Server bzw. Seite
+        if (urlNeu) {
+            // nur den geänderten Teil der URL hervorheben
+            const a = vorher.addr || "", b = jetzt.addr; let i = 0;
+            while (i < a.length && i < b.length && a[i] === b[i]) i++;
+            if (b === "about:blank" || a === "about:blank") i = 0;
+            else i = Math.max(b.lastIndexOf("/", i - 1), b.lastIndexOf("?", i - 1)) + 1;
+            $("#addr").innerHTML = esc(b.slice(0, i)) + '<span id="addr-neu">' + esc(b.slice(i)) + "</span>";
+            markiere("#addr-neu", "URL geändert", 0);
+        }
+        const nachPaket = st.send ? (urlNeu ? 700 : 0) + (st.send === "req3" ? 3 * 1400 : 1300) : 0;
+        if (vorher.page !== jetzt.page) markiere("#page", st.send && st.send.startsWith("res") ? "neue Seite aus dem Body" : "Seite geändert", st.send && st.send.startsWith("res") ? nachPaket : 0);
+        if (vorher.status !== jetzt.status) markiere("#srv-status", "Server-Status", st.send && st.send.startsWith("req") ? nachPaket : 0);
+        if (vorher.db !== jetzt.db) markiere("#srv-db", (st.db && st.db.title.startsWith("Datenbank")) ? "Daten am Server geändert" : "neuer Eintrag im Protokoll", st.send && st.send.startsWith("req") ? nachPaket : 0);
+    }
+    window.__hxPrev = jetzt;
+    animate(st, urlNeu ? 700 : 0);
+    history.replaceState(null, "", "#" + tab.id + "/" + step);
+}
+
+function go(dir) {
+    const n = TABS[tabIndex].steps.length;
+    if (dir > 0 && step < n) step++;
+    else if (dir < 0 && step > 1) step--;
+    else if (dir > 0 && tabIndex < TABS.length - 1) { tabIndex++; step = 1; }
+    else if (dir < 0 && tabIndex > 0) { tabIndex--; step = TABS[tabIndex].steps.length; }
+    else return;
+    render();
+}
+
+function goTab(dir) {
+    const i = tabIndex + dir;
+    if (i < 0 || i >= TABS.length) return;
+    tabIndex = i; step = 1; render();
+}
+
+function togglePresenter() {
+    presenter = !presenter;
+    document.body.classList.toggle("sd-presenter", presenter);
+    $("[data-pres]").classList.toggle("active", presenter);
+}
+
+function toggleFullscreen() {
+    try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); } catch (e) { /* nicht erlaubt */ }
+}
+
+window.addEventListener("keydown", (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = e.key;
+    if (k === "ArrowRight") { e.preventDefault(); go(1); }
+    else if (k === "ArrowLeft") { e.preventDefault(); go(-1); }
+    else if (k === "ArrowDown") { e.preventDefault(); goTab(1); }
+    else if (k === "ArrowUp") { e.preventDefault(); goTab(-1); }
+    else if (k === "p" || k === "P") togglePresenter();
+    else if (k === "f" || k === "F") toggleFullscreen();
+});
+document.querySelectorAll("[data-dir]").forEach((b) => b.onclick = () => go(+b.dataset.dir));
+document.querySelectorAll(".sd-pnav [data-go]").forEach((b) => b.onclick = () => go(+b.dataset.go));
+$("[data-pres]").onclick = togglePresenter;
+$("[data-act=fs]").onclick = toggleFullscreen;
+
+function readHash() {
+    const [hid, hst] = decodeURIComponent(location.hash.slice(1)).split("/");
+    const hi = TABS.findIndex((t) => t.id === hid);
+    if (hi < 0) return false;
+    tabIndex = hi; step = Math.min(Math.max(+hst || 1, 1), TABS[hi].steps.length);
+    return true;
+}
+window.addEventListener("hashchange", () => { if (readHash()) render(); });
+
+buildTabs();
+readHash();
+render();
+</script>
+</body>
+</html>

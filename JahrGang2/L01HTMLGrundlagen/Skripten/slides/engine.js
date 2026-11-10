@@ -153,7 +153,7 @@
         document.addEventListener("keydown", function (e) {
             const t = e.target && e.target.tagName;
             if (/INPUT|TEXTAREA|SELECT/.test(t)) return;
-            if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "1", "2", "3", "4"].indexOf(e.key) >= 0) {
+            if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "1", "2", "3", "4", "p", "P", "f", "F"].indexOf(e.key) >= 0) {
                 e.preventDefault();
                 send({ type: "key", key: e.key });
             }
@@ -280,6 +280,13 @@
     </div>
     <button class="sd-view sd-chip" data-v="blocks" title="Block/Inline zuschalten (Taste 3)">Block / Inline<kbd>3</kbd></button>
     <button class="sd-view sd-chip" data-v="components" title="Komponenten zuschalten (Taste 4)">Komponenten<kbd>4</kbd></button>
+    <button class="sd-view sd-fs" data-act="fs" title="Vollbild ein/aus (Taste F)">⛶ Vollbild<kbd>F</kbd></button>
+    <div class="sd-pres-group">
+      <button class="sd-view sd-chip" data-pres="1" title="Erklärung ausblenden, Code 30 % / Browser 70 % (Taste P)">🎤 Presenter<kbd>P</kbd></button>
+      <button class="sd-view" data-show="both" title="Code und Browser">Code + Browser</button>
+      <button class="sd-view" data-show="browser" title="Nur den Browser zeigen">nur Browser</button>
+      <button class="sd-view" data-show="code" title="Nur den Code zeigen">nur Code</button>
+    </div>
   </div>
 </div>
 <div class="sd-work">
@@ -310,7 +317,8 @@
     <div class="sd-progress"></div>
   </div>
   <button class="sd-nav-btn" data-dir="1" title="Weiter (→)">›</button>
-</div>`;
+</div>
+<div class="sd-pnav"><button data-go="-1" title="Zurück (←)">‹</button><span></span><button data-go="1" title="Weiter (→)">›</button></div>`;
             const q = (s) => document.querySelector(s);
             this.el = {
                 tabs: q(".sd-tabs"), views: q(".sd-views"), code: q(".sd-code"), file: q(".sd-file"),
@@ -331,12 +339,34 @@
                 b.addEventListener("click", () => this.setView(b.dataset.v));
             });
             if (!this.css) this.el.views.querySelector('[data-v="css"]').style.display = "none";
+            this.el.views.querySelector('[data-act="fs"]').addEventListener("click", () => SlideDeck.toggleFullscreen());
             document.querySelectorAll(".sd-code-toggle").forEach((b) => {
                 b.addEventListener("click", () => { this.codeMode = b.dataset.mode; this.renderCode(); });
                 if (b.dataset.mode === "css" && !this.css) b.style.display = "none";
             });
             this.el.prev.addEventListener("click", () => this.go(-1));
             this.el.next.addEventListener("click", () => this.go(1));
+            // Presenter-Modus und Ansicht (Code + Browser / nur Browser / nur Code)
+            this.presenter = false;
+            this.show = "both";
+            q("[data-pres]").addEventListener("click", () => this.togglePresenter());
+            document.querySelectorAll("[data-show]").forEach((b) => b.addEventListener("click", () => { this.show = b.dataset.show; this.applyLayout(); }));
+            document.querySelectorAll(".sd-pnav [data-go]").forEach((b) => b.addEventListener("click", () => this.go(+b.dataset.go)));
+            const sync = () => { q(".sd-pnav span").textContent = this.el.label.textContent; };
+            new MutationObserver(sync).observe(this.el.label, { childList: true, characterData: true, subtree: true });
+            this.applyLayout();
+        },
+
+        togglePresenter() { this.presenter = !this.presenter; this.applyLayout(); },
+
+        // Presenter: Erklärung aus, Code 30 % / Browser 70 %. Ansicht: beides, nur Browser, nur Code.
+        applyLayout() {
+            const b = document.body.classList;
+            b.toggle("sd-presenter", this.presenter);
+            b.toggle("sd-v-browser", this.show === "browser");
+            b.toggle("sd-v-code", this.show === "code");
+            document.querySelector("[data-pres]").classList.toggle("active", this.presenter);
+            document.querySelectorAll("[data-show]").forEach((x) => x.classList.toggle("active", x.dataset.show === this.show));
         },
 
         get tab() { return this.tabs[this.tabIndex]; },
@@ -380,8 +410,17 @@
             if (e && (e.ctrlKey || e.metaKey || e.altKey)) return;
             const map = { ArrowRight: () => this.go(1), ArrowLeft: () => this.go(-1), ArrowDown: () => this.goTab(1), ArrowUp: () => this.goTab(-1) };
             if (map[key]) { if (e) e.preventDefault(); map[key](); return; }
+            if (key === "p" || key === "P") { this.togglePresenter(); return; }
+            if (key === "f" || key === "F") { SlideDeck.toggleFullscreen(); return; }
             const v = { 1: "html", 2: "css", 3: "blocks", 4: "components" }[key];
             if (v) this.setView(v);
+        },
+
+        toggleFullscreen() {
+            try {
+                if (document.fullscreenElement) document.exitFullscreen();
+                else document.documentElement.requestFullscreen();
+            } catch (e) { /* Vollbild nicht erlaubt */ }
         },
 
         // html/css schalten um, blocks/components werden zu- bzw. abgeschaltet
@@ -532,7 +571,7 @@
                 }
                 const hint = document.createElement("span");
                 hint.className = "sd-hint";
-                hint.textContent = "← → Schritte · ↑ ↓ Tabs · 1/2 HTML ⇄ HTML + CSS · 3 Block/Inline · 4 Komponenten";
+                hint.textContent = "← → Schritte · ↑ ↓ Tabs · 1/2 HTML ⇄ HTML + CSS · 3 Block/Inline · 4 Komponenten · F Vollbild";
                 this.el.progress.appendChild(hint);
                 this.el.prev.disabled = this.tabIndex === 0 && this.step === 1;
                 this.el.next.disabled = this.tabIndex === this.tabs.length - 1 && this.step === n;

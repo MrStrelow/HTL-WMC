@@ -1,0 +1,220 @@
+>**Wir merken uns von [HTML](L01.1-HTML.md):**
+>1. [``HTML``](../../../05_Glossar.md#html) (Hypertext Markup Language) ist keine Programmiersprache, sondern eine [``Auszeichnungssprache``](../../../05_Glossar.md#auszeichnungssprache), die dem Browser mitteilt wie Text *strukturiert* ist.
+>2. Wir trennen *Struktur* ([``HTML``](../../../05_Glossar.md#html)) und *Design* ([``CSS``](../../../05_Glossar.md#css)) und setzen diese in zwei verschiedene *Sprachen* um.
+>3. [``Tags``](../../../05_Glossar.md#tag) werden in spitzen Klammern ``<>`` geschrieben. 
+>4. Ein [``Tag``](../../../05_Glossar.md#tag) *beginnt* mit einem [``Start-Tag``](../../../05_Glossar.md#start-tag) z.B. ``<p>`` und *endet* mit einem [``Closing-Tag``](../../../05_Glossar.md#closing-tag). Der [``Closing-Tag``](../../../05_Glossar.md#closing-tag) z.B. ``</p>`` besitzt einen Schrägstrich.
+>5. [``Attribute``](../../../05_Glossar.md#attribut) stehen immer im [``Start-Tag``](../../../05_Glossar.md#start-tag), bestehen aus einem *Namen* und einem *Wert* in Anführungszeichen und liefern Zusatzinformationen z.B. ``<a href="https://www.google.com/">``.
+>6. [``Elemente``](../../../05_Glossar.md#html-element) sind [``Tags``](../../../05_Glossar.md#tag) und deren *Inhalt*.
+>7. [``Semantisches HTML``](../../../05_Glossar.md#semantik) bedeutet, dass [``Tags``](../../../05_Glossar.md#tag) beschreiben *was* der Inhalt ist, und nicht *wie* dieser aussehen soll. Ein Beispiel wäre ``<h1>`` hat eine konkrete *Bedeutung*: der annotierte Text ist eine Überschrift. Wenn ein Programm das Internet nach Überschriften durchsucht, dann können wir uns auf ``<h1>`` verlassen. Aber auf ``<b>`` nicht. Der Text ist *fett* aber was heißt das? Wichtig? Nur weil wir es besser lesen können? Wenn wir ein Programm verwenden um das Internet nach fettem Text zu durchsuchen, dann bekommen wir verschiedene Texte welche alle eine verschiedene Bedeutung haben.
+>8. Jedes HTML-Dokument benötigt ein *zwingendes Grundgerüst* bestehend aus ``<!DOCTYPE html>``, ``<html>``, ``<head>`` und ``<body>``. Wir nennen sie unsichtbare [``Tags``](../../../05_Glossar.md#tag).
+>9. Der ``<body>`` beinhaltet die *Struktur*, ``<head>`` beinhaltet Informationen welche nicht für die *Struktur* relevant sind.
+>10. [``Block-Elemente``](../../../05_Glossar.md#block-element) können wir mit anderen [``Elementen``](../../../05_Glossar.md#html-element) *schachteln*. Eine Ausnahme ist der Paragraph ``<p>``. Wir schreiben den [``Start-Tag``](../../../05_Glossar.md#start-tag) und [``Closing-Tag``](../../../05_Glossar.md#closing-tag) *übereinander* in verschiedenen Zeilen.
+>11. [``Inline-Elemente``](../../../05_Glossar.md#inline-element) können wir **nicht** mit anderen [``Elementen``](../../../05_Glossar.md#html-element) *schachteln*. Wir schreiben den [``Start-Tag``](../../../05_Glossar.md#start-tag) und [``Closing-Tag``](../../../05_Glossar.md#closing-tag) *nebeneinander* in der gleichen Zeile.
+> 12. [``Inline-Elemente``](../../../05_Glossar.md#inline-element) nehmen im Dokument nur genau so viel Breite ein, wie ihr eigener Inhalt benötigt, und erzwingen keinen Zeilenumbruch – sie fließen direkt im laufenden Text mit, wie ``<a>``, ``<strong>`` oder ``<img>``.
+> 13. [``Block-Elemente``](../../../05_Glossar.md#block-element) verwenden die gesamte verfügbare Breite ihres Parent-Containers (*Eltern-Elements*). Sie erzwingen vor und nach sich einen Zeilenumbruch. Sie sind ``<header>``, ``<section>`` oder ``<p>``.
+> 14. [``Non-Closing Tags``](../../../05_Glossar.md#non-closing-tag) stehen für sich allein und umschließen keinen Inhalt, weshalb sie kein End-Tag benötigen - leere Elemente wie ``<img>``, ``<br>``, ``<hr>`` oder ``<input>``.
+> 15. Alles, was im Browserfenster sichtbar sein soll, muss zwingend im [``<body>``](../../../05_Glossar.md#body) stehen. Der [``<head>``](../../../05_Glossar.md#head) ist für *Metadaten* und *Konfigurationen* des *Dokumentes* da.
+> 16. Der [``<main>``](../../../05_Glossar.md#main)-Tag umschließt den zentralen Hauptinhalt der Webseite, grenzt diesen von wiederkehrenden Randbereichen (wie ``<header>``, ``<nav>``, ``<aside>`` oder ``<footer>``) ab und darf nur einmal pro Dokument sichtbar vorkommen.
+> 17. Der [``<p>``](../../../05_Glossar.md#paragraph)-Tag (*Paragraph*) umschließt zusammenhängende Textabsätze als ``Block-Element``. Auch innerhalb von ``<section>`` und ``<article>`` steht Fließtext niemals „nackt“ im Container, sondern wird immer sauber in ``<p>``-Tags verpackt.
+> 18. Der [``<strong>``](../../../05_Glossar.md#strong)-Tag zeichnet Textteile mit starker inhaltlicher Wichtigkeit oder Dringlichkeit aus (semantische Betonung) und wird von Browsern standardmäßig fett dargestellt.
+> 19. Der [``<em>``](../../../05_Glossar.md#emphasis)-Tag (*Emphasis*) markiert eine sprachliche Betonung oder Nuance im Satzfluss, die den Sinn einer Aussage verändert, und wird vom Browser standardmäßig kursiv dargestellt.
+> 20. Der [``<header>``](../../../05_Glossar.md#header)-Tag bildet den einleitenden Kopfbereich für die gesamte Webseite (z. B. mit Hauptüberschrift, Logo und ``<nav>``) oder lokal für einen einzelnen ``<article>`` bzw. eine ``<section>`` (z. B. mit Artikeltitel, Autor und Veröffentlichungsdatum).
+> 21. Der [``<footer>``](../../../05_Glossar.md#footer)-Tag schließt einen Bereich ab und enthält Metadaten wie Copyright-Hinweise, Autor oder weiterführende Links – sowohl ganz unten für die gesamte Webseite als auch lokal am Ende eines einzelnen ``<article>``.
+> 22. Der [``<aside>``](../../../05_Glossar.md#aside)-Tag kapselt ergänzende Zusatzinformationen, die nur indirekt mit dem Hauptinhalt zusammenhängen und vom Kerninhalt getrennt stehen können – wie Seitenleisten (*Sidebars*), Werbebanner, Glossar-Boxen oder weiterführende Links.
+> 23. Der [``<nav>``](../../../05_Glossar.md#nav)-Tag kennzeichnet zentrale Navigationsblöcke der Webseite, in denen meist ungeordnete Listen (``<ul>``, ``<li>``) mit Verweisen (``<a>``) zur Orientierung auf der Seite (Sprungmarken) oder zwischen Unterseiten gebündelt werden.
+> 24. Der [``<section>``](../../../05_Glossar.md#section)-Tag gruppiert thematisch zusammengehörige Inhalte in logische Kapitel oder Rubriken, die fast immer eine eigene Überschrift (``<h2>``–``<h6>``) besitzen, für sich allein genommen außerhalb des Dokuments aber unvollständig wären.
+> 25. Der [``<article>``](../../../05_Glossar.md#article)-Tag kapselt einen vollständig eigenständigen, in sich geschlossenen Inhaltsbaustein (wie einen Zeitungsartikel, Blogpost, Foren-Kommentar oder eine Produktkarte), der auch losgelöst von der restlichen Webseite zu 100 % Sinn ergibt (**„Ausschneide-Test“**) und als Vorlage für wiederverwendbare **UI-Komponenten** (z. B. in React oder Bootstrap) dient.
+> 26. **``<article>`` in ``<section>`` vs. ``<section>`` in ``<article>`` (Zeitungs- & Buch-Metapher):**
+>     * **``<article>`` in ``<section>`` („Die Zeitungs-Rubrik“):** Außen steht eine thematische Rubrik oder Schublade (``<section>``, z. B. *„Sport-News“* oder *„Aktuelle Projekte“*), in der mehrere gleichartige, einzeln ausschneidbare Einzelbeiträge (``<article>``) gesammelt werden.
+>     * **``<section>`` in ``<article>`` („Das Fachbuch mit Kapiteln“):** Außen steht ein einziges großes, eigenständiges Gesamtwerk (``<article>``, z. B. ein *langer Projektbericht*), das im Inneren zur besseren Übersicht in mehrere logische Teilkapitel (``<section>``, z. B. *„1. Problemstellung“*, *„2. Hardware“*) unterteilt wird.
+> 27. Der [``<table>``](../../../05_Glossar.md#table)-Tag dient ausschließlich der strukturierten Darstellung echter tabellarischer Daten (Zeilen/Spalten-Vergleiche) und darf **niemals für das Seiten-Layout** (wie z. B. ein **3-Spalten-Design** aus Navigation, Hauptinhalt und Sidebar) missbraucht werden! Ein mehrspaltiges Seiten-Layout wird im HTML rein semantisch mit ``<nav>``, ``<main>`` und ``<aside>`` strukturiert und erst später per **CSS** (Flexbox oder Grid) nebeneinander angeordnet.
+> 28. [``Nicht-semantische Tags``](../../../05_Glossar.md#nicht-semantische-tags) wie [``<div>``](../../../05_Glossar.md#div) (allgemeiner Block-Container) und [``<span>``](../../../05_Glossar.md#span) (allgemeiner Inline-Container) besitzen keinerlei inhaltliche Bedeutung. Um eine unübersichtliche „Div-Suppe“ zu vermeiden, nutzen wir sie nur als letzten Ausweg (*Last Resort*), wenn kein semantischer Tag passt und wir eine reine Hülle für das spätere CSS-Styling oder Komponenten-Layout benötigen.
+> 29. Der [``<a>``](../../../05_Glossar.md#anchor)-Tag (*Anchor*) erzeugt interaktive Hyperlinks über das Attribut ``href``. Er kann auf **externe Webseiten** mittels absoluter URL (``https://...``), auf **lokale Dateien** derselben Website mittels relativer Pfade (z. B. ``kontakt.html``), auf eine **spezifische Stelle im Dokument** mittels ``id``-Anker (``#kapitel1``) oder auf **System-Aktionen** (``mailto:...``, ``tel:...``) verweisen.
+> 30. Der [``<hr>``](../../../05_Glossar.md#horizontal-rule)-Tag (*Horizontal Rule*) ist ein leeres Block-Element (*Non-Closing Tag*), das einen thematischen Umbruch zwischen Abschnitten markiert und im Browser standardmäßig als horizontale Trennlinie dargestellt wird.
+> 31. **Medien semantisch einbinden (``<figure>``, ``<figcaption>`` & ``<img>``):**
+>     * Der [``<img>``](../../../05_Glossar.md#img)-Tag ist ein leeres Inline-Element (*Non-Closing Tag*), das über ``src`` den Bildpfad lädt und über das Pflicht-Attribut ``alt`` einen Alternativtext für Screenreader und Ladefehler bereitstellt.
+>     * Der [``<figure>``](../../../05_Glossar.md#figure)-Tag umschließt Medieninhalte (wie Bilder, Diagramme oder Code-Snippets) als eigenständige, zusammengehörige Block-Einheit, während [``<figcaption>``](../../../05_Glossar.md#figcaption) die dazugehörige Bildunterschrift oder Quellenangabe direkt mit dem Bild verknüpft.
+> 32. **``<a>`` (Link) vs. ``<button>`` (Aktion) – Die Komponenten-Goldregel:**
+>     * Wir entscheiden uns niemals nach dem Aussehen (beide können per CSS wie ein Knopf aussehen), sondern nach der **Funktion**:
+>     * Verwende immer [``<a>``](../../../05_Glossar.md#anchor), wenn der Nutzer zu einer **neuen URL, einer anderen Seite oder einem ``#anker`` navigiert**.
+>     * Verwende immer [``<button>``](../../../05_Glossar.md#button), wenn eine **Aktion auf der aktuellen Seite** ausgelöst wird (z. B. Formular absenden mit ``type="submit"``, Dialog öffnen, Darkmode umschalten mit ``type="button"``).
+> 33. Mit den Tags [``<details>``](../../../05_Glossar.md#details) und [``<summary>``](../../../05_Glossar.md#summary) stellt HTML5 eine **native, interaktive Aufklapp-Komponente (Akkordeon)** bereit, die komplett ohne JavaScript funktioniert: ``<summary>`` bildet die permanent sichtbare, anklickbare Kopfzeile, während der restliche Inhalt in ``<details>`` erst beim Aufklappen sichtbar wird.
+> 34. **Formulare (``<form>``) und HTTP-Kommunikation (``GET`` vs. ``POST``):**
+>     * Der [``<form>``](../../../05_Glossar.md#form)-Tag bündelt Benutzereingaben und kann diese **komplett ohne JavaScript** als [``HTTP-Request``](../../../05_Glossar.md#http) vom [``Client``](../../../05_Glossar.md#client) (Browser) an einen [``Server``](../../../05_Glossar.md#server) senden.
+>     * Das Attribut ``action`` legt die **Ziel-URL des Servers** fest (z. B. ``action="https://www.google.com/search"``), an den die Daten geschickt werden.
+>     * Das Attribut ``method`` bestimmt die Übertragungsart:
+>         * **``method="GET"`` (Daten abrufen / filtern / suchen):** Hängt die Formulardaten für jeden sichtbar als Schlüssel-Wert-Paare (Query-String) mit einem ``?`` und ``&`` direkt an die URL in der Browser-Adresszeile an (z. B. ``?q=htl&sort=date``). Niemals für Passwörter verwenden!
+>         * **``method="POST"`` (Daten senden / speichern / verändern):** Verpackt die Formulardaten unsichtbar im **HTTP-Request-Body** im Hintergrund. Pflicht für Logins, Passwörter, Registrierungen oder lange Nachrichten.
+> 35. **Eingabeelemente in Formularen (``<label>``, ``<input>``, ``<select>``, ``<textarea>``):**
+>     * **[``<label>``](../../../05_Glossar.md#label):** Beschriftet ein Eingabefeld sichtbar und verknüpft sich über das Attribut ``for="feld-id"`` fest mit der ``id="feld-id"`` des Eingabefelds (wichtig für Screenreader und Klick-Komfort).
+>     * **Das ``name``-Attribut:** Jedes Eingabefeld benötigt zwingend ein ``name="..."``-Attribut (z. B. ``name="q"``), da dieser Name beim Absenden zum **Schlüssel (Key)** für den Server wird – ohne ``name`` wird der Wert vom Browser nicht mitgeschickt!
+>     * **[``<input>``](../../../05_Glossar.md#input):** Ein vielseitiger *Non-Closing Tag*, dessen Verhalten über ``type`` gesteuert wird (z. B. ``type="text"``, ``type="email"``, ``type="password"``, ``type="number"``, ``type="date"``, ``type="checkbox"``, ``type="radio"``). Attribute wie ``required``, ``placeholder`` oder ``min``/``max`` ermöglichen eine native Browser-Prüfung ohne JavaScript.
+>     * **[``<select>``](../../../05_Glossar.md#select) & [``<option>``](../../../05_Glossar.md#option):** Erzeugen ein Auswahl-Dropdown-Menü, bei dem der Nutzer aus vordefinierten ``<option value="...">``-Einträgen wählt.
+>     * **[``<textarea>``](../../../05_Glossar.md#textarea):** Erzeugt ein mehrzeiliges Textfeld für längere Eingaben (wie Kommentare oder Nachrichten) und besitzt im Gegensatz zu ``<input>`` immer ein Start- und ein Closing-Tag.
+<!-- 
+>1) Der [``Client``](../../../05_Glossar.md#client) (z.B. dein Webbrowser) stellt Anfragen, und der [``Server``](../../../05_Glossar.md#server) liefert die entsprechenden Antworten.
+>2) Die Kommunikation zwischen [``Client``](../../../05_Glossar.md#client) und [``Server``](../../../05_Glossar.md#server) erfolgt über das Protokoll [``HTTP``](../../../05_Glossar.md#http) (Hypertext Transfer Protocol).
+>3) Eine [``Statische Website``](../../../05_Glossar.md#statische-website) wird vom [``Server``](../../../05_Glossar.md#server) exakt so ausgeliefert, wie sie als unveränderliche HTML/CSS-Datei auf der Festplatte liegt (schnell und ideal für Infoseiten).
+>4) Eine [``Dynamische Website``](../../../05_Glossar.md#dynamische-website) wird vom [``Server``](../../../05_Glossar.md#server) auf Anfrage "on the fly" zusammengebaut (z.B. für Blogs oder Online-Shops).
+>5) Eine [``Single Page Application (SPA)``](../../../05_Glossar.md#spa) lädt die Seite nicht neu; die Logik liegt im ``JavaScript`` des Browsers, der Inhalte dynamisch austauscht.
+>6) Eine [``Web-API``](../../../05_Glossar.md#web-api) liefert keine fertigen Webseiten, sondern reine Rohdaten, auf die eine SPA zugreifen kann.
+>7) [``RESTful``](../../../05_Glossar.md#restful) ist ein Architektur-Standard für Web-APIs, der vorschreibt, die HTTP-Methoden (GET, POST, PUT, DELETE) logisch für Datenbank-Aktionen zu nutzen.
+>16) Gute [``Semantik``](../../../05_Glossar.md#semantik) verbessert die Auffindbarkeit bei Suchmaschinen (``SEO``) und hilft Menschen, die auf Screenreader angewiesen sind (Barrierefreiheit).
+>17) Vermeide die "Div-Suppe" (zu viele bedeutungslose ``<div>``-Tags). Nutze stattdessen HTML5-Zonen-Tags wie ``<main>``, ``<article>``, ``<header>`` oder ``<nav>``, wo immer es möglich ist.
+>19) Wenn der finale Text für eine Webseite noch fehlt, nutzen wir [``Blindtext``](../../../05_Glossar.md#blindtext) (wie Lorem Ipsum), um beim Gestalten des Layouts nicht abgelenkt zu werden.
+>21) **[``Semantische Tags``](../../../05_Glossar.md#semantische-tags)** geben dem Browser und Suchmaschinen die exakte Bedeutung des Inhalts vor. Beispiele: ``<h1>`` bis ``<h6>``, ``<p>``, ``<strong>``, ``<em>``, ``<a>``, ``<ul>``, ``<ol>``, ``<li>``, ``<header>``, ``<nav>``, ``<main>``, ``<article>``, ``<aside>``, ``<footer>``.
+>22) **[``Non-Closing Tags``](../../../05_Glossar.md#non-closing-tag)** (leere Elemente) stehen für sich allein, haben keinen Inhalt und kein End-Tag. Beispiele: ``<img>``, ``<br>``, ``<hr>``, ``<input>``, ``<meta>``, ``<link>``.
+>23) **[``Nicht-semantische Tags``](../../../05_Glossar.md#nicht-semantische-tags)** verraten nichts über ihren Inhalt und dienen lediglich als neutrale Container für das spätere CSS-Design. Beispiele: ``<div>`` (für Block-Elemente) und ``<span>`` (für Textabschnitte). -->
+
+
+Hier ist eine übersichtliche Liste aller **HTML-Tags**, die in dem oben stehenden Text verwendet oder explizit erwähnt wurden:
+
+* **`<a>`** – Anchor-Tag (Hyperlinks)
+* **`<article>`** – Eigenständiger Inhaltsbaustein (z. B. Blogpost, Artikel)
+* **`<aside>`** – Ergänzende Zusatzinformationen / Seitenleiste
+* **`<body>`** – Sichtbarer Hauptbereich des HTML-Dokuments
+* **`<br>`** – Zeilenumbruch (Non-Closing Tag)
+* **`<button>`** – Interaktiver Button für Aktionen auf der Seite
+* **`<div>`** – Nicht-semantischer Block-Container („Div-Suppe“)
+* **`<!DOCTYPE html>`** – Dokumenttyp-Deklaration (kein klassisches HTML-Tag, aber Teil des Grundgerüsts)
+* **`<em>`** – Sprachliche Betonung (kursiv)
+* **`<figcaption>`** – Bildunterschrift oder Quellenangabe für `<figure>`
+* **`<figure>`** – Container für Medieninhalte (wie Bilder oder Diagramme)
+* **`<footer>`** – Fußbereich einer Seite oder eines Artikels
+* **`<form>`** – Formular zur Bündelung von Benutzereingaben
+* **`<h1>` bis `<h6>**` – Überschriften (Headings) in verschiedenen Hierarchiestufen
+* **`<head>`** – Metadaten und Konfigurationen des Dokuments
+* **`<header>`** – Einleitender Kopfbereich (global oder für Sektionen/Artikel)
+* **`<hr>`** – Horizontale Trennlinie (Non-Closing Tag)
+* **`<html>`** – Wurzelelement (Root) jedes HTML-Dokuments
+* **`<img>`** – Bild-Tag (Non-Closing Tag)
+* **`<input>`** – Vielseitiges Eingabefeld in Formularen (Non-Closing Tag)
+* **`<label>`** – Sichtbare Beschriftung für ein Formular-Eingabefeld
+* **`<li>`** – Listenelement innerhalb einer Liste
+* **`<main>`** – Zentraler Hauptinhalt der Webseite
+* **`<nav>`** – Navigationsbereich für Menüs und Links
+* **`<ol>`** – Nummerierte Liste (Ordered List)
+* **`<option>`** – Einzelner Eintrag in einem `<select>`-Dropdown
+* **`<p>`** – Paragraph (Textabsatz)
+* **`<section>`** – Thematisch zusammengehörige Sektion / Kapitel
+* **`<select>`** – Auswahl-Dropdown-Menü in Formularen
+* **`<span>`** – Nicht-semantischer Inline-Container für Textabschnitte
+* **`<strong>`** – Inhaltliche Wichtigkeit / starke Betonung (fett)
+* **`<details>` / `<summary>**` – Native Aufklapp-Komponente (Akkordeon) mit anklickbarem Kopf
+* **`<table>`** – Tabellarische Daten
+* **`<textarea>`** – Mehrzeiliges Textfeld für längere Eingaben
+* **`<ul>`** – Ungeordnete Liste (Unordered List)
+
+
+Hier ist die Liste der HTML-Tags, sinnvoll nach **thematischen Bereichen** sortiert:
+
+---
+
+### 1. Grundgerüst & Metadaten
+
+* **`<!DOCTYPE html>`** – Dokumenttyp-Deklaration (Teil des Grundgerüsts)
+* **`<html>`** – Wurzelelement (Root) jedes HTML-Dokuments
+* **`<head>`** – Metadaten und Konfigurationen des Dokuments
+* **`<body>`** – Sichtbarer Hauptbereich des HTML-Dokuments
+
+---
+
+### 2. Strukturierung mit Block Elementen
+
+* **`<header>`** – Einleitender Kopfbereich (global oder für Sektionen/Artikel)
+* **`<nav>`** – Navigationsbereich für Menüs und Links
+* **`<main>`** – Zentraler Hauptinhalt der Webseite
+* **`<section>`** – Thematisch zusammengehörige Sektion / Kapitel
+* **`<article>`** – Eigenständiger Inhaltsbaustein (z. B. Blogpost, Artikel)
+* **`<aside>`** – Ergänzende Zusatzinformationen / Seitenleiste
+* **`<footer>`** – Fußbereich einer Seite oder eines Artikels
+* **`<h1>` bis `<h6>**` – Überschriften in verschiedenen Hierarchiestufen
+* **`<p>`** – Paragraph (Textabsatz)
+
+---
+
+### 3. Inline Elemente
+* **`<strong>`** – Inhaltliche Wichtigkeit / starke Betonung (fett)
+* **`<em>`** – Sprachliche Betonung (kursiv)
+* **`<a>`** – Anchor-Tag (Hyperlinks)
+* **`<br>`** – Zeilenumbruch (Non-Closing Tag)
+* **`<hr>`** – Horizontale Trennlinie (Non-Closing Tag)
+
+---
+
+### 4. Listen als Blockelemente
+
+* **`<ul>`** – Ungeordnete Liste (Unordered List)
+* **`<ol>`** – Nummerierte Liste (Ordered List)
+* **`<li>`** – Listenelement innerhalb einer Liste
+
+---
+
+### 5. Medien & Grafiken
+
+* **`<img>`** – Bild-Tag (Non-Closing Tag)
+* **`<figure>`** – Container für Medieninhalte (wie Bilder oder Diagramme)
+* **`<figcaption>`** – Bildunterschrift oder Quellenangabe für `<figure>`
+
+---
+
+### 6. Tabellen
+
+* **`<table>`** – Tabellarische Daten
+
+---
+
+### 7. Formulare & Benutzereingaben
+
+* **`<form>`** – Formular zur Bündelung von Benutzereingaben
+* **`<label>`** – Sichtbare Beschriftung für ein Formular-Eingabefeld
+* **`<input>`** – Vielseitiges Eingabefeld in Formularen (Non-Closing Tag)
+* **`<textarea>`** – Mehrzeiliges Textfeld für längere Eingaben
+* **`<select>`** – Auswahl-Dropdown-Menü in Formularen
+* **`<option>`** – Einzelner Eintrag in einem `<select>`-Dropdown
+* **`<button>`** – Interaktiver Button für Aktionen auf der Seite
+
+---
+
+### 8. Interaktive Komponenten
+
+* **`<details>` / `<summary>**` – Native Aufklapp-Komponente (Akkordeon) mit anklickbarem Kopf
+
+mit ``Attributen``
+Hier ist eine übersichtliche Liste aller **HTML-Tags**, die in dem oben stehenden Text verwendet oder explizit erwähnt wurden (sortiert nach Alphabet):
+
+* **`<a>`** – Anchor-Tag (Hyperlinks)
+* **`<article>`** – Eigenständiger Inhaltsbaustein (z. B. Blogpost, Artikel)
+* **`<aside>`** – Ergänzende Zusatzinformationen / Seitenleiste
+* **`<body>`** – Sichtbarer Hauptbereich des HTML-Dokuments
+* **`<br>`** – Zeilenumbruch (Non-Closing Tag)
+* **`<button>`** – Interaktiver Button für Aktionen auf der Seite
+* **`<div>`** – Nicht-semantischer Block-Container („Div-Suppe“)
+* **`<!DOCTYPE html>`** – Dokumenttyp-Deklaration (kein klassisches HTML-Tag, aber Teil des Grundgerüsts)
+* **`<em>`** – Sprachliche Betonung (kursiv)
+* **`<figcaption>`** – Bildunterschrift oder Quellenangabe für `<figure>`
+* **`<figure>`** – Container für Medieninhalte (wie Bilder oder Diagramme)
+* **`<footer>`** – Fußbereich einer Seite oder eines Artikels
+* **`<form>`** – Formular zur Bündelung von Benutzereingaben
+* **`<h1>` bis `<h6>**` – Überschriften (Headings) in verschiedenen Hierarchiestufen
+* **`<head>`** – Metadaten und Konfigurationen des Dokuments
+* **`<header>`** – Einleitender Kopfbereich (global oder für Sektionen/Artikel)
+* **`<hr>`** – Horizontale Trennlinie (Non-Closing Tag)
+* **`<html>`** – Wurzelelement (Root) jedes HTML-Dokuments
+* **`<img>`** – Bild-Tag (Non-Closing Tag)
+* **`<input>`** – Vielseitiges Eingabefeld in Formularen (Non-Closing Tag)
+* **`<label>`** – Sichtbare Beschriftung für ein Formular-Eingabefeld
+* **`<li>`** – Listenelement innerhalb einer Liste
+* **`<main>`** – Zentraler Hauptinhalt der Webseite
+* **`<nav>`** – Navigationsbereich für Menüs und Links
+* **`<ol>`** – Nummerierte Liste (Ordered List)
+* **`<option>`** – Einzelner Eintrag in einem `<select>`-Dropdown
+* **`<p>`** – Paragraph (Textabsatz)
+* **`<section>`** – Thematisch zusammengehörige Sektion / Kapitel
+* **`<select>`** – Auswahl-Dropdown-Menü in Formularen
+* **`<span>`** – Nicht-semantischer Inline-Container für Textabschnitte
+* **`<strong>`** – Inhaltliche Wichtigkeit / starke Betonung (fett)
+* **`<details>` / `<summary>**` – Native Aufklapp-Komponente (Akkordeon) mit anklickbarem Kopf
+* **`<table>`** – Tabellarische Daten
+* **`<textarea>`** – Mehrzeiliges Textfeld für längere Eingaben
+* **`<ul>`** – Ungeordnete Liste (Unordered List)

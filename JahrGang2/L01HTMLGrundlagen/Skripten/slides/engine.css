@@ -409,3 +409,20 @@ body {
 .sd-chip.active::before {
     content: "✓ ";
 }
+
+/* ---------- Presenter-Modus und Ansicht ---------- */
+.sd-pres-group { display: flex; gap: 4px; align-items: center; margin-left: 10px; padding-left: 10px; border-left: 1px solid var(--border); }
+body.sd-presenter .sd-explain { display: none; }
+body.sd-presenter .sd-work { grid-template-columns: minmax(0, 3fr) minmax(0, 7fr); }
+body.sd-v-browser .sd-code-wrap { display: none; }
+body.sd-v-code .sd-browser { display: none; }
+body.sd-v-browser .sd-work, body.sd-v-code .sd-work { grid-template-columns: minmax(0, 1fr); }
+.sd-pnav { display: none; position: fixed; right: 14px; bottom: 14px; z-index: 50; gap: 6px; align-items: center;
+           background: var(--panel-2); border: 1px solid var(--border); border-radius: 999px; padding: 4px 8px; box-shadow: 0 4px 14px rgba(0,0,0,.35); }
+body.sd-presenter .sd-pnav { display: flex; }
+.sd-pnav button { background: transparent; color: var(--text); border: 0; font-size: 1.3rem; cursor: pointer; padding: 0 8px; }
+.sd-pnav span { color: var(--muted); font-size: 0.8rem; min-width: 60px; text-align: center; }
+
+/* Vollbild-Knopf */
+.sd-fs { margin-left: 6px; }
+:fullscreen .sd-fs { background: var(--accent); color: #111827; border-color: var(--accent); }

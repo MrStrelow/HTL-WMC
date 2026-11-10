@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktiver HTML & React Simulator</title>
+    <style>
+        /* =======================================================
+           APP UI STYLES
+           ======================================================= */
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: system-ui, sans-serif; background: #1e1e1e; color: #fff; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        .toolbar { background: #2d2d2d; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #444; }
+        .toggle-group, .slide-group { display: flex; gap: 10px; align-items: center; }
+        
+        button { background: #333; color: white; border: 2px solid #555; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; transition: 0.2s; }
+        button:hover:not(:disabled) { background: #444; }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+        
+        button.active.btn-structure { background: #2563eb; border-color: #60a5fa; }
+        button.active.btn-react { background: #059669; border-color: #34d399; }
+        button.active.btn-css { background: #d946ef; border-color: #f472b6; }
+        
+        .step-counter { font-size: 14px; font-weight: bold; color: #fbbf24; min-width: 120px; text-align: center; }
+
+        .workspace { display: flex; flex: 1; overflow: hidden; }
+        
+        .left-panel { width: 45%; border-right: 2px solid #444; display: flex; flex-direction: column; background: #1e1e1e; }
+        .code-container { flex: 1; overflow-y: auto; padding: 20px; border-bottom: 2px solid #333; display: flex; flex-direction: column; }
+        .code-title { color: #888; font-size: 12px; text-transform: uppercase; margin-top: 0; margin-bottom: 10px; letter-spacing: 1px; }
+        pre { margin: 0; font-family: 'Courier New', Courier, monospace; font-size: 13px; line-height: 1.5; color: #d4d4d4; }
+        
+        /* Syntax Highlighting */
+        .tag { color: #569cd6; }
+        .attr { color: #9cdcfe; }
+        .val { color: #ce9178; }
+        .comment { color: #6a9955; font-style: italic; }
+
+        .right-panel { width: 55%; background: #ffffff; color: #000; display: flex; flex-direction: column; position: relative; }
+        #render-window { flex: 1; padding: 30px; overflow-y: auto; background: #f9fafb; font-family: 'Times New Roman', Times, serif; }
+
+        .explanation-panel { background: #2d2d2d; border-top: 2px solid #444; padding: 20px; font-size: 15px; line-height: 1.5; height: 180px; overflow-y: auto; }
+        .explanation-panel strong { color: #facc15; }
+        .expl-step { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #555; }
+        .expl-toggles { color: #ccc; }
+
+        /* =======================================================
+           DYNAMIC RENDER WINDOW STYLES (Overlays)
+           ======================================================= */
+        .show-structure [data-type="block"] { outline: 2px solid rgba(37, 99, 235, 0.7) !important; position: relative; margin-top: 22px; margin-bottom: 2px; }
+        .show-structure [data-type="inline"] { outline: 2px dashed #f59e0b !important; position: relative; background: rgba(245, 158, 11, 0.1); }
+        .show-structure [data-tag]::before {
+            content: attr(data-tag); position: absolute; top: -18px; left: -2px; font-family: monospace; font-size: 11px; padding: 2px 6px; color: white; line-height: 1; z-index: 10;
+        }
+        .show-structure [data-type="block"]::before { background: #2563eb; }
+        .show-structure [data-type="inline"]::before { background: #f59e0b; top: -20px; }
+
+        .show-react [data-react] { outline: 4px dashed #059669 !important; outline-offset: 4px; position: relative; margin-top: 25px; }
+        .show-react [data-react]::after {
+            content: "<" attr(data-react) " />"; position: absolute; top: -25px; right: -4px; background: #059669; color: white; font-family: monospace; font-size: 13px; font-weight: bold; padding: 3px 8px; border-radius: 4px 4px 0 0; z-index: 20;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <div class="toggle-group">
+            <button id="btn-structure" class="btn-structure">1. Struktur & Boxen</button>
+            <button id="btn-react" class="btn-react">2. React Komponenten</button>
+            <button id="btn-css" class="btn-css">3. CSS Design</button>
+        </div>
+        
+        <div class="slide-group">
+            <button id="btn-prev">◀ Zurück</button>
+            <span class="step-counter" id="step-counter">Schritt 1 von 8</span>
+            <button id="btn-next">Weiter ▶</button>
+        </div>
+    </div>
+
+    <div class="workspace">
+        <div class="left-panel">
+            <div class="code-container">
+                <h3 class="code-title">index.html</h3>
+                <pre><code id="html-code"></code></pre>
+            </div>
+            <div class="code-container" id="css-panel" style="display: none; border-top: 2px solid #444; border-bottom: none; height: 30%;">
+                <h3 class="code-title">style.css</h3>
+                <pre><code id="css-code"></code></pre>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <style id="dynamic-css"></style>
+            <div id="render-window"></div>
+        </div>
+    </div>
+
+    <div class="explanation-panel" id="explanation"></div>
+
+<script>
+    /* =======================================================
+       DATEN: Aufbau-Schritte (Strikte Formatierung, kein Einklappen)
+       ======================================================= */
+    
+    // Bausteine für das lückenlose Aneinanderhängen
+    const htmlTop = `<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>HTL Kurs - Dashboard</title>
+</head>
+<body>
+`;
+    const htmlBottom = `\n</body>\n</html>`;
+
+    const step1Code = `
+    <header>
+        <h1>
+            Web-Programmierung: Unser Dashboard
+        </h1>
+    </header>`;
+
+    const step2Code = `
+    <header>
+        <h1>
+            Web-Programmierung: Unser Dashboard
+        </h1>
+        <nav>
+            <p>
+                <strong>Inhaltsverzeichnis:</strong>
+            </p>
+            <ul>
+                <li>
+                    <a href="#lehrplan">Zum Lehrplan springen</a>
+                </li>
+                <li>
+                    <a href="#projekte">Zu den Projekten springen</a>
+                </li>
+                <li>
+                    <a href="#kontakt">Kontakt & Adresse</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    
+    <hr>`;
+
+    const step3Code = `
+
+    <main>
+        <section id="lehrplan">
+            <h2>
+                Unser aktueller Lehrplan
+            </h2> 
+        </section>
+    </main>`;
+
+    const step4MainOpen = `
+
+    <main>
+        <section id="lehrplan">
+            <h2>
+                Unser aktueller Lehrplan
+            </h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>
+                            Wochentag
+                        </th>
+                        <th>
+                            Thema
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            Montag
+                        </td>
+                        <td>
+                            HTML Struktur & Boxen
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Mittwoch
+                        </td>
+                        <td>
+                            Tabellen und Listen
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>`;
+    const mainClose = `\n    </main>`;
+
+    const step5ProjekteEmpty = `
+        <section id="projekte">
+            <h2>
+                Schüler-Projekte
+            </h2>
+            <article>
+                <h3>
+                    Projekt: HTML-Portfolio
+                </h3>
+            </article>
+        </section>`;
+
+    const step6ProjekteFull = `
+        <section id="projekte">
+            <h2>
+                Schüler-Projekte
+            </h2>
+            <article>
+                <h3>
+                    Projekt: HTML-Portfolio
+                </h3>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML5 Logo" width="100">
+                <p>
+                    Das erste Projekt nutzt <strong>reines HTML</strong>. 
+                    Mehr Infos auf <a href="https://developer.mozilla.org/de/docs/Web/HTML" target="_blank">MDN Web Docs</a>.
+                </p>
+            </article>
+        </section>`;
+
+    const step7Aside = `
+    
+    <hr>
+
+    <aside id="kontakt">
+        <h2>
+            Unsere Schule
+        </h2>
+        <p>
+            HTL Informatik<br>
+            Musterstraße 42<br>
+            1010 Wien<br>
+            Österreich
+        </p>
+    </aside>`;
+
+    const step8Footer = `
+    
+    <footer>
+        <p>
+            &copy; 2026 HTL Informatik. <a href="#">Zurück nach oben</a>
+        </p>
+    </footer>`;
+
+    // Zusammenbauen der Slides (immer komplett, kein "...")
+    const slides = [
+        {
+            desc: "<strong>Schritt 1: Der Header-Block.</strong> Wir starten mit dem Fundament. Das &lt;header&gt; Block-Element nimmt automatisch die volle Breite ein. Block-Tags schreiben wir mit Zeilenumbruch auf und zu! Darin liegt das &lt;h1&gt; Block-Element.",
+            raw: htmlTop + step1Code + htmlBottom
+        },
+        {
+            desc: "<strong>Schritt 2: Listen als Block-Elemente.</strong> Wir schachteln den Block &lt;nav&gt; in den Header. Das &lt;li&gt;-Tag verhält sich wie ein Block und wird deshalb auf eigenen Zeilen geöffnet und geschlossen. Inline-Elemente wie &lt;a&gt; und &lt;strong&gt; bleiben im Textfluss.",
+            raw: htmlTop + step2Code + htmlBottom
+        },
+        {
+            desc: "<strong>Schritt 3: Hauptbereich & Section.</strong> Wir öffnen das &lt;main&gt;-Element für den Kerninhalt. Darin erstellen wir unser erstes thematisches Kapitel: Eine &lt;section&gt; für den Lehrplan.",
+            raw: htmlTop + step2Code + step3Code + htmlBottom
+        },
+        {
+            desc: "<strong>Schritt 4: Die strenge Tabellen-Struktur.</strong> Wir fügen eine Tabelle ein. Auch Tabellen-Tags (&lt;tr&gt;, &lt;th&gt;, &lt;td&gt;) sind Struktur-Blöcke und werden konsequent untereinander geschrieben. Der Text liegt ganz tief im Inneren.",
+            raw: htmlTop + step2Code + step4MainOpen + mainClose + htmlBottom
+        },
+        {
+            desc: "<strong>Schritt 5: Projekte-Sektion & Artikel-Block.</strong> Wir fügen eine zweite &lt;section&gt; in das Main-Element ein. Darin liegt ein &lt;article&gt; Block. Ein Artikel kapselt Inhalte, die völlig eigenständig Sinn ergeben (die perfekte Vorstufe für React).",
+            raw: htmlTop + step2Code + step4MainOpen + step5ProjekteEmpty + mainClose + htmlBottom
+        },
+        {
+            desc: "<strong>Schritt 6: Inline-Elemente füllen den Artikel.</strong> Das &lt;img&gt; ist ein Inline-Element, das sich selbst schließt. &lt;strong&gt; und &lt;a&gt; sind ebenfalls Inline. Sie werden nebeneinander in einer Zeile geschrieben, da sie keine Struktur-Boxen erzwingen.",
+            raw: htmlTop + step2Code + step4MainOpen + step6ProjekteFull + mainClose + htmlBottom
+        },
+        {
+            desc: "<strong>Schritt 7: Der Aside-Block (Randbereich).</strong> Unter dem Main-Bereich fügen wir ein &lt;aside&gt; ein. Im Paragraphen &lt;p&gt; nutzen wir &lt;br&gt;. Da dies Inline-Tags sind, die nur einen simplen Umbruch bewirken, schreiben wir sie direkt hinter den Text.",
+            raw: htmlTop + step2Code + step4MainOpen + step6ProjekteFull + mainClose + step7Aside + htmlBottom
+        },
+        {
+            desc: "<strong>Schritt 8: Der Footer-Block.</strong> Zum Abschluss ergänzen wir das &lt;footer&gt; Block-Element ganz unten. Damit ist unsere vollständig semantische, streng nach Block/Inline formatierte Webseite fertig!",
+            raw: htmlTop + step2Code + step4MainOpen + step6ProjekteFull + mainClose + step7Aside + step8Footer + htmlBottom
+        }
+    ];
+
+    const rawCSS = `/* CSS für das Dashboard */
+* { box-sizing: border-box; }
+body { font-family: system-ui, sans-serif; background: #f4f4f9; color: #333; }
+
+.app-header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+.nav-list { display: flex; gap: 15px; list-style: none; padding: 0; }
+.nav-link { color: #34d399; text-decoration: none; font-weight: bold; }
+
+.widget { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+.card { border: 1px solid #eee; padding: 15px; border-radius: 6px; }
+
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+.data-table th { background: #f8f9fa; }
+
+.sidebar { background: #e2e8f0; padding: 20px; border-radius: 8px; }
+.app-footer { margin-top: 20px; font-size: 12px; text-align: center; color: #666; }`;
+
+    /* =======================================================
+       LOGIK & HILFSFUNKTIONEN
+       ======================================================= */
+    let currentStep = 0;
+    let isStructure = false;
+    let isReact = false;
+    let isCss = false;
+
+    // Intelligenter CSS Injector basierend auf Regex für robustes Ersetzen
+    function applyCSSClasses(html) {
+        return html
+            .replace(/<header>/, '<header class="app-header">')
+            .replace(/<ul>/, '<ul class="nav-list">')
+            .replace(/<a href/g, '<a class="nav-link" href')
+            .replace(/<main>/, '<main class="dashboard-main">')
+            .replace(/<section id="lehrplan">/, '<section id="lehrplan" class="widget">')
+            .replace(/<section id="projekte">/, '<section id="projekte" class="widget">')
+            .replace(/<table border="1">/, '<table class="data-table">')
+            .replace(/<article>/, '<article class="card">')
+            .replace(/<aside id="kontakt">/, '<aside id="kontakt" class="sidebar">')
+            .replace(/<footer>/, '<footer class="app-footer">');
+    }
+
+    // Sicherer Syntax Highlighter
+    function highlightHTML(code) {
+        let escaped = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        escaped = escaped.replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="comment">$1</span>');
+        escaped = escaped.replace(/(&lt;\/?)([a-zA-Z0-9]+)([\s\S]*?)(&gt;)/g, (match, openBracket, tagName, innerAttrs, closeBracket) => {
+            if (tagName === 'span' && innerAttrs.includes('class="comment"')) return match;
+            let coloredAttrs = innerAttrs.replace(/([a-zA-Z0-9-]+)=(&quot;|"|')(.*?)\2/g, '<span class="attr">$1</span>=<span class="val">"$3"</span>');
+            return openBracket + '<span class="tag">' + tagName + '</span>' + coloredAttrs + closeBracket;
+        });
+        return escaped;
+    }
+
+    function updateView() {
+        document.getElementById('btn-structure').classList.toggle('active', isStructure);
+        document.getElementById('btn-react').classList.toggle('active', isReact);
+        document.getElementById('btn-css').classList.toggle('active', isCss);
+        
+        document.getElementById('btn-prev').disabled = currentStep === 0;
+        document.getElementById('btn-next').disabled = currentStep === slides.length - 1;
+        
+        document.getElementById('step-counter').innerText = `Schritt ${currentStep + 1} von ${slides.length}`;
+
+        const currentRawHTML = slides[currentStep].raw;
+        const finalHTML = isCss ? applyCSSClasses(currentRawHTML) : currentRawHTML;
+        
+        document.getElementById('html-code').innerHTML = highlightHTML(finalHTML);
+        
+        document.getElementById('css-panel').style.display = isCss ? 'flex' : 'none';
+        if (isCss) {
+            document.getElementById('css-code').innerHTML = rawCSS;
+            document.getElementById('dynamic-css').innerHTML = rawCSS;
+            document.getElementById('render-window').style.fontFamily = 'system-ui, sans-serif';
+            document.getElementById('render-window').style.background = '#f4f4f9';
+        } else {
+            document.getElementById('dynamic-css').innerHTML = '';
+            document.getElementById('render-window').style.fontFamily = "'Times New Roman', Times, serif";
+            document.getElementById('render-window').style.background = '#ffffff';
+        }
+
+        const renderWindow = document.getElementById('render-window');
+        const bodyMatch = finalHTML.match(/<body>([\s\S]*?)<\/body>/);
+        renderWindow.innerHTML = bodyMatch ? bodyMatch[1] : '';
+
+        renderWindow.className = '';
+        if (isStructure) renderWindow.classList.add('show-structure');
+        if (isReact) renderWindow.classList.add('show-react');
+
+        Array.from(renderWindow.querySelectorAll('*')).forEach(el => {
+            el.setAttribute('data-tag', el.tagName.toLowerCase());
+            const display = window.getComputedStyle(el).display;
+            if (display.includes('inline') && display !== 'inline-block' && el.tagName.toLowerCase() !== 'br') {
+                el.setAttribute('data-type', 'inline');
+            } else {
+                el.setAttribute('data-type', 'block');
+            }
+        });
+
+        const header = renderWindow.querySelector('header');
+        if(header) header.setAttribute('data-react', 'AppHeader');
+        
+        const nav = renderWindow.querySelector('nav');
+        if(nav) nav.setAttribute('data-react', 'NavigationMenu');
+        
+        const lehrplan = renderWindow.querySelector('section#lehrplan');
+        if(lehrplan) lehrplan.setAttribute('data-react', 'ScheduleWidget');
+        
+        const projekte = renderWindow.querySelector('section#projekte');
+        if(projekte) projekte.setAttribute('data-react', 'ProjectsWidget');
+        
+        const card = renderWindow.querySelector('article');
+        if(card) card.setAttribute('data-react', 'ProjectCard');
+        
+        const aside = renderWindow.querySelector('aside');
+        if(aside) aside.setAttribute('data-react', 'Sidebar');
+        
+        const footer = renderWindow.querySelector('footer');
+        if(footer) footer.setAttribute('data-react', 'AppFooter');
+
+        updateExplanation();
+    }
+
+    function updateExplanation() {
+        const expl = document.getElementById('explanation');
+        let text = `<div class="expl-step">${slides[currentStep].desc}</div>`;
+        
+        let toggleText = "<div class='expl-toggles'>";
+        if (!isStructure && !isReact && !isCss) {
+            toggleText += "<em>Aktiviere die Toggles oben links, um den Code zu analysieren.</em>";
+        }
+        if (isStructure) toggleText += "<span style='color:#60a5fa'>▶ Struktur:</span> Blaue Boxen sind Block-Elemente. <span style='color:#fbbf24'>Orange Rahmen</span> sind Inline-Elemente (Textfluss).<br>";
+        if (isReact) toggleText += "<span style='color:#34d399'>▶ React:</span> Grüne Linien zeigen, wie HTML-Blöcke zu eigenständigen React-Komponenten werden.<br>";
+        if (isCss) toggleText += "<span style='color:#f472b6'>▶ CSS:</span> class-Attribute wurden ins HTML injiziert. Das CSS stylt diese nun.";
+        toggleText += "</div>";
+
+        expl.innerHTML = text + toggleText;
+    }
+
+    document.getElementById('btn-structure').addEventListener('click', () => { isStructure = !isStructure; updateView(); });
+    document.getElementById('btn-react').addEventListener('click', () => { isReact = !isReact; updateView(); });
+    document.getElementById('btn-css').addEventListener('click', () => { isCss = !isCss; updateView(); });
+
+    document.getElementById('btn-prev').addEventListener('click', () => { if(currentStep > 0) { currentStep--; updateView(); } });
+    document.getElementById('btn-next').addEventListener('click', () => { if(currentStep < slides.length - 1) { currentStep++; updateView(); } });
+
+    updateView();
+</script>
+</body>
+</html>

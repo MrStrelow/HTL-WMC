@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantik, Medien, Interaktion, Formulare & HTTP-Trainer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* =======================================================
+           SYNTAX HIGHLIGHTING & CODE EDITOR STYLES
+           ======================================================= */
+        .tag { color: #569cd6; }
+        .attr { color: #9cdcfe; }
+        .val { color: #ce9178; }
+        .comment { color: #6a9955; font-style: italic; }
+
+        /* Neu hinzugefügte Code-Blöcke hervorheben */
+        .new-code-highlight {
+            background: rgba(245, 158, 11, 0.14);
+            border-left: 3px solid #f59e0b;
+            display: block;
+            margin: 2px 0;
+            padding-left: 6px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* =======================================================
+           DYNAMIC RENDER WINDOW OVERLAYS (RECHTES FENSTER)
+           ======================================================= */
+        /* 1. Block & Inline Visualisierung */
+        .show-structure [data-type="block"] {
+            outline: 2px solid rgba(37, 99, 235, 0.75) !important;
+            position: relative;
+            margin-top: 22px !important;
+            margin-bottom: 4px !important;
+        }
+        .show-structure [data-type="inline"] {
+            outline: 2px dashed #f59e0b !important;
+            position: relative;
+            background: rgba(245, 158, 11, 0.12);
+        }
+        .show-structure [data-tag]::before {
+            content: "<" attr(data-tag) ">";
+            position: absolute;
+            top: -19px;
+            left: -2px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 5px;
+            color: white;
+            line-height: 1;
+            z-index: 10;
+            border-radius: 2px 2px 0 0;
+            pointer-events: none;
+        }
+        .show-structure [data-type="block"]::before { background: #2563eb; }
+        .show-structure [data-type="inline"]::before { background: #d97706; top: -18px; }
+
+        /* 2. React Component Visualisierung (Rechts im Browser) */
+        .show-react [data-react] {
+            outline: 3px dashed var(--react-color, #10b981) !important;
+            outline-offset: 4px;
+            position: relative;
+            margin-top: 26px !important;
+            margin-bottom: 8px !important;
+            background-color: var(--react-bg, rgba(16, 185, 129, 0.04));
+        }
+        .show-react [data-react]::after {
+            content: "<" attr(data-react) " />";
+            position: absolute;
+            top: -24px;
+            right: -3px;
+            background: var(--react-color, #10b981);
+            color: #fff;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px 4px 0 0;
+            z-index: 20;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            pointer-events: none;
+        }
+
+        /* 2b. React Code-Zonen Visualisierung (Links im Code-Editor) */
+        .react-code-zone {
+            position: relative;
+            border-left: 4px solid var(--rc-color, #10b981);
+            background: var(--rc-bg, rgba(16, 185, 129, 0.1));
+            margin: 4px 0;
+            padding: 4px 8px 4px 10px;
+            border-radius: 0 6px 6px 0;
+            display: block;
+        }
+        .react-code-badge {
+            float: right;
+            background: var(--rc-color, #10b981);
+            color: #111827;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 1px 7px;
+            border-radius: 4px;
+            margin-left: 10px;
+            user-select: none;
+        }
+
+        /* =======================================================
+           HTTP CLIENT-SERVER ANIMATION STYLES
+           ======================================================= */
+        @keyframes packetMoveRight {
+            0% { transform: translateX(0); opacity: 0.2; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { transform: translateX(220px); opacity: 0.2; }
+        }
+        @keyframes packetMoveLeft {
+            0% { transform: translateX(220px); opacity: 0.2; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { transform: translateX(0); opacity: 0.2; }
+        }
+        .anim-packet-req {
+            animation: packetMoveRight 2.2s infinite ease-in-out;
+        }
+        .anim-packet-res {
+            animation: packetMoveLeft 2.2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-neutral-900 text-neutral-100 h-screen flex flex-col overflow-hidden select-none font-sans">
+
+    <!-- =======================================================
+         TOP TOOLBAR
+         ======================================================= -->
+    <header class="bg-neutral-800 px-5 py-3 flex flex-wrap justify-between items-center border-b-2 border-neutral-700 gap-4 shrink-0">
+        
+        <!-- Links: Szenario Dropdown + Analyse Toggles -->
+        <div class="flex items-center gap-3 flex-wrap">
+            <!-- Szenario-Auswahl (Behält alle Original-Tabs + Neue Konzepte) -->
+            <div class="relative">
+                <select id="scenario-select" class="bg-neutral-900 text-amber-400 font-bold text-sm border-2 border-amber-500/60 rounded-lg px-3 py-2 pr-8 cursor-pointer focus:outline-none focus:border-amber-400 transition max-w-[460px] truncate">
+                    <optgroup label="Teil 1: Semantische Grundstruktur (Wiederholung)">
+                        <option value="news">🌐 Website 1: &lt;article&gt; in &lt;section&gt; (News-Feed)</option>
+                        <option value="docs">📄 Website 2: &lt;section&gt; in &lt;article&gt; (Fachartikel)</option>
+                    </optgroup>
+                    <optgroup label="Teil 2: Medien, Interaktion & Formulare (Startet bei Website 1)">
+                        <option value="media">🖼️ Konzept 1: Medien &amp; Akkordeon (&lt;figure&gt;, &lt;img&gt;, &lt;details&gt;)</option>
+                        <option value="actions">🔘 Konzept 2: &lt;button&gt; vs. &lt;a&gt; (Aktion vs. Navigation)</option>
+                        <option value="form_get">🔍 Konzept 3: Formular mit GET &amp; Input (Live Google-Suche)</option>
+                        <option value="form_post">📩 Konzept 4: Formular mit POST, &lt;select&gt; &amp; Inputs (Echo-Server)</option>
+                        <option value="http_concept">🖧 Konzept 5: Client &amp; Server bei HTTP (GET vs. POST Architektur)</option>
+                    </optgroup>
+                    <optgroup label="Zusammenfassung & Nachschlagewerk">
+                        <option value="merken">💡 Wir merken uns (Regeln &amp; Spickzettel zu allen Tags &amp; HTTP)</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="h-6 w-[2px] bg-neutral-600 hidden sm:block"></div>
+
+            <!-- Toggles -->
+            <div id="toggle-container" class="flex gap-2 items-center">
+                <button id="btn-structure" class="px-3.5 py-1.5 rounded-md text-xs font-bold border-2 border-neutral-600 bg-neutral-700 hover:bg-neutral-600 transition flex items-center gap-1.5 cursor-pointer">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-400 inline-block"></span>
+                    1. Block &amp; Inline
+                </button>
+                <button id="btn-react" class="px-3.5 py-1.5 rounded-md text-xs font-bold border-2 border-neutral-600 bg-neutral-700 hover:bg-neutral-600 transition flex items-center gap-1.5 cursor-pointer">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span>
+                    2. React Komponenten
+                </button>
+                <button id="btn-css" class="px-3.5 py-1.5 rounded-md text-xs font-bold border-2 border-neutral-600 bg-neutral-700 hover:bg-neutral-600 transition flex items-center gap-1.5 cursor-pointer">
+                    <span class="w-2.5 h-2.5 rounded-full bg-fuchsia-400 inline-block"></span>
+                    3. CSS Design
+                </button>
+            </div>
+        </div>
+
+        <!-- Rechts: Schritt-Steuerung (inkl. Pfeiltasten-Hinweis) -->
+        <div id="step-controls" class="flex items-center gap-2">
+            <span class="text-xs text-neutral-400 hidden xl:inline mr-1" title="Nutze die Pfeiltasten Links/Rechts zum Blättern">⌨️ Pfeiltasten ◀ ▶</span>
+            <button id="btn-prev" class="px-3 py-1.5 rounded-md text-xs font-bold bg-neutral-700 border-2 border-neutral-600 hover:bg-neutral-600 disabled:opacity-35 disabled:cursor-not-allowed transition cursor-pointer">
+                ◀ Zurück
+            </button>
+            <span id="step-counter" class="text-sm font-bold text-amber-400 min-w-[115px] text-center">
+                Schritt 1 von 5
+            </span>
+            <button id="btn-next" class="px-3 py-1.5 rounded-md text-xs font-bold bg-neutral-700 border-2 border-neutral-600 hover:bg-neutral-600 disabled:opacity-35 disabled:cursor-not-allowed transition cursor-pointer">
+                Weiter ▶
+            </button>
+        </div>
+    </header>
+
+    <!-- =======================================================
+         MAIN WORKSPACE (SIMULATOR)
+         ======================================================= -->
+    <main id="simulator-workspace" class="flex flex-1 overflow-hidden">
+        
+        <!-- Linkes Panel: Code (HTML & CSS) -->
+        <div class="w-[46%] border-r-2 border-neutral-700 flex flex-col bg-[#1e1e1e] select-text">
+            <!-- HTML Code -->
+            <div id="html-scroll-container" class="flex-1 overflow-y-auto p-5 flex flex-col">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="flex items-center gap-2">
+                        <h3 class="text-neutral-400 text-xs uppercase tracking-wider font-bold">index.html</h3>
+                        <span id="base-code-badge" class="hidden text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded font-semibold">
+                            Aufbauend auf Website 1
+                        </span>
+                    </div>
+                    <span id="code-hint-badge" class="hidden text-[11px] bg-emerald-900/60 text-emerald-300 border border-emerald-600/50 px-2 py-0.5 rounded">
+                        🎨 Farben zeigen Zuständigkeit der React-Komponenten
+                    </span>
+                </div>
+                <pre class="font-mono text-[12.5px] leading-relaxed text-neutral-200 overflow-x-auto"><code id="html-code"></code></pre>
+            </div>
+
+            <!-- CSS Code (Einblendbar) -->
+            <div id="css-panel" class="hidden h-[34%] border-t-2 border-neutral-700 overflow-y-auto p-5 bg-[#181818] flex-col shrink-0">
+                <h3 class="text-fuchsia-400 text-xs uppercase tracking-wider font-bold mb-2">style.css (Strikte Trennung von Struktur &amp; Design)</h3>
+                <pre class="font-mono text-[12px] leading-relaxed text-neutral-300"><code id="css-code"></code></pre>
+            </div>
+        </div>
+
+        <!-- Rechtes Panel A: Live Browser Vorschau (Standard für HTML-Tabs) -->
+        <div id="browser-preview-pane" class="w-[54%] bg-white text-neutral-900 flex flex-col relative overflow-hidden">
+            <!-- Browser Adressleiste Attrappe -->
+            <div class="bg-neutral-200 border-b border-neutral-300 px-4 py-1.5 flex items-center gap-2 text-xs text-neutral-600 shrink-0">
+                <div class="flex gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-400 inline-block"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span>
+                </div>
+                <div id="browser-url" class="bg-white px-3 py-1 rounded border border-neutral-300 flex-1 font-mono text-[11px] text-neutral-600 truncate">
+                    https://htl-campus.at/news-feed
+                </div>
+                <span id="live-url-badge" class="hidden bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                    LIVE REQUEST VORSCHAU
+                </span>
+            </div>
+
+            <style id="dynamic-css"></style>
+            <div id="render-window" class="flex-1 p-7 overflow-y-auto select-text"></div>
+        </div>
+
+        <!-- Rechtes Panel B: Konzeptionelle Client-Server HTTP-Architektur (Exklusiv für Tab http_concept) -->
+        <div id="http-concept-pane" class="hidden w-[54%] bg-slate-950 text-slate-100 flex-col relative overflow-y-auto p-6 select-text">
+            <!-- Wird dynamisch über renderHttpConceptDiagram() befüllt -->
+        </div>
+    </main>
+
+    <!-- =======================================================
+         "WIR MERKEN UNS" VIEW (VERSTECKT STANDARDMÄSSIG)
+         ======================================================= -->
+    <main id="merken-workspace" class="hidden flex-1 overflow-y-auto bg-neutral-900 p-8 select-text">
+        <div class="max-w-6xl mx-auto space-y-8 pb-10">
+            
+            <!-- Kopfbereich -->
+            <div class="bg-gradient-to-r from-amber-500/20 via-blue-500/10 to-emerald-500/20 border-2 border-amber-500/40 rounded-2xl p-6">
+                <h1 class="text-2xl font-extrabold text-amber-400 mb-2">💡 Wir merken uns: Semantik, Komponenten-Tags, Formulare &amp; HTTP</h1>
+                <p class="text-neutral-300 text-sm leading-relaxed">
+                    Moderne Web-Frameworks (React, Next.js, Tailwind, Bootstrap) basieren auf sauberem, semantischem HTML. 
+                    Wenn du das richtige Tag wählst, bekommst du Tastatur-Bedienbarkeit, Barrierefreiheit und echte HTTP-Kommunikation völlig kostenlos vom Browser geschenkt!
+                </p>
+            </div>
+
+            <!-- 1. Neue Medien- & Interaktions-Tags -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Figure & Img -->
+                <div class="bg-neutral-800 border-2 border-sky-500/40 rounded-xl p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider bg-sky-500/20 text-sky-300 px-2.5 py-1 rounded">Medien-Komponente</span>
+                        <h3 class="text-lg font-bold text-white mt-3 mb-2">
+                            <code class="text-sky-400">&lt;figure&gt;</code>, <code class="text-sky-400">&lt;img&gt;</code> &amp; <code class="text-sky-400">&lt;figcaption&gt;</code>
+                        </h3>
+                        <p class="text-xs text-neutral-300 leading-relaxed mb-3">
+                            Ein Bild mit Bildunterschrift bildet eine semantische Einheit. <code class="text-sky-300">&lt;figure&gt;</code> ist der Block-Container, <code class="text-sky-300">&lt;figcaption&gt;</code> liefert die Beschreibung.
+                        </p>
+                        <ul class="text-xs text-neutral-300 space-y-1.5 list-disc list-inside">
+                            <li><code class="text-amber-300">alt="..."</code>: Pflicht für Screenreader &amp; falls das Bild nicht lädt.</li>
+                            <li><code class="text-amber-300">loading="lazy"</code>: Lädt Bilder erst beim Hinscrollen (Standard in Next.js <code class="text-emerald-300">&lt;Image /&gt;</code>).</li>
+                        </ul>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-neutral-700 text-[11px] text-neutral-400 font-mono">
+                        React-Äquivalent: &lt;MediaFigure /&gt;
+                    </div>
+                </div>
+
+                <!-- Details & Summary -->
+                <div class="bg-neutral-800 border-2 border-purple-500/40 rounded-xl p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 px-2.5 py-1 rounded">Nativer State (Ohne JS!)</span>
+                        <h3 class="text-lg font-bold text-white mt-3 mb-2">
+                            <code class="text-purple-400">&lt;details&gt;</code> &amp; <code class="text-purple-400">&lt;summary&gt;</code>
+                        </h3>
+                        <p class="text-xs text-neutral-300 leading-relaxed mb-3">
+                            Ein echtes, interaktives Akkordeon direkt in HTML5 – ganz ohne JavaScript! <code class="text-purple-300">&lt;summary&gt;</code> ist die anklickbare Kopfzeile, alles darunter klappt beim Klick auf und zu.
+                        </p>
+                        <ul class="text-xs text-neutral-300 space-y-1.5 list-disc list-inside">
+                            <li>Besitzt einen eingebauten Zustand (<code class="text-amber-300">open</code>-Attribut).</li>
+                            <li>Perfekt für FAQs, Spoiler oder technische Zusatzdaten in Cards.</li>
+                        </ul>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-neutral-700 text-[11px] text-neutral-400 font-mono">
+                        React-Äquivalent: useState(isOpen)
+                    </div>
+                </div>
+
+                <!-- Button vs. Link -->
+                <div class="bg-neutral-800 border-2 border-emerald-500/40 rounded-xl p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded">Goldene UI-Regel</span>
+                        <h3 class="text-lg font-bold text-white mt-3 mb-2">
+                            <code class="text-emerald-400">&lt;button&gt;</code> vs. <code class="text-amber-400">&lt;a href="..."&gt;</code>
+                        </h3>
+                        <p class="text-xs text-neutral-300 leading-relaxed mb-3">
+                            Entscheide <strong>niemals nach dem Aussehen</strong> (in Bootstrap/Tailwind können beide wie Buttons aussehen), sondern nach der Funktion:
+                        </p>
+                        <ul class="text-xs text-neutral-300 space-y-1.5 list-disc list-inside">
+                            <li><strong><code class="text-amber-300">&lt;a href="..."&gt;</code> (Navigation):</strong> Wechselt die URL, springt zu einer anderen Seite oder zu einem <code class="text-amber-300">#anker</code>.</li>
+                            <li><strong><code class="text-emerald-300">&lt;button&gt;</code> (Aktion):</strong> Löst eine Aktion aus (Formular absenden, Darkmode umschalten, Dialog öffnen, Merken).</li>
+                        </ul>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-neutral-700 text-[11px] text-amber-300">
+                        ⚠️ In Formularen immer <code>type="button"</code> setzen, wenn er NICHT absenden soll!
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Formulare & HTTP (GET vs. POST) -->
+            <div class="bg-neutral-800 border-2 border-amber-500/40 rounded-xl p-6 shadow-lg">
+                <h2 class="text-lg font-bold text-amber-400 mb-4 flex items-center gap-2">
+                    <span>🖧</span> Formulare (&lt;form&gt;) &amp; HTTP: Wie spricht HTML ohne JavaScript mit einem Server?
+                </h2>
+                <div class="grid md:grid-cols-2 gap-6 mb-5">
+                    <div class="bg-neutral-900/90 border-l-4 border-sky-500 p-4 rounded-r-lg">
+                        <div class="font-mono text-sky-400 font-bold text-base mb-1">method="GET" (Daten abrufen / Suchen)</div>
+                        <p class="text-xs text-neutral-300 leading-relaxed mb-2">
+                            Der Browser hängt alle Formularfelder mit <code class="text-amber-300">?name=wert&amp;name2=wert2</code> direkt sichtbar an die <strong>URL (Query-String)</strong> an. Der HTTP-Body bleibt leer.
+                        </p>
+                        <div class="bg-black/50 p-2 rounded font-mono text-[11px] text-sky-300">
+                            https://www.google.com/search<span class="text-amber-400 font-bold">?q=Prusa+3D</span>
+                        </div>
+                        <p class="text-[11px] text-neutral-400 mt-2">
+                            ✅ Ideal für Suchfelder &amp; Filter (Link kann als Lesezeichen gespeichert und geteilt werden).<br>
+                            ❌ <strong>Niemals</strong> für Passwörter oder sensible Daten!
+                        </p>
+                    </div>
+
+                    <div class="bg-neutral-900/90 border-l-4 border-emerald-500 p-4 rounded-r-lg">
+                        <div class="font-mono text-emerald-400 font-bold text-base mb-1">method="POST" (Daten senden / Speichern)</div>
+                        <p class="text-xs text-neutral-300 leading-relaxed mb-2">
+                            Die URL bleibt sauber. Der Browser verpackt die Daten unsichtbar in das Innere des Pakets – den <strong>HTTP Request Body</strong> – und schickt sie an den Server (z. B. <code class="text-emerald-300">https://httpbin.org/post</code>).
+                        </p>
+                        <div class="bg-black/50 p-2 rounded font-mono text-[11px] text-emerald-300">
+                            POST /post HTTP/1.1<br>
+                            Body: <span class="text-amber-400 font-bold">email=max%40htl.at&amp;abteilung=if</span>
+                        </div>
+                        <p class="text-[11px] text-neutral-400 mt-2">
+                            ✅ Pflicht für Logins, Registrierungen, Bestellungen &amp; Datenbank-Änderungen.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Pflicht-Attribute in Formularen -->
+                <div class="bg-neutral-900 p-4 rounded-lg border border-neutral-700 grid sm:grid-cols-3 gap-4 text-xs">
+                    <div>
+                        <strong class="text-amber-400 font-mono">name="..." (Für den Server!)</strong>
+                        <p class="text-neutral-300 mt-1">Ohne <code>name</code>-Attribut wird ein <code>&lt;input&gt;</code> oder <code>&lt;select&gt;</code> beim Absenden komplett ignoriert! Es bestimmt den Key im HTTP-Paket.</p>
+                    </div>
+                    <div>
+                        <strong class="text-sky-400 font-mono">id="..." + &lt;label for="..."&gt;</strong>
+                        <p class="text-neutral-300 mt-1">Verbindet die Beschriftung im Browser mit dem Eingabefeld. Klickt man auf das Label, springt der Cursor sofort ins Feld.</p>
+                    </div>
+                    <div>
+                        <strong class="text-emerald-400 font-mono">&lt;select&gt; &amp; &lt;option value="..."&gt;</strong>
+                        <p class="text-neutral-300 mt-1">Beim Dropdown trägt <code>&lt;select name="abt"&gt;</code> den Namen und die gewählte <code>&lt;option value="if"&gt;</code> liefert den gesendeten Wert.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Klassiker: <section> vs. <article> (Aus Vorlage erhalten) -->
+            <div class="bg-neutral-800 border-2 border-neutral-700 rounded-xl p-6 shadow-lg">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <span>📰</span> Wiederholung: Der „Ausschneide-Test“ (&lt;article&gt; vs. &lt;section&gt;)
+                </h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-neutral-900/80 border-l-4 border-emerald-500 p-4 rounded-r-lg">
+                        <div class="font-mono text-emerald-400 font-bold text-base mb-1">&lt;article&gt; = Eigenständiges Werk (Card-Komponente)</div>
+                        <p class="text-sm text-neutral-300 leading-relaxed">
+                            Ergibt der Block alleine auf einer anderen Plattform zu 100 % Sinn (News-Karte, Produktkarte, Blog-Beitrag)? Dann ist es ein <code class="text-emerald-300">&lt;article&gt;</code>!
+                        </p>
+                    </div>
+                    <div class="bg-neutral-900/80 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                        <div class="font-mono text-blue-400 font-bold text-base mb-1">&lt;section&gt; = Thematisches Kapitel / Rubrik</div>
+                        <p class="text-sm text-neutral-300 leading-relaxed">
+                            Bündelt zusammengehörige Inhalte unter einer Überschrift (<code class="text-blue-300">&lt;h2&gt;</code>), z. B. die Rubrik „Informatik-News“ oder den Bereich „Projekt-Anmeldung“.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- =======================================================
+         BOTTOM EXPLANATION PANEL
+         ======================================================= -->
+    <footer id="explanation-panel" class="bg-neutral-800 border-t-2 border-neutral-700 px-6 py-3.5 h-[155px] overflow-y-auto shrink-0 select-text">
+        <div id="explanation-content" class="max-w-6xl mx-auto text-sm leading-relaxed"></div>
+    </footer>
+
+<script>
+    /* =======================================================
+       OFFLINE-FÄHIGES SVG-BILD FÜR DEN 3D-DRUCKER (<figure>)
+       ======================================================= */
+    const prusaSvgDataUri = "data:image/svg+xml;utf8," + encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="520" height="220" viewBox="0 0 520 220">
+            <rect width="520" height="220" rx="12" fill="#0f172a"/>
+            <rect x="20" y="20" width="480" height="180" rx="8" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+            <!-- 3D Printer Frame -->
+            <rect x="175" y="35" width="170" height="150" rx="6" fill="none" stroke="#f97316" stroke-width="6"/>
+            <line x1="175" y1="75" x2="345" y2="75" stroke="#94a3b8" stroke-width="4"/>
+            <!-- Extruder Head -->
+            <rect x="242" y="62" width="36" height="28" rx="4" fill="#f97316"/>
+            <polygon points="255,90 265,90 260,100" fill="#fbbf24"/>
+            <!-- Printed Object on Bed -->
+            <path d="M 235 160 L 260 110 L 285 160 Z" fill="#38bdf8" opacity="0.85"/>
+            <line x1="195" y1="162" x2="325" y2="162" stroke="#e2e8f0" stroke-width="5"/>
+            <!-- Labels -->
+            <text x="35" y="55" fill="#f97316" font-family="monospace" font-weight="bold" font-size="15">PRUSA CoreXY</text>
+            <text x="35" y="78" fill="#94a3b8" font-family="sans-serif" font-size="12">HTL Labor • Nozzle 215°C</text>
+            <rect x="35" y="145" width="95" height="26" rx="4" fill="#065f46"/>
+            <text x="82" y="162" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="11" font-weight="bold">STATUS: READY</text>
+        </svg>
+    `);
+
+    /* =======================================================
+       BASIS-CODE AUS VORBEREITUNG-ANIMIERT.HTML (WEBSITE 1)
+       ======================================================= */
+    const s1_top = `<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>HTL Campus News</title>
+</head>
+<body>`;
+    const s1_bottom = `\n</body>\n</html>`;
+
+    const s1_header = `
+    <header>
+        <h1>
+            HTL Campus-Portal
+        </h1>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#tech-news">Informatik &amp; Technik</a>
+                </li>
+                <li>
+                    <a href="#termine">Termine</a>
+                </li>
+            </ul>
+        </nav>
+    </header>`;
+
+    const s1_sec_empty = `
+
+    <main>
+        <section id="tech-news">
+            <h2>
+                Rubrik: Informatik &amp; Technik
+            </h2>
+        </section>
+    </main>`;
+
+    const s1_art1 = `
+
+    <main>
+        <section id="tech-news">
+            <h2>
+                Rubrik: Informatik &amp; Technik
+            </h2>
+            <article>
+                <h3>
+                    Neuer 3D-Drucker im Labor
+                </h3>
+                <p>
+                    Ab sofort steht ein <strong>Prusa CoreXY</strong> für alle <em>Diplomprojekte</em> bereit.
+                </p>
+                <footer>
+                    <p>
+                        Veröffentlicht am <time datetime="2026-10-15">15. Oktober</time> | <a href="#mehr1">Beitrag lesen</a>
+                    </p>
+                </footer>
+            </article>
+        </section>
+    </main>`;
+
+    const s1_art2 = `
+
+    <main>
+        <section id="tech-news">
+            <h2>
+                Rubrik: Informatik &amp; Technik
+            </h2>
+            <article>
+                <h3>
+                    Neuer 3D-Drucker im Labor
+                </h3>
+                <p>
+                    Ab sofort steht ein <strong>Prusa CoreXY</strong> für alle <em>Diplomprojekte</em> bereit.
+                </p>
+                <footer>
+                    <p>
+                        Veröffentlicht am <time datetime="2026-10-15">15. Oktober</time> | <a href="#mehr1">Beitrag lesen</a>
+                    </p>
+                </footer>
+            </article>
+            <article>
+                <h3>
+                    Sieg beim Coding-Contest
+                </h3>
+                <p>
+                    Der <strong>2. Jahrgang</strong> gewinnt den Landespreis im Bereich <em>Algorithmen</em>.
+                </p>
+                <footer>
+                    <p>
+                        Veröffentlicht am <time datetime="2026-10-18">18. Oktober</time> | <a href="#mehr2">Beitrag lesen</a>
+                    </p>
+                </footer>
+            </article>
+        </section>
+    </main>`;
+
+    const s1_page_footer = `
+
+    <footer>
+        <p>
+            &copy; 2026 HTL Informatik Redaktion
+        </p>
+    </footer>`;
+
+    // DER KOMPLETTE ENDZUSTAND VON WEBSITE 1 ALS STARTPUNKT FÜR ALLE NEUEN TABS!
+    const BASE_NEWS_COMPLETE = s1_top + s1_header + s1_art2 + s1_page_footer + s1_bottom;
+
+    /* =======================================================
+       SZENARIO 2: <section> IN <article> (AUS VORLAGE)
+       ======================================================= */
+    const s2_top = `<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Projekt-Wiki: Wetterstation</title>
+</head>
+<body>`;
+    const s2_bottom = `\n</body>\n</html>`;
+    const s2_header = `
+    <header>
+        <h1>
+            HTL Projekt-Archiv
+        </h1>
+    </header>`;
+    const s2_art_shell = `
+
+    <main>
+        <article>
+            <header>
+                <h2>
+                    Solar-Wetterstation mit ESP32
+                </h2>
+                <p>
+                    Dokumentation von <strong>Lukas &amp; Sarah</strong> (Stand: <time datetime="2026-10">Oktober 2026</time>)
+                </p>
+            </header>
+        </article>
+    </main>`;
+    const s2_sec1 = `
+
+    <main>
+        <article>
+            <header>
+                <h2>
+                    Solar-Wetterstation mit ESP32
+                </h2>
+                <p>
+                    Dokumentation von <strong>Lukas &amp; Sarah</strong> (Stand: <time datetime="2026-10">Oktober 2026</time>)
+                </p>
+            </header>
+            <section id="problem">
+                <h3>
+                    1. Problemstellung &amp; Ziel
+                </h3>
+                <p>
+                    Messdaten im Schulgarten sollen <strong>völlig autark</strong> über <em>WLAN</em> übertragen werden.
+                </p>
+            </section>
+        </article>
+    </main>`;
+    const s2_sec2 = `
+
+    <main>
+        <article>
+            <header>
+                <h2>
+                    Solar-Wetterstation mit ESP32
+                </h2>
+                <p>
+                    Dokumentation von <strong>Lukas &amp; Sarah</strong> (Stand: <time datetime="2026-10">Oktober 2026</time>)
+                </p>
+            </header>
+            <section id="problem">
+                <h3>
+                    1. Problemstellung &amp; Ziel
+                </h3>
+                <p>
+                    Messdaten im Schulgarten sollen <strong>völlig autark</strong> über <em>WLAN</em> übertragen werden.
+                </p>
+            </section>
+            <section id="hardware">
+                <h3>
+                    2. Verwendete Bauteile
+                </h3>
+                <ul>
+                    <li>
+                        Mikrocontroller: <strong>ESP32-WROOM</strong>
+                    </li>
+                    <li>
+                        Sensor: <strong>BME280</strong> (Temperatur &amp; Luftfeuchte)
+                    </li>
+                </ul>
+            </section>
+        </article>
+    </main>`;
+    const s2_art_footer = `
+
+    <main>
+        <article>
+            <header>
+                <h2>
+                    Solar-Wetterstation mit ESP32
+                </h2>
+                <p>
+                    Dokumentation von <strong>Lukas &amp; Sarah</strong> (Stand: <time datetime="2026-10">Oktober 2026</time>)
+                </p>
+            </header>
+            <section id="problem">
+                <h3>
+                    1. Problemstellung &amp; Ziel
+                </h3>
+                <p>
+                    Messdaten im Schulgarten sollen <strong>völlig autark</strong> über <em>WLAN</em> übertragen werden.
+                </p>
+            </section>
+            <section id="hardware">
+                <h3>
+                    2. Verwendete Bauteile
+                </h3>
+                <ul>
+                    <li>
+                        Mikrocontroller: <strong>ESP32-WROOM</strong>
+                    </li>
+                    <li>
+                        Sensor: <strong>BME280</strong> (Temperatur &amp; Luftfeuchte)
+                    </li>
+                </ul>
+            </section>
+            <footer>
+                <p>
+                    Status: <strong>Abgeschlossen</strong> | <a href="#repo">Quellcode herunterladen</a>
+                </p>
+            </footer>
+        </article>
+    </main>`;
+
+    /* =======================================================
+       GEMEINSAMES BASIS-CSS FÜR ALLE NEWS-ERWEITERUNGEN
+       ======================================================= */
+    const sharedExtendedCss = `/* CSS Design für das HTL Campus-Portal & alle neuen Komponenten */
+* { box-sizing: border-box; }
+.page-header { background: #0f172a; color: white; padding: 16px 22px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.page-header h1 { margin: 0; font-size: 20px; }
+.nav-list { display: flex; gap: 16px; list-style: none; margin: 0; padding: 0; }
+.nav-link { color: #38bdf8; text-decoration: none; font-weight: bold; font-size: 14px; }
+
+/* Rubrik-Section & Artikel-Cards */
+.news-section { background: #f1f5f9; padding: 20px; border-radius: 12px; border: 1px solid #cbd5e1; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.news-section > h2 { grid-column: 1 / -1; margin: 0 0 6px 0; font-size: 18px; color: #334155; }
+.news-card { background: white; padding: 18px; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
+.news-card h3 { margin-top: 0; color: #0f172a; font-size: 16px; }
+.card-footer { margin-top: 14px; padding-top: 10px; border-top: 1px solid #f1f5f9; font-size: 12px; color: #64748b; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+
+/* Konzept 1: <figure>, <img>, <figcaption> & <details>/<summary> */
+.media-figure { margin: 10px 0 14px 0; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; }
+.media-img { width: 100%; height: auto; border-radius: 6px; display: block; }
+.media-caption { font-size: 11px; color: #64748b; text-align: center; margin-top: 6px; font-style: italic; }
+.specs-details { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; margin-top: 10px; font-size: 13px; }
+.specs-summary { font-weight: bold; color: #1e40af; cursor: pointer; }
+
+/* Konzept 2: <button> vs. <a> */
+.action-btn { background: #2563eb; color: white; border: none; padding: 5px 11px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+.action-btn:hover { background: #1d4ed8; }
+.theme-btn { background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+
+/* Konzept 3 & 4: Formulare (<form>, <input>, <select>, <textarea>) */
+.form-section { background: #eff6ff; border: 2px solid #93c5fd; padding: 18px 20px; border-radius: 12px; margin-bottom: 20px; }
+.form-section h2 { margin: 0 0 12px 0; font-size: 17px; color: #1e3a8a; }
+.campus-form { display: flex; flex-direction: column; gap: 12px; }
+.form-row { display: flex; flex-direction: column; gap: 4px; }
+.form-label { font-size: 12px; font-weight: bold; color: #1e293b; }
+.form-input, .form-select, .form-textarea { padding: 8px 10px; border: 1px solid #94a3b8; border-radius: 6px; font-size: 13px; background: white; }
+.submit-btn { background: #059669; color: white; border: none; padding: 9px 16px; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; align-self: flex-start; }
+.submit-btn:hover { background: #047857; }
+.page-footer { margin-top: 20px; text-align: center; font-size: 12px; color: #64748b; }`;
+
+    function applyExtendedClasses(html) {
+        return html
+            // Echt-Bild Data-URI für die Live-Vorschau einsetzen
+            .replace(/src="prusa-corexy\.svg"/g, `src="${prusaSvgDataUri}"`)
+            .replace('<header>', '<header class="page-header">')
+            .replace('<ul>', '<ul class="nav-list">')
+            .replace(/<a href="#tech-news">/g, '<a class="nav-link" href="#tech-news">')
+            .replace(/<a href="#termine">/g, '<a class="nav-link" href="#termine">')
+            .replace('<section id="tech-news">', '<section id="tech-news" class="news-section">')
+            .replace(/<article>/g, '<article class="news-card">')
+            .replace(/<figure>/g, '<figure class="media-figure">')
+            .replace(/<img /g, '<img class="media-img" ')
+            .replace(/<figcaption>/g, '<figcaption class="media-caption">')
+            .replace(/<details>/g, '<details class="specs-details">')
+            .replace(/<summary>/g, '<summary class="specs-summary">')
+            .replace(/<button type="button" id="btn-darkmode">/g, '<button type="button" id="btn-darkmode" class="theme-btn">')
+            .replace(/<button type="button">/g, '<button type="button" class="action-btn">')
+            .replace(/<section id="campus-suche">/g, '<section id="campus-suche" class="form-section">')
+            .replace(/<section id="projekt-anmeldung">/g, '<section id="projekt-anmeldung" class="form-section">')
+            .replace(/<form /g, '<form class="campus-form" ')
+            .replace(/<label /g, '<label class="form-label" ')
+            .replace(/<input type="text"/g, '<input class="form-input" type="text"')
+            .replace(/<input type="email"/g, '<input class="form-input" type="email"')
+            .replace(/<select /g, '<select class="form-select" ')
+            .replace(/<textarea /g, '<textarea class="form-textarea" ')
+            .replace(/<button type="submit">/g, '<button type="submit" class="submit-btn">')
+            .replace(/<footer>\n                    <p>/g, '<footer class="card-footer">\n                    <p>')
+            .replace(/<footer>\n        <p>/g, '<footer class="page-footer">\n        <p>');
+    }
+
+    /* =======================================================
+       ALLE SZENARIEN & KONZEPT-TABS
+       ======================================================= */
+    const scenarios = {
+        // -------------------------------------------------------
+        // ORIGINAL TAB 1: NEWS-FEED (<article> in <section>)
+        // -------------------------------------------------------
+        news: {
+            url: "https://htl-campus.at/news-feed",
+            slides: [
+                {
+                    title: "Schritt 1: Seitenkopf & Navigation (<header> & <nav>)",
+                    desc: "Wir beginnen mit dem Kopfbereich der Webseite. Block-Elemente wie <code>&lt;header&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;ul&gt;</code> und <code>&lt;li&gt;</code> erzeugen eigene strukturelle Boxen und stehen auf eigenen Zeilen. Das <code>&lt;a&gt;</code>-Tag ist ein Inline-Element.",
+                    raw: s1_top + s1_header + s1_bottom
+                },
+                {
+                    title: "Schritt 2: Die thematische Rubrik (<section>)",
+                    desc: "Im Hauptbereich <code>&lt;main&gt;</code> legen wir eine <code>&lt;section&gt;</code> für die Rubrik „Informatik & Technik“ an. <strong>Warum section?</strong> Weil dies ein thematischer Sammelbereich der Seite ist, der gleich mehrere Beiträge bündeln wird.",
+                    raw: s1_top + s1_header + s1_sec_empty + s1_bottom
+                },
+                {
+                    title: "Schritt 3: Der erste eigenständige Beitrag (<article> in <section>)",
+                    desc: "Innerhalb der Rubrik-Section platzieren wir einen <code>&lt;article&gt;</code>. <strong>Warum article?</strong> Diese News-Meldung über den 3D-Drucker ist komplett in sich geschlossen! Man könnte sie ausschneiden und anderswo veröffentlichen – sie ergibt allein vollen Sinn.",
+                    raw: s1_top + s1_header + s1_art1 + s1_bottom
+                },
+                {
+                    title: "Schritt 4: Wiederverwendbare Struktur (Zweiter <article>)",
+                    desc: "Wir fügen einen zweiten <code>&lt;article&gt;</code> mit exakt demselben Aufbau (<code>&lt;h3&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;footer&gt;</code>) in die <code>&lt;section&gt;</code> ein. Durch diese saubere Kapselung entsteht ein einheitliches Bauplan-Muster für beliebig viele weitere Nachrichten!",
+                    raw: s1_top + s1_header + s1_art2 + s1_bottom
+                },
+                {
+                    title: "Schritt 5: Der globale Seiten-Abschluss (<footer>)",
+                    desc: "Ganz unten schließen wir das Dokument mit dem globalen <code>&lt;footer&gt;</code> ab. Dieser fertige Stand von Website 1 ist der <strong>Startpunkt für alle neuen Konzept-Tabs</strong>!",
+                    raw: BASE_NEWS_COMPLETE
+                }
+            ],
+            css: sharedExtendedCss,
+            applyClasses: applyExtendedClasses,
+            components: [
+                { selector: 'header', name: 'SiteHeader', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' },
+                { selector: 'section#tech-news', name: 'NewsFeedSection', color: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.10)' },
+                { selector: 'article', name: 'NewsCard', color: '#10b981', bg: 'rgba(16, 185, 129, 0.14)' },
+                { selector: '#render-window > footer', name: 'SiteFooter', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)' }
+            ]
+        },
+
+        // -------------------------------------------------------
+        // ORIGINAL TAB 2: FACHARTIKEL (<section> in <article>)
+        // -------------------------------------------------------
+        docs: {
+            url: "https://htl-campus.at/wiki/solar-wetterstation",
+            slides: [
+                {
+                    title: "Schritt 1: Schlichter Seitenkopf (<header>)",
+                    desc: "Wir starten mit dem globalen <code>&lt;header&gt;</code> für unser Projekt-Archiv.",
+                    raw: s2_top + s2_header + s2_bottom
+                },
+                {
+                    title: "Schritt 2: Das eigenständige Gesamtdokument (<article>)",
+                    desc: "Auf dieser Seite geht es um <strong>einen einzigen großen Projektbericht</strong>. Da der gesamte Bericht für sich allein stehen kann, ist das äußere Element im <code>&lt;main&gt;</code> ein <code>&lt;article&gt;</code>!",
+                    raw: s2_top + s2_header + s2_art_shell + s2_bottom
+                },
+                {
+                    title: "Schritt 3: Das erste Kapitel (<section> in <article>)",
+                    desc: "Innerhalb des großen <code>&lt;article&gt;</code> legen wir für das 1. Kapitel eine <code>&lt;section&gt;</code> an. „1. Problemstellung“ ist kein eigenständiges Werk, sondern ein logischer Teilabschnitt.",
+                    raw: s2_top + s2_header + s2_sec1 + s2_bottom
+                },
+                {
+                    title: "Schritt 4: Das zweite Kapitel (Weitere <section> in <article>)",
+                    desc: "Wir ergänzen das 2. Kapitel („Verwendete Bauteile“) als weitere <code>&lt;section&gt;</code> im selben <code>&lt;article&gt;</code>.",
+                    raw: s2_top + s2_header + s2_sec2 + s2_bottom
+                },
+                {
+                    title: "Schritt 5: Der Dokument-Abschluss (<footer> im <article>)",
+                    desc: "Am Ende des Berichts fügen wir noch innerhalb des <code>&lt;article&gt;</code> einen <code>&lt;footer&gt;</code> für den Projektstatus und Download-Link hinzu.",
+                    raw: s2_top + s2_header + s2_art_footer + s2_bottom
+                }
+            ],
+            css: `/* CSS für Website 2: Fachartikel (<section> in <article>) */
+* { box-sizing: border-box; }
+.wiki-header { background: #1e293b; color: #f8fafc; padding: 12px 20px; border-radius: 8px; margin-bottom: 20px; }
+.wiki-header h1 { margin: 0; font-size: 16px; letter-spacing: 0.5px; text-transform: uppercase; color: #94a3b8; }
+.doc-article { background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.doc-header { border-bottom: 2px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 20px; }
+.doc-header h2 { margin: 0 0 6px 0; font-size: 24px; color: #0f172a; }
+.doc-header p { margin: 0; font-size: 13px; color: #64748b; }
+.doc-chapter { background: #f8fafc; border-left: 4px solid #3b82f6; padding: 16px 20px; border-radius: 0 8px 8px 0; margin-bottom: 16px; }
+.doc-chapter h3 { margin-top: 0; font-size: 16px; color: #1e3a8a; }
+.doc-footer { margin-top: 24px; padding-top: 14px; border-top: 2px dashed #e2e8f0; font-size: 13px; color: #475569; }`,
+            applyClasses: (html) => {
+                return html
+                    .replace('<header>', '<header class="wiki-header">')
+                    .replace('<article>', '<article class="doc-article">')
+                    .replace('<article class="doc-article">\n            <header>', '<article class="doc-article">\n            <header class="doc-header">')
+                    .replace(/<section id="problem">/g, '<section id="problem" class="doc-chapter">')
+                    .replace(/<section id="hardware">/g, '<section id="hardware" class="doc-chapter">')
+                    .replace('<footer>', '<footer class="doc-footer">');
+            },
+            components: [
+                { selector: '#render-window > header', name: 'WikiNavbar', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' },
+                { selector: 'article', name: 'ProjectReportArticle', color: '#10b981', bg: 'rgba(16, 185, 129, 0.08)' },
+                { selector: 'article > header', name: 'ReportHeader', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.14)' },
+                { selector: 'section', name: 'ReportSection', color: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.14)' },
+                { selector: 'article > footer', name: 'ReportFooter', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.14)' }
+            ]
+        },
+
+        // -------------------------------------------------------
+        // NEU: KONZEPT 1 - MEDIEN & AKKORDEON (<figure>, <img>, <figcaption>, <details>, <summary>)
+        // -------------------------------------------------------
+        media: {
+            url: "https://htl-campus.at/news-feed#medien-komponenten",
+            startsFromBase: true,
+            slides: [
+                {
+                    title: "Schritt 1: Ausgangspunkt (Unser fertiger News-Feed aus Website 1)",
+                    desc: "Wir starten exakt beim bekannten Code aus <code>vorbereitung-animiert.html</code>. Als Nächstes wollen wir die erste News-Card („Neuer 3D-Drucker im Labor“) mit einem Produktbild samt Bildunterschrift sowie einem ausklappbaren Bereich für technische Daten ausstatten.",
+                    raw: BASE_NEWS_COMPLETE
+                },
+                {
+                    title: "Schritt 2: Semantischer Medien-Container (<figure> & <img>)",
+                    desc: "Wir fügen im ersten <code>&lt;article&gt;</code> ein <code>&lt;figure&gt;</code> mit einem <code>&lt;img&gt;</code> ein. <strong>Wichtige Attribute:</strong> <code>src</code> gibt die Bildquelle an, <code>alt</code> beschreibt das Bild für Blinde/Screenreader, und <code>loading=\"lazy\"</code> sorgt dafür, dass der Browser das Bild erst lädt, wenn es ins Sichtfeld scrollt (genauso arbeitet <code>&lt;Image /&gt;</code> in Next.js!).",
+                    highlightTag: "figure",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `                <h3>\n                    Neuer 3D-Drucker im Labor\n                </h3>`,
+                        `                <h3>\n                    Neuer 3D-Drucker im Labor\n                </h3>\n                <figure>\n                    <img src="prusa-corexy.svg" alt="Prusa CoreXY 3D-Drucker im Labor" loading="lazy">\n                </figure>`
+                    )
+                },
+                {
+                    title: "Schritt 3: Die Bildunterschrift (<figcaption> in <figure>)",
+                    desc: "Warum haben wir das <code>&lt;img&gt;</code> in ein <code>&lt;figure&gt;</code> gepackt? Weil wir nun mit <code>&lt;figcaption&gt;</code> eine semantisch fest verknüpfte Bildunterschrift hinzufügen können! <code>&lt;figure&gt;</code> + <code>&lt;img&gt;</code> + <code>&lt;figcaption&gt;</code> bilden zusammen eine perfekte, wiederverwendbare Medien-Komponente.",
+                    highlightTag: "figure",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `                <h3>\n                    Neuer 3D-Drucker im Labor\n                </h3>`,
+                        `                <h3>\n                    Neuer 3D-Drucker im Labor\n                </h3>\n                <figure>\n                    <img src="prusa-corexy.svg" alt="Prusa CoreXY 3D-Drucker im Labor" loading="lazy">\n                    <figcaption>\n                        Abb. 1: Der neue Prusa CoreXY im HTL-Labor (Bauraum: 250x210x220 mm)\n                    </figcaption>\n                </figure>`
+                    )
+                },
+                {
+                    title: "Schritt 4: Interaktives Akkordeon ohne JavaScript (<details> & <summary>)",
+                    desc: "Klicke rechts in der Vorschau auf <strong>„Technische Daten anzeigen“</strong>! Mit <code>&lt;details&gt;</code> und dem Titel-Tag <code>&lt;summary&gt;</code> liefert HTML5 eine fertige Aufklapp-Komponente (Accordion) mit eigenem Zustand (offen/geschlossen) – komplett ohne eine einzige Zeile JavaScript!",
+                    highlightTag: "details",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `                <p>\n                    Ab sofort steht ein <strong>Prusa CoreXY</strong> für alle <em>Diplomprojekte</em> bereit.\n                </p>`,
+                        `                <figure>\n                    <img src="prusa-corexy.svg" alt="Prusa CoreXY 3D-Drucker im Labor" loading="lazy">\n                    <figcaption>\n                        Abb. 1: Der neue Prusa CoreXY im HTL-Labor (Bauraum: 250x210x220 mm)\n                    </figcaption>\n                </figure>\n                <p>\n                    Ab sofort steht ein <strong>Prusa CoreXY</strong> für alle <em>Diplomprojekte</em> bereit.\n                </p>\n                <details>\n                    <summary>Technische Daten anzeigen</summary>\n                    <ul>\n                        <li>Materialien: PLA, PETG, ASA</li>\n                        <li>Maximale Düsentemperatur: 290 °C</li>\n                    </ul>\n                </details>`
+                    )
+                }
+            ],
+            css: sharedExtendedCss,
+            applyClasses: applyExtendedClasses,
+            components: [
+                { selector: 'header', name: 'SiteHeader', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' },
+                { selector: 'section#tech-news', name: 'NewsFeedSection', color: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.10)' },
+                { selector: 'article', name: 'NewsCard', color: '#10b981', bg: 'rgba(16, 185, 129, 0.14)' },
+                { selector: 'figure', name: 'MediaFigure', color: '#0ea5e9', bg: 'rgba(14, 165, 233, 0.16)' },
+                { selector: 'details', name: 'TechSpecsAccordion', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.15)' }
+            ]
+        },
+
+        // -------------------------------------------------------
+        // NEU: KONZEPT 2 - <button> VS. <a> (AKTION VS. NAVIGATION)
+        // -------------------------------------------------------
+        actions: {
+            url: "https://htl-campus.at/news-feed",
+            startsFromBase: true,
+            slides: [
+                {
+                    title: "Schritt 1: Ausgangspunkt (Der bekannte News-Feed)",
+                    desc: "Wir starten wieder beim identischen Basis-Code unserer News-Seite. In den beiden <code>&lt;article&gt;</code>-Karten gibt es im <code>&lt;footer&gt;</code> bereits die Links <code>&lt;a href=\"#mehr1\"&gt;Beitrag lesen&lt;/a&gt;</code>. Doch wann nehmen wir in Komponenten ein <code>&lt;a&gt;</code> und wann ein <code>&lt;button&gt;</code>?",
+                    raw: BASE_NEWS_COMPLETE
+                },
+                {
+                    title: "Schritt 2: Wann verwenden wir <a>? (Navigation & URL-Wechsel)",
+                    desc: "Ein <code>&lt;a href=\"...\"&gt;</code> (Anchor/Link) hat genau eine Aufgabe: <strong>Es verändert die URL im Browser!</strong> Egal ob wir zu einem Seiten-Anker (<code>#mehr1</code>) springen oder eine externe Unterseite (<code>/archiv</code>) öffnen – sobald ein Ortswechsel stattfindet, ist <code>&lt;a href&gt;</code> zwingend.",
+                    highlightTag: "nav",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `<a href="#mehr1">Beitrag lesen</a>`,
+                        `<a href="https://htl-campus.at/news/3d-drucker">Ganzer Artikel (URL-Wechsel)</a>`
+                    )
+                },
+                {
+                    title: "Schritt 3: Wann verwenden wir <button>? (Zustandsänderung & Aktion)",
+                    desc: "Jetzt fügen wir im <code>&lt;header&gt;</code> einen Darkmode-Schalter und im <code>&lt;article&gt;</code> einen „Artikel merken“-Knopf hinzu. Beide wechseln <strong>nicht</strong> die Seite, sondern lösen eine Aktion aus $\\rightarrow$ daher zwingend <code>&lt;button type=\"button\"&gt;</code>! Schalte oben <strong>„3. CSS Design“</strong> ein und klicke die Buttons rechts in der Vorschau an!",
+                    highlightTag: "button",
+                    raw: BASE_NEWS_COMPLETE
+                        .replace(
+                            `        </nav>\n    </header>`,
+                            `        </nav>\n        <button type="button" id="btn-darkmode">🌙 Darkmode umschalten</button>\n    </header>`
+                        )
+                        .replace(
+                            `<a href="#mehr1">Beitrag lesen</a>`,
+                            `<a href="#mehr1">Beitrag lesen</a>\n                        <button type="button">⭐ Artikel merken</button>`
+                        )
+                        .replace(
+                            `<a href="#mehr2">Beitrag lesen</a>`,
+                            `<a href="#mehr2">Beitrag lesen</a>\n                        <button type="button">⭐ Artikel merken</button>`
+                        )
+                }
+            ],
+            css: sharedExtendedCss,
+            applyClasses: applyExtendedClasses,
+            components: [
+                { selector: 'header', name: 'SiteHeader', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' },
+                { selector: 'article', name: 'NewsCard', color: '#10b981', bg: 'rgba(16, 185, 129, 0.14)' },
+                { selector: 'button', name: 'ActionButton', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.22)' }
+            ]
+        },
+
+        // -------------------------------------------------------
+        // NEU: KONZEPT 3 - FORMULAR MIT GET (LIVE GOOGLE-SUCHE)
+        // -------------------------------------------------------
+        form_get: {
+            url: "https://www.google.com/search?q=",
+            startsFromBase: true,
+            slides: [
+                {
+                    title: "Schritt 1: Ausgangspunkt (Der bekannte News-Feed)",
+                    desc: "Wir starten wieder bei unserem bekannten News-Feed. Wie können wir nun <strong>komplett ohne JavaScript</strong> echte Daten an einen Server im Internet schicken? Genau dafür gibt es in HTML das <code>&lt;form&gt;</code>-Element (Formular)!",
+                    raw: BASE_NEWS_COMPLETE
+                },
+                {
+                    title: "Schritt 2: Das <form>-Element mit action und method=\"GET\"",
+                    desc: "Wir fügen über den News eine eigene <code>&lt;section id=\"campus-suche\"&gt;</code> mit einem <code>&lt;form&gt;</code> ein. <code>action=\"https://www.google.com/search\"</code> legt fest, <strong>an welchen Server</strong> die Anfrage geht. <code>method=\"GET\"</code> bestimmt, dass die Eingabedaten direkt sichtbar als Parameter an die URL angehängt werden.",
+                    highlightTag: "form",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `    <main>\n        <section id="tech-news">`,
+                        `    <main>\n        <section id="campus-suche">\n            <h2>\n                Campus- &amp; Websuche (HTTP GET)\n            </h2>\n            <form action="https://www.google.com/search" method="GET" target="_blank">\n            </form>\n        </section>\n\n        <section id="tech-news">`
+                    )
+                },
+                {
+                    title: "Schritt 3: <label> und <input type=\"text\" name=\"q\"> (id vs. name!)",
+                    desc: "Wir legen das Textfeld an. <strong>Achtung, wichtigster Unterschied in HTML:</strong> Das Attribut <code>id=\"suchfeld\"</code> verbindet nur das <code>&lt;label for=\"suchfeld\"&gt;</code> für den Klick im Browser. Das Attribut <code>name=\"q\"</code> hingegen ist der <strong>Schlüsselname für den Server</strong>! Google erwartet den Suchbegriff unter dem Namen <code>q</code> (für <em>query</em>).",
+                    highlightTag: "form",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `    <main>\n        <section id="tech-news">`,
+                        `    <main>\n        <section id="campus-suche">\n            <h2>\n                Campus- &amp; Websuche (HTTP GET)\n            </h2>\n            <form action="https://www.google.com/search" method="GET" target="_blank">\n                <label for="suchfeld">Suchbegriff:</label>\n                <input id="suchfeld" type="text" name="q" placeholder="z.B. HTL Informatik..." required>\n            </form>\n        </section>\n\n        <section id="tech-news">`
+                    )
+                },
+                {
+                    title: "Schritt 4: Absende-Button (<button type=\"submit\">) — Jetzt live ausprobieren!",
+                    desc: "Mit <code>&lt;button type=\"submit\"&gt;</code> wird das Formular scharfgeschaltet. <strong>Probiere es rechts sofort aus:</strong> Tippe etwas in das Suchfeld ein (beobachte oben die Adresszeile <code>?q=...</code>!) und klicke auf den Button – dein Browser feuert einen echten HTTP-GET-Request an Google ab!",
+                    highlightTag: "form",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `    <main>\n        <section id="tech-news">`,
+                        `    <main>\n        <section id="campus-suche">\n            <h2>\n                Campus- &amp; Websuche (HTTP GET)\n            </h2>\n            <form action="https://www.google.com/search" method="GET" target="_blank">\n                <label for="suchfeld">Suchbegriff:</label>\n                <input id="suchfeld" type="text" name="q" placeholder="z.B. Prusa CoreXY..." required>\n                <button type="submit">🔍 Auf Google suchen (GET-Request)</button>\n            </form>\n        </section>\n\n        <section id="tech-news">`
+                    )
+                }
+            ],
+            css: sharedExtendedCss,
+            applyClasses: applyExtendedClasses,
+            components: [
+                { selector: 'header', name: 'SiteHeader', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' },
+                { selector: 'section#campus-suche', name: 'SearchBarForm', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.16)' },
+                { selector: 'section#tech-news', name: 'NewsFeedSection', color: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.10)' },
+                { selector: 'article', name: 'NewsCard', color: '#10b981', bg: 'rgba(16, 185, 129, 0.14)' }
+            ]
+        },
+
+        // -------------------------------------------------------
+        // NEU: KONZEPT 4 - FORMULAR MIT POST, DROPDOWN (<select>) & ECHO-SERVER
+        // -------------------------------------------------------
+        form_post: {
+            url: "https://httpbin.org/post (HTTP POST Ziel-Server)",
+            startsFromBase: true,
+            slides: [
+                {
+                    title: "Schritt 1: Ausgangspunkt (Der bekannte News-Feed)",
+                    desc: "Wir starten wieder beim fertigen News-Feed. Jetzt wollen wir unterhalb der News ein Formular einbauen, mit dem Schüler ihr Diplomprojekt anmelden können. Da hierbei Daten übermittelt und gespeichert werden sollen, nutzen wir <code>method=\"POST\"</code>!",
+                    raw: BASE_NEWS_COMPLETE
+                },
+                {
+                    title: "Schritt 2: POST-Formular mit Test-Echo-Server (https://httpbin.org/post)",
+                    desc: "Mit welchem Server sprechen wir, wenn wir noch kein eigenes C#-Backend programmiert haben? Wir nutzen den weltweiten Entwickler-Testserver <code>action=\"https://httpbin.org/post\"</code>! Dieser Server nimmt jeden <code>POST</code>-Request entgegen und zeigt uns als Echo exakt an, was im unsichtbaren HTTP-Body bei ihm ankam.",
+                    highlightTag: "form",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `        </section>\n    </main>`,
+                        `        </section>\n\n        <section id="projekt-anmeldung">\n            <h2>\n                Diplomprojekt anmelden (HTTP POST)\n            </h2>\n            <form action="https://httpbin.org/post" method="POST" target="_blank">\n            </form>\n        </section>\n    </main>`
+                    )
+                },
+                {
+                    title: "Schritt 3: E-Mail-Input mit nativer Browser-Prüfung (type=\"email\" & required)",
+                    desc: "Wir ergänzen ein Eingabefeld mit <code>type=\"email\"</code>, <code>name=\"student_email\"</code> und <code>required</code>. Der Browser prüft nun ganz von alleine vor dem Absenden, ob das Feld ausgefüllt ist und ein gültiges <code>@</code>-Zeichen enthält!",
+                    highlightTag: "form",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `        </section>\n    </main>`,
+                        `        </section>\n\n        <section id="projekt-anmeldung">\n            <h2>\n                Diplomprojekt anmelden (HTTP POST)\n            </h2>\n            <form action="https://httpbin.org/post" method="POST" target="_blank">\n                <label for="mail">HTL E-Mail-Adresse:</label>\n                <input id="mail" type="email" name="student_email" placeholder="vorname.nachname@htl.at" required>\n            </form>\n        </section>\n    </main>`
+                    )
+                },
+                {
+                    title: "Schritt 4: Auswahlmenü / Dropdown (<select> & <option value=\"...\">)",
+                    desc: "Für die Wahl der Abteilung nutzen wir ein Dropdown: <code>&lt;select name=\"abteilung\"&gt;</code> ist die äußere Box, und jede Auswahlmöglichkeit ist ein <code>&lt;option value=\"...\"&gt;</code>. Wählt der User „Informatik“, schickt der Browser das Paar <code>abteilung=if</code> an den Server!",
+                    highlightTag: "form",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `        </section>\n    </main>`,
+                        `        </section>\n\n        <section id="projekt-anmeldung">\n            <h2>\n                Diplomprojekt anmelden (HTTP POST)\n            </h2>\n            <form action="https://httpbin.org/post" method="POST" target="_blank">\n                <label for="mail">HTL E-Mail-Adresse:</label>\n                <input id="mail" type="email" name="student_email" placeholder="vorname.nachname@htl.at" required>\n\n                <label for="abt">Abteilung auswählen:</label>\n                <select id="abt" name="abteilung" required>\n                    <option value="">-- Bitte wählen --</option>\n                    <option value="if">Informatik (IF)</option>\n                    <option value="me">Mechatronik (ME)</option>\n                    <option value="et">Elektrotechnik (ET)</option>\n                </select>\n            </form>\n        </section>\n    </main>`
+                    )
+                },
+                {
+                    title: "Schritt 5: Mehrzeiliges Textfeld (<textarea>) & Submit — Live mit httpbin.org testen!",
+                    desc: "Wir fügen noch eine <code>&lt;textarea name=\"projektidee\"&gt;</code> und den Submit-Button hinzu. <strong>Teste es rechts live:</strong> Fülle das Formular aus und klicke auf Absenden! In einem neuen Tab antwortet dir <code>httpbin.org/post</code> und zeigt unter <code>\"form\": { ... }</code> deine gesendeten POST-Daten!",
+                    highlightTag: "form",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `        </section>\n    </main>`,
+                        `        </section>\n\n        <section id="projekt-anmeldung">\n            <h2>\n                Diplomprojekt anmelden (HTTP POST)\n            </h2>\n            <form action="https://httpbin.org/post" method="POST" target="_blank">\n                <label for="mail">HTL E-Mail-Adresse:</label>\n                <input id="mail" type="email" name="student_email" placeholder="vorname.nachname@htl.at" required>\n\n                <label for="abt">Abteilung auswählen:</label>\n                <select id="abt" name="abteilung" required>\n                    <option value="">-- Bitte wählen --</option>\n                    <option value="if">Informatik (IF)</option>\n                    <option value="me">Mechatronik (ME)</option>\n                    <option value="et">Elektrotechnik (ET)</option>\n                </select>\n\n                <label for="idee">Kurzbeschreibung der Projektidee:</label>\n                <textarea id="idee" name="projektidee" rows="3" placeholder="Was soll entwickelt werden?" required></textarea>\n\n                <button type="submit">📩 Projekt anmelden (POST an httpbin.org)</button>\n            </form>\n        </section>\n    </main>`
+                    )
+                }
+            ],
+            css: sharedExtendedCss,
+            applyClasses: applyExtendedClasses,
+            components: [
+                { selector: 'header', name: 'SiteHeader', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' },
+                { selector: 'section#tech-news', name: 'NewsFeedSection', color: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.10)' },
+                { selector: 'article', name: 'NewsCard', color: '#10b981', bg: 'rgba(16, 185, 129, 0.14)' },
+                { selector: 'section#projekt-anmeldung', name: 'ProjectRegistrationForm', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.14)' }
+            ]
+        },
+
+        // -------------------------------------------------------
+        // NEU: KONZEPT 5 - CLIENT & SERVER ARCHITEKTUR BEI HTTP (KEINE VORSCHAU RECHTS!)
+        // -------------------------------------------------------
+        http_concept: {
+            url: "architecture://client-server-http-inspector",
+            startsFromBase: true,
+            isConceptualHttp: true,
+            slides: [
+                {
+                    title: "Schritt 1: Initialer Seitenabruf (Browser lädt unsere HTML-Seite per HTTP GET)",
+                    desc: "Rechts sehen wir nun <strong>keine Browser-Vorschau</strong>, sondern was unter der Haube im Netzwerk zwischen <strong>Client (Browser)</strong> und <strong>Server</strong> passiert! Wenn du <code>htl-campus.at/news</code> öffnest, schickt dein Browser einen <code>GET</code>-Request. Der Server antwortet mit <code>200 OK</code> und liefert den HTML-Code links im Body zurück.",
+                    httpPhase: "initial_get",
+                    raw: BASE_NEWS_COMPLETE
+                },
+                {
+                    title: "Schritt 2: Formular mit method=\"GET\" — Daten wandern in die URL (Query-String)",
+                    desc: "Links im Code ergänzen wir das Suchformular mit <code>method=\"GET\"</code> und <code>name=\"q\"</code>. Klickt der User auf Submit, schnürt der Client ein HTTP-GET-Paket: Er liest alle <code>name=value</code>-Paare aus und klebt sie mit einem Fragezeichen <code>?q=Prusa</code> <strong>direkt oben in die Ziel-URL</strong>! Der Request-Body bleibt komplett leer.",
+                    httpPhase: "form_get_request",
+                    highlightTag: "form",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `    <main>\n        <section id="tech-news">`,
+                        `    <main>\n        <section id="campus-suche">\n            <form action="https://www.google.com/search" method="GET">\n                <input type="text" name="q" value="Prusa">\n                <button type="submit">Suchen (GET)</button>\n            </form>\n        </section>\n\n        <section id="tech-news">`
+                    )
+                },
+                {
+                    title: "Schritt 3: Formular mit method=\"POST\" — Daten wandern unsichtbar in den HTTP-Body",
+                    desc: "Jetzt stellen wir im Code auf unser Anmeldeformular mit <code>method=\"POST\"</code> um. Schau rechts auf das Netzwerkpaket: Die URL <code>POST /post HTTP/1.1</code> enthält <strong>keinerlei Formulardaten</strong>! Stattdessen legt der Browser die Felder (<code>student_email=max@htl.at&amp;abteilung=if</code>) geschützt in den <strong>HTTP Request Body</strong>.",
+                    httpPhase: "form_post_request",
+                    highlightTag: "form",
+                    raw: BASE_NEWS_COMPLETE.replace(
+                        `        </section>\n    </main>`,
+                        `        </section>\n\n        <section id="projekt-anmeldung">\n            <form action="https://httpbin.org/post" method="POST">\n                <input type="email" name="student_email" value="max@htl.at">\n                <select name="abteilung">\n                    <option value="if" selected>Informatik (IF)</option>\n                </select>\n                <button type="submit">Anmelden (POST)</button>\n            </form>\n        </section>\n    </main>`
+                    )
+                },
+                {
+                    title: "Schritt 4: Der direkte Architektur-Vergleich (GET vs. POST nebeneinander)",
+                    desc: "Links im Code siehst du nun beide Formulare (oben <code>GET</code>, unten <code>POST</code>) in derselben Webseite vereint. Rechts kannst du in der Gegenüberstellung genau ablesen, wann welche HTTP-Methode in der Webentwicklung Pflicht ist!",
+                    httpPhase: "comparison_matrix",
+                    highlightTag: "form",
+                    raw: BASE_NEWS_COMPLETE
+                        .replace(
+                            `    <main>\n        <section id="tech-news">`,
+                            `    <main>\n        <!-- 1. GET-Formular: Parameter wandern in die URL (?q=...) -->\n        <section id="campus-suche">\n            <form action="https://www.google.com/search" method="GET">\n                <input type="text" name="q" value="Prusa">\n                <button type="submit">Suchen (GET)</button>\n            </form>\n        </section>\n\n        <section id="tech-news">`
+                        )
+                        .replace(
+                            `        </section>\n    </main>`,
+                            `        </section>\n\n        <!-- 2. POST-Formular: Daten wandern in den HTTP-Body -->\n        <section id="projekt-anmeldung">\n            <form action="https://httpbin.org/post" method="POST">\n                <input type="email" name="student_email" value="max@htl.at">\n                <select name="abteilung">\n                    <option value="if" selected>Informatik (IF)</option>\n                </select>\n                <button type="submit">Anmelden (POST)</button>\n            </form>\n        </section>\n    </main>`
+                        )
+                }
+            ],
+            css: sharedExtendedCss,
+            applyClasses: applyExtendedClasses,
+            components: [
+                { selector: 'header', name: 'SiteHeader', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' },
+                { selector: 'section#campus-suche', name: 'SearchBarGetForm', color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.16)' },
+                { selector: 'section#projekt-anmeldung', name: 'RegistrationPostForm', color: '#10b981', bg: 'rgba(16, 185, 129, 0.16)' }
+            ]
+        }
+    };
+
+    /* =======================================================
+       STATE MANAGEMENT
+       ======================================================= */
+    let currentScenario = 'news';
+    let currentStep = 0;
+    let isStructure = false;
+    let isReact = false;
+    let isCss = false;
+
+    /* =======================================================
+       SYNTAX HIGHLIGHTING & REACT CODE-BLOCK MARKIERUNG
+       ======================================================= */
+    function highlightHTML(code, markReactZones = false, scenarioKey = 'news', highlightTag = null) {
+        let escaped = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        escaped = escaped.replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="comment">$1</span>');
+        escaped = escaped.replace(/(&lt;\/?)([a-zA-Z0-9]+)([\s\S]*?)(&gt;)/g, (match, openBracket, tagName, innerAttrs, closeBracket) => {
+            if (tagName === 'span' && innerAttrs.includes('class="comment"')) return match;
+            let coloredAttrs = innerAttrs.replace(/([a-zA-Z0-9-]+)=(&quot;|"|')(.*?)\2/g, '<span class="attr">$1</span>=<span class="val">"$3"</span>');
+            return openBracket + '<span class="tag">' + tagName + '</span>' + coloredAttrs + closeBracket;
+        });
+
+        // Falls ein bestimmter neuer Tag-Block in diesem Schritt hervorgehoben werden soll (und React-Ansicht aus ist)
+        if (!markReactZones && highlightTag) {
+            const reg = new RegExp(`([ \\t]*&lt;<span class="tag">${highlightTag}<\\/span>[\\s\\S]*?&lt;\\/<span class="tag">${highlightTag}<\\/span>&gt;)`, 'g');
+            escaped = escaped.replace(reg, `<span class="new-code-highlight">$1</span>`);
+        }
+
+        // Wenn der React-Tab aktiv ist, zeichnen wir direkt im HTML-Code ein, welcher Block welche Komponente ist
+        if (markReactZones) {
+            if (scenarioKey === 'docs') {
+                escaped = wrapFirstHeader(escaped, 'WikiNavbar', '#3b82f6', 'rgba(59, 130, 246, 0.14)');
+                escaped = wrapCodeBlock(escaped, 'article', 'ProjectReportArticle', '#10b981', 'rgba(16, 185, 129, 0.10)', 1);
+                escaped = wrapSecondHeader(escaped, 'ReportHeader', '#f59e0b', 'rgba(245, 158, 11, 0.16)');
+                escaped = wrapCodeBlock(escaped, 'section', 'ReportSection', '#8b5cf6', 'rgba(139, 92, 246, 0.18)', 0);
+                escaped = wrapCodeBlock(escaped, 'footer', 'ReportFooter', '#ec4899', 'rgba(236, 72, 153, 0.16)', 1);
+            } else {
+                escaped = wrapCodeBlock(escaped, 'header', 'SiteHeader', '#3b82f6', 'rgba(59, 130, 246, 0.14)', 1);
+                escaped = wrapCodeBlock(escaped, 'figure', 'MediaFigure', '#0ea5e9', 'rgba(14, 165, 233, 0.18)', 0);
+                escaped = wrapCodeBlock(escaped, 'details', 'TechSpecsAccordion', '#ec4899', 'rgba(236, 72, 153, 0.18)', 0);
+                escaped = wrapCodeBlock(escaped, 'form', 'FormComponent', '#f59e0b', 'rgba(245, 158, 11, 0.18)', 0);
+                escaped = wrapCodeBlock(escaped, 'article', 'NewsCard', '#10b981', 'rgba(16, 185, 129, 0.16)', 0);
+                escaped = wrapLastFooter(escaped, 'SiteFooter', '#f59e0b', 'rgba(245, 158, 11, 0.15)');
+            }
+        }
+
+        return escaped;
+    }
+
+    function wrapCodeBlock(escapedHtml, tagName, compName, color, bg, maxMatches = 0) {
+        const regex = new RegExp(`([ \\t]*&lt;<span class="tag">${tagName}<\\/span>[\\s\\S]*?&lt;\\/<span class="tag">${tagName}<\\/span>&gt;)`, 'g');
+        let count = 0;
+        return escapedHtml.replace(regex, (match) => {
+            count++;
+            if (maxMatches > 0 && count > maxMatches) return match;
+            return `<span class="react-code-zone" style="--rc-color:${color}; --rc-bg:${bg};"><span class="react-code-badge">&lt;${compName} /&gt;</span>\n${match}</span>`;
+        });
+    }
+
+    function wrapFirstHeader(escapedHtml, compName, color, bg) {
+        const regex = /([ \t]*&lt;<span class="tag">header<\/span>[\s\S]*?&lt;\/<span class="tag">header<\/span>&gt;)/;
+        return escapedHtml.replace(regex, `<span class="react-code-zone" style="--rc-color:${color}; --rc-bg:${bg};"><span class="react-code-badge">&lt;${compName} /&gt;</span>\n$1</span>`);
+    }
+
+    function wrapSecondHeader(escapedHtml, compName, color, bg) {
+        const regex = /([ \t]*&lt;<span class="tag">header<\/span>[\s\S]*?&lt;\/<span class="tag">header<\/span>&gt;)/g;
+        let count = 0;
+        return escapedHtml.replace(regex, (match) => {
+            count++;
+            if (count === 2) {
+                return `<span class="react-code-zone" style="--rc-color:${color}; --rc-bg:${bg};"><span class="react-code-badge">&lt;${compName} /&gt;</span>\n${match}</span>`;
+            }
+            return match;
+        });
+    }
+
+    function wrapLastFooter(escapedHtml, compName, color, bg) {
+        const regex = /(    &lt;<span class="tag">footer<\/span>[\s\S]*?    &lt;\/<span class="tag">footer<\/span>&gt;)/;
+        return escapedHtml.replace(regex, `<span class="react-code-zone" style="--rc-color:${color}; --rc-bg:${bg};"><span class="react-code-badge">&lt;${compName} /&gt;</span>\n$1</span>`);
+    }
+
+    /* =======================================================
+       KONZEPTIONELLES CLIENT-SERVER HTTP DIAGRAMM (FÜR TAB 5)
+       ======================================================= */
+    function renderHttpConceptDiagram(phase) {
+        const pane = document.getElementById('http-concept-pane');
+
+        if (phase === 'initial_get') {
+            pane.innerHTML = `
+                <div class="max-w-2xl mx-auto w-full space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div>
+                            <span class="text-[11px] font-mono uppercase bg-sky-500/20 text-sky-300 px-2.5 py-0.5 rounded border border-sky-500/40 font-bold">Phase 1: Webseite abrufen</span>
+                            <h2 class="text-lg font-bold text-white mt-1">Client &amp; Server beim normalen Seitenaufruf</h2>
+                        </div>
+                        <span class="text-xs font-mono text-slate-400">Keine Browser-Vorschau (Konzept-Ansicht)</span>
+                    </div>
+
+                    <!-- Visuelles Client-Server-Schaubild -->
+                    <div class="bg-slate-900 border-2 border-slate-800 rounded-xl p-5 relative overflow-hidden">
+                        <div class="flex justify-between items-center relative z-10">
+                            <!-- Client Box -->
+                            <div class="w-44 bg-slate-950 border-2 border-sky-500 rounded-xl p-3.5 text-center shadow-lg">
+                                <div class="text-2xl mb-1">💻</div>
+                                <div class="font-bold text-sm text-sky-400">Client (Browser)</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">Chrome / Edge / Firefox</div>
+                            </div>
+
+                            <!-- Netzwerk-Strecke mit animierten Paketen -->
+                            <div class="flex-1 px-4 flex flex-col gap-5">
+                                <div class="relative">
+                                    <div class="text-[11px] font-mono text-sky-300 mb-1 text-center font-bold">1. HTTP Request (Anfrage) ➔</div>
+                                    <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden relative">
+                                        <div class="w-16 h-full bg-sky-400 rounded-full anim-packet-req"></div>
+                                    </div>
+                                    <div class="text-[10px] font-mono text-slate-400 text-center mt-1">GET /news-feed HTTP/1.1</div>
+                                </div>
+
+                                <div class="relative">
+                                    <div class="text-[11px] font-mono text-emerald-300 mb-1 text-center font-bold">⬅ 2. HTTP Response (Antwort)</div>
+                                    <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden relative">
+                                        <div class="w-16 h-full bg-emerald-400 rounded-full anim-packet-res"></div>
+                                    </div>
+                                    <div class="text-[10px] font-mono text-slate-400 text-center mt-1">200 OK + HTML-Code (siehe links)</div>
+                                </div>
+                            </div>
+
+                            <!-- Server Box -->
+                            <div class="w-44 bg-slate-950 border-2 border-emerald-500 rounded-xl p-3.5 text-center shadow-lg">
+                                <div class="text-2xl mb-1">🗄️</div>
+                                <div class="font-bold text-sm text-emerald-400">Webserver</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">htl-campus.at</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HTTP Paket-Inspektor -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-slate-900 border border-sky-500/40 rounded-lg p-4 font-mono text-xs">
+                            <div class="text-sky-400 font-bold mb-2 pb-1 border-b border-slate-800">📤 1. Was schickt der Browser?</div>
+                            <div class="text-amber-300 font-bold">GET /news-feed HTTP/1.1</div>
+                            <div class="text-slate-300">Host: htl-campus.at</div>
+                            <div class="text-slate-300">Accept: text/html</div>
+                            <div class="mt-3 pt-2 border-t border-slate-800 text-slate-500 italic">
+                                [HTTP-Body ist leer]
+                            </div>
+                        </div>
+                        <div class="bg-slate-900 border border-emerald-500/40 rounded-lg p-4 font-mono text-xs">
+                            <div class="text-emerald-400 font-bold mb-2 pb-1 border-b border-slate-800">📥 2. Was antwortet der Server?</div>
+                            <div class="text-emerald-300 font-bold">HTTP/1.1 200 OK</div>
+                            <div class="text-slate-300">Content-Type: text/html; charset=UTF-8</div>
+                            <div class="mt-3 pt-2 border-t border-slate-800 text-sky-300">
+                                &lt;!DOCTYPE html&gt;<br>
+                                &lt;html lang="de"&gt;... (Code von links)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (phase === 'form_get_request') {
+            pane.innerHTML = `
+                <div class="max-w-2xl mx-auto w-full space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div>
+                            <span class="text-[11px] font-mono uppercase bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded border border-amber-500/40 font-bold">Phase 2: Formular mit method="GET"</span>
+                            <h2 class="text-lg font-bold text-white mt-1">Wie baut der Browser aus dem HTML-Formular einen GET-Request?</h2>
+                        </div>
+                    </div>
+
+                    <!-- Mapping Formel -->
+                    <div class="bg-slate-900 border-2 border-amber-500/50 rounded-xl p-4">
+                        <div class="text-xs font-bold text-amber-300 uppercase mb-2">🔗 Die automatische URL-Bauanleitung des Browsers bei GET:</div>
+                        <div class="bg-black/60 p-3 rounded-lg font-mono text-xs flex flex-wrap items-center gap-1">
+                            <span class="bg-sky-900/60 text-sky-300 px-2 py-1 rounded border border-sky-500/40" title="Aus action-Attribut">https://www.google.com/search</span>
+                            <span class="text-white font-bold text-base">?</span>
+                            <span class="bg-emerald-900/60 text-emerald-300 px-2 py-1 rounded border border-emerald-500/40" title="Aus name-Attribut des Inputs">q</span>
+                            <span class="text-white font-bold text-base">=</span>
+                            <span class="bg-amber-900/60 text-amber-300 px-2 py-1 rounded border border-amber-500/40" title="Vom Benutzer eingetippter Wert">Prusa</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-[11px] text-slate-400 mt-2 text-center font-mono">
+                            <div>↑ aus <code>action="..."</code></div>
+                            <div>↑ aus <code>name="q"</code></div>
+                            <div>↑ aus <code>value="Prusa"</code></div>
+                        </div>
+                    </div>
+
+                    <!-- Client-Server Flow -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+                        <div class="w-36 bg-slate-950 border-2 border-sky-500 rounded-lg p-3 text-center">
+                            <div class="font-bold text-xs text-sky-400">💻 Client (Browser)</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Klickt auf Submit</div>
+                        </div>
+                        <div class="flex-1 px-4">
+                            <div class="text-[11px] font-mono text-amber-300 text-center font-bold mb-1">GET /search?q=Prusa HTTP/1.1 ➔</div>
+                            <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="w-20 h-full bg-amber-400 rounded-full anim-packet-req"></div>
+                            </div>
+                            <div class="text-[10px] text-slate-400 text-center mt-1">Daten hängen offen sichtbar an der URL!</div>
+                        </div>
+                        <div class="w-36 bg-slate-950 border-2 border-amber-500 rounded-lg p-3 text-center">
+                            <div class="font-bold text-xs text-amber-400">🗄️ Google Server</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Liest Parameter <code>q</code></div>
+                        </div>
+                    </div>
+
+                    <!-- Roh-Paket Ansicht -->
+                    <div class="bg-slate-900 border border-slate-700 rounded-lg p-4 font-mono text-xs space-y-1.5">
+                        <div class="text-xs font-sans font-bold text-slate-400 uppercase mb-1">📦 Das echte HTTP-GET-Paket auf der Leitung:</div>
+                        <div><span class="text-sky-400 font-bold">GET</span> <span class="text-emerald-300">/search</span><span class="bg-amber-500/20 text-amber-300 px-1 rounded font-bold">?q=Prusa</span> HTTP/1.1</div>
+                        <div class="text-slate-400">Host: www.google.com</div>
+                        <div class="text-slate-400">User-Agent: Mozilla/5.0</div>
+                        <div class="pt-2 mt-2 border-t border-slate-800 text-slate-500 italic">
+                            [HTTP Request Body: KOMPLETT LEER – alle Daten stehen oben in Zeile 1 in der URL!]
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (phase === 'form_post_request') {
+            pane.innerHTML = `
+                <div class="max-w-2xl mx-auto w-full space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div>
+                            <span class="text-[11px] font-mono uppercase bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded border border-emerald-500/40 font-bold">Phase 3: Formular mit method="POST"</span>
+                            <h2 class="text-lg font-bold text-white mt-1">Wie verpackt der Browser Daten bei einem POST-Request?</h2>
+                        </div>
+                    </div>
+
+                    <!-- Client-Server Flow -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+                        <div class="w-36 bg-slate-950 border-2 border-sky-500 rounded-lg p-3 text-center">
+                            <div class="font-bold text-xs text-sky-400">💻 Client (Browser)</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Sendet Anmeldung</div>
+                        </div>
+                        <div class="flex-1 px-4">
+                            <div class="text-[11px] font-mono text-emerald-300 text-center font-bold mb-1">POST /post HTTP/1.1 (Daten im Body) ➔</div>
+                            <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="w-20 h-full bg-emerald-400 rounded-full anim-packet-req"></div>
+                            </div>
+                            <div class="text-[10px] text-slate-400 text-center mt-1">URL bleibt sauber – Nutzdaten stecken im Paket-Rumpf!</div>
+                        </div>
+                        <div class="w-36 bg-slate-950 border-2 border-emerald-500 rounded-lg p-3 text-center">
+                            <div class="font-bold text-xs text-emerald-400">🗄️ httpbin.org</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Liest Request-Body</div>
+                        </div>
+                    </div>
+
+                    <!-- Roh-Paket Ansicht mit Header & Body -->
+                    <div class="bg-slate-900 border-2 border-emerald-500/50 rounded-xl p-4 font-mono text-xs space-y-1.5">
+                        <div class="text-xs font-sans font-bold text-emerald-400 uppercase mb-1">📦 Das echte HTTP-POST-Paket (Header + Body getrennt durch Leerzeile):</div>
+                        <div><span class="text-emerald-400 font-bold">POST</span> <span class="text-sky-300">/post</span> HTTP/1.1 <span class="text-slate-500 font-sans ml-2">← Kein ?... in der URL!</span></div>
+                        <div class="text-slate-300">Host: httpbin.org</div>
+                        <div class="text-slate-300">Content-Type: application/x-www-form-urlencoded</div>
+                        <div class="text-slate-300">Content-Length: 37</div>
+                        
+                        <div class="my-2 border-t border-dashed border-slate-700 pt-2">
+                            <span class="text-[10px] font-sans uppercase text-amber-400 font-bold block mb-1">🔒 HTTP Request Body (Nicht in der Adresszeile sichtbar):</span>
+                            <div class="bg-black/60 p-2.5 rounded border border-amber-500/40 text-amber-300 font-bold">
+                                student_email=max%40htl.at&amp;abteilung=if
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/80 border-l-4 border-sky-500 p-3.5 rounded-r-lg text-xs text-slate-300">
+                        💡 <strong>Merke:</strong> Sowohl bei <code>GET</code> als auch bei <code>POST</code> baut der Browser genau denselben String <code>name1=wert1&amp;name2=wert2</code> zusammen. Der einzige Unterschied ist der <strong>Transportort</strong>: Bei <code>GET</code> oben in der URL, bei <code>POST</code> unten im HTTP-Body!
+                    </div>
+                </div>
+            `;
+        } else {
+            pane.innerHTML = `
+                <div class="max-w-2xl mx-auto w-full space-y-5">
+                    <div class="border-b border-slate-800 pb-3">
+                        <span class="text-[11px] font-mono uppercase bg-fuchsia-500/20 text-fuchsia-300 px-2.5 py-0.5 rounded border border-fuchsia-500/40 font-bold">Phase 4: Architektur-Entscheidung</span>
+                        <h2 class="text-lg font-bold text-white mt-1">Wann verwende ich im &lt;form&gt; GET und wann POST?</h2>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- GET Spalte -->
+                        <div class="bg-slate-900 border-2 border-sky-500/50 rounded-xl p-4 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono font-bold text-base text-sky-400">method="GET"</span>
+                                <span class="text-[11px] bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded">Lesen / Filtern</span>
+                            </div>
+                            <ul class="text-xs text-slate-300 space-y-2">
+                                <li>📍 <strong>Wo liegen die Daten?</strong><br><span class="text-slate-400">Sichtbar in der URL (<code>?q=Prusa</code>).</span></li>
+                                <li>📦 <strong>HTTP Request Body:</strong><br><span class="text-slate-400">Immer leer.</span></li>
+                                <li>🔖 <strong>Lesezeichen &amp; Teilen:</strong><br><span class="text-emerald-400">Ja! Man kann die Ergebnis-URL kopieren und verschicken.</span></li>
+                                <li>🔄 <strong>Seite neu laden (F5):</strong><br><span class="text-emerald-400">Harmlos (führt die Suche einfach erneut aus).</span></li>
+                                <li>🛠️ <strong>Typischer Einsatz:</strong><br><span class="text-sky-300">Google-Suche, Produktfilter im Shop, Seitennavigation.</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- POST Spalte -->
+                        <div class="bg-slate-900 border-2 border-emerald-500/50 rounded-xl p-4 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono font-bold text-base text-emerald-400">method="POST"</span>
+                                <span class="text-[11px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">Schreiben / Ändern</span>
+                            </div>
+                            <ul class="text-xs text-slate-300 space-y-2">
+                                <li>📍 <strong>Wo liegen die Daten?</strong><br><span class="text-slate-400">Unsichtbar im <strong>HTTP-Body</strong>.</span></li>
+                                <li>📦 <strong>Datenmenge &amp; Typen:</strong><br><span class="text-emerald-400">Unbegrenzt (auch Datei-Uploads &amp; lange Texte).</span></li>
+                                <li>🔖 <strong>Passwörter &amp; Login:</strong><br><span class="text-emerald-400">Pflicht! Steht niemals im Browser-Verlauf oder in der URL.</span></li>
+                                <li>🔄 <strong>Seite neu laden (F5):</strong><br><span class="text-amber-300">Browser warnt: „Formular erneut absenden?“ (Schutz vor Doppelkauf!).</span></li>
+                                <li>🛠️ <strong>Typischer Einsatz:</strong><br><span class="text-emerald-300">Login, Registrierung, Bestellung, Projekt-Anmeldung.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    /* =======================================================
+       RENDER & UPDATE LOGIK
+       ======================================================= */
+    function updateButtonStyles() {
+        const btnStruct = document.getElementById('btn-structure');
+        const btnReact = document.getElementById('btn-react');
+        const btnCss = document.getElementById('btn-css');
+
+        btnStruct.className = `px-3.5 py-1.5 rounded-md text-xs font-bold border-2 transition flex items-center gap-1.5 cursor-pointer ${
+            isStructure ? 'bg-blue-600 border-blue-400 text-white shadow-md shadow-blue-900/50' : 'border-neutral-600 bg-neutral-700 hover:bg-neutral-600 text-neutral-200'
+        }`;
+        btnReact.className = `px-3.5 py-1.5 rounded-md text-xs font-bold border-2 transition flex items-center gap-1.5 cursor-pointer ${
+            isReact ? 'bg-emerald-600 border-emerald-400 text-white shadow-md shadow-emerald-900/50' : 'border-neutral-600 bg-neutral-700 hover:bg-neutral-600 text-neutral-200'
+        }`;
+        btnCss.className = `px-3.5 py-1.5 rounded-md text-xs font-bold border-2 transition flex items-center gap-1.5 cursor-pointer ${
+            isCss ? 'bg-fuchsia-600 border-fuchsia-400 text-white shadow-md shadow-fuchsia-900/50' : 'border-neutral-600 bg-neutral-700 hover:bg-neutral-600 text-neutral-200'
+        }`;
+    }
+
+    function bindInteractivePreviewHandlers() {
+        const renderWindow = document.getElementById('render-window');
+        const browserUrl = document.getElementById('browser-url');
+        const liveBadge = document.getElementById('live-url-badge');
+
+        // 1. Live URL-Vorschau beim Tippen ins GET-Suchfeld (Konzept 3)
+        const searchInput = renderWindow.querySelector('#suchfeld');
+        if (searchInput && currentScenario === 'form_get') {
+            liveBadge.classList.remove('hidden');
+            const updateGoogleUrl = () => {
+                const encoded = encodeURIComponent(searchInput.value || '');
+                browserUrl.innerHTML = `https://www.google.com/search<span class="text-emerald-700 font-bold">?q=${encoded}</span>`;
+            };
+            updateGoogleUrl();
+            searchInput.addEventListener('input', updateGoogleUrl);
+        } else {
+            liveBadge.classList.add('hidden');
+        }
+
+        // 2. Interaktives Feedback für <button type="button"> in Konzept 2
+        const darkBtn = renderWindow.querySelector('#btn-darkmode');
+        if (darkBtn) {
+            darkBtn.addEventListener('click', () => {
+                const isDark = renderWindow.getAttribute('data-preview-dark') === 'true';
+                if (!isDark) {
+                    renderWindow.style.background = '#0f172a';
+                    renderWindow.style.color = '#f8fafc';
+                    renderWindow.setAttribute('data-preview-dark', 'true');
+                } else {
+                    renderWindow.style.background = isCss ? '#f8fafc' : '#ffffff';
+                    renderWindow.style.color = '#171717';
+                    renderWindow.setAttribute('data-preview-dark', 'false');
+                }
+            });
+        }
+
+        renderWindow.querySelectorAll('article button[type="button"]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.textContent.includes('⭐')) {
+                    btn.textContent = '✅ Gespeichert!';
+                } else {
+                    btn.textContent = '⭐ Artikel merken';
+                }
+            });
+        });
+    }
+
+    function updateView() {
+        const simWorkspace = document.getElementById('simulator-workspace');
+        const merkenWorkspace = document.getElementById('merken-workspace');
+        const toggleContainer = document.getElementById('toggle-container');
+        const stepControls = document.getElementById('step-controls');
+        const browserPane = document.getElementById('browser-preview-pane');
+        const httpConceptPane = document.getElementById('http-concept-pane');
+        const baseBadge = document.getElementById('base-code-badge');
+
+        // Modus: "Wir merken uns"
+        if (currentScenario === 'merken') {
+            simWorkspace.classList.add('hidden');
+            merkenWorkspace.classList.remove('hidden');
+            toggleContainer.classList.add('opacity-30', 'pointer-events-none');
+            stepControls.classList.add('opacity-30', 'pointer-events-none');
+            document.getElementById('explanation-content').innerHTML = `
+                <div class="flex items-center gap-3 text-amber-300 font-bold">
+                    <span>📌 Zusammenfassung aktiv:</span>
+                    <span class="text-neutral-300 font-normal">Wähle oben im Dropdown eines der interaktiven Szenarien oder Konzepte aus, um den Schritt-für-Schritt-Aufbau mit den Pfeiltasten ◀ ▶ durchzugehen.</span>
+                </div>`;
+            return;
+        }
+
+        // Modus: Interaktive Website oder Konzept-Tab
+        simWorkspace.classList.remove('hidden');
+        merkenWorkspace.classList.add('hidden');
+        toggleContainer.classList.remove('opacity-30', 'pointer-events-none');
+        stepControls.classList.remove('opacity-30', 'pointer-events-none');
+
+        updateButtonStyles();
+
+        const activeData = scenarios[currentScenario];
+        const slides = activeData.slides;
+
+        if (currentStep >= slides.length) currentStep = slides.length - 1;
+        if (currentStep < 0) currentStep = 0;
+
+        const currentSlide = slides[currentStep];
+
+        document.getElementById('btn-prev').disabled = currentStep === 0;
+        document.getElementById('btn-next').disabled = currentStep === slides.length - 1;
+        document.getElementById('step-counter').innerText = `Schritt ${currentStep + 1} von ${slides.length}`;
+        document.getElementById('browser-url').innerText = activeData.url;
+
+        baseBadge.classList.toggle('hidden', !activeData.startsFromBase);
+
+        // HTML Code links aufbereiten (Im Code-Editor zeigen wir den sauberen Dateinamen prusa-corexy.svg)
+        const currentRawHTML = currentSlide.raw;
+        const codeDisplayHTML = isCss
+            ? activeData.applyClasses(currentRawHTML).replace(prusaSvgDataUri, 'prusa-corexy.svg')
+            : currentRawHTML;
+
+        document.getElementById('html-code').innerHTML = highlightHTML(
+            codeDisplayHTML,
+            isReact,
+            currentScenario,
+            currentSlide.highlightTag || null
+        );
+        document.getElementById('code-hint-badge').classList.toggle('hidden', !isReact);
+
+        // Falls ein neuer Code-Block hervorgehoben wurde, sanft dorthin scrollen
+        setTimeout(() => {
+            const highlightedEl = document.querySelector('#html-code .new-code-highlight');
+            if (highlightedEl) {
+                highlightedEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 40);
+
+        // CSS Panel links unten ein-/ausblenden
+        const cssPanel = document.getElementById('css-panel');
+        if (isCss) {
+            cssPanel.classList.remove('hidden');
+            cssPanel.classList.add('flex');
+            document.getElementById('css-code').innerText = activeData.css;
+            document.getElementById('dynamic-css').innerHTML = activeData.css;
+            document.getElementById('render-window').style.fontFamily = 'system-ui, -apple-system, sans-serif';
+            document.getElementById('render-window').style.background = '#f8fafc';
+        } else {
+            cssPanel.classList.add('hidden');
+            cssPanel.classList.remove('flex');
+            document.getElementById('dynamic-css').innerHTML = `
+                #render-window h1 { font-size: 1.85em; font-weight: bold; margin: 0.4em 0; }
+                #render-window h2 { font-size: 1.4em; font-weight: bold; margin: 0.5em 0; }
+                #render-window h3 { font-size: 1.15em; font-weight: bold; margin: 0.6em 0; }
+                #render-window p { margin: 0.65em 0; }
+                #render-window ul { list-style: disc; padding-left: 28px; margin: 0.65em 0; }
+                #render-window a { color: #0000ee; text-decoration: underline; }
+                #render-window figure { margin: 12px 0; border: 1px solid #cbd5e1; padding: 6px; }
+                #render-window img { max-width: 100%; height: auto; display: block; }
+                #render-window figcaption { font-size: 12px; color: #475569; margin-top: 4px; }
+                #render-window details { border: 1px solid #94a3b8; padding: 6px 10px; margin: 8px 0; }
+                #render-window summary { font-weight: bold; cursor: pointer; }
+                #render-window button { border: 1px solid #475569; background: #e2e8f0; padding: 2px 8px; border-radius: 3px; cursor: pointer; font-size: 13px; }
+                #render-window input, #render-window select, #render-window textarea { border: 1px solid #64748b; padding: 3px 6px; margin: 3px 0; display: block; }
+                #render-window label { font-weight: bold; font-size: 13px; display: block; margin-top: 6px; }
+            `;
+            document.getElementById('render-window').style.fontFamily = "'Times New Roman', Times, serif";
+            document.getElementById('render-window').style.background = '#ffffff';
+        }
+        document.getElementById('render-window').style.color = '#171717';
+        document.getElementById('render-window').setAttribute('data-preview-dark', 'false');
+
+        // RECHTES PANEL: Entweder Konzeptionelles Client-Server-Diagramm ODER Live-Browser-Vorschau
+        if (activeData.isConceptualHttp) {
+            browserPane.classList.add('hidden');
+            httpConceptPane.classList.remove('hidden');
+            httpConceptPane.classList.add('flex');
+            renderHttpConceptDiagram(currentSlide.httpPhase);
+        } else {
+            httpConceptPane.classList.add('hidden');
+            httpConceptPane.classList.remove('flex');
+            browserPane.classList.remove('hidden');
+
+            const renderWindow = document.getElementById('render-window');
+            const previewHTML = isCss
+                ? activeData.applyClasses(currentRawHTML)
+                : currentRawHTML.replace(/src="prusa-corexy\.svg"/g, `src="${prusaSvgDataUri}"`);
+
+            const bodyMatch = previewHTML.match(/<body>([\s\S]*?)<\/body>/);
+            renderWindow.innerHTML = bodyMatch ? bodyMatch[1] : '';
+
+            renderWindow.className = 'flex-1 p-7 overflow-y-auto select-text';
+            if (isStructure) renderWindow.classList.add('show-structure');
+            if (isReact) renderWindow.classList.add('show-react');
+
+            // 1. Block & Inline Attribute für Overlay setzen
+            Array.from(renderWindow.querySelectorAll('*')).forEach(el => {
+                const tag = el.tagName.toLowerCase();
+                el.setAttribute('data-tag', tag);
+                const inlineTags = ['a', 'strong', 'em', 'time', 'span', 'img', 'code', 'button', 'input', 'label', 'select', 'textarea'];
+                if (inlineTags.includes(tag)) {
+                    el.setAttribute('data-type', 'inline');
+                } else {
+                    el.setAttribute('data-type', 'block');
+                }
+            });
+
+            // 2. React-Komponenten Attribute & Farben im Render-Window setzen
+            activeData.components.forEach(comp => {
+                renderWindow.querySelectorAll(comp.selector).forEach(el => {
+                    el.setAttribute('data-react', comp.name);
+                    el.style.setProperty('--react-color', comp.color);
+                    el.style.setProperty('--react-bg', comp.bg);
+                });
+            });
+
+            bindInteractivePreviewHandlers();
+        }
+
+        updateExplanation(currentSlide, activeData.isConceptualHttp);
+    }
+
+    function updateExplanation(slide, isConceptualHttp = false) {
+        const container = document.getElementById('explanation-content');
+        
+        let html = `
+            <div class="mb-2 pb-2 border-b border-neutral-700">
+                <span class="text-amber-400 font-bold">${slide.title}:</span>
+                <span class="text-neutral-200 ml-1">${slide.desc}</span>
+            </div>
+            <div class="flex flex-wrap gap-x-6 gap-y-1 text-xs text-neutral-400">
+        `;
+
+        if (isConceptualHttp) {
+            html += `<span>🖧 <strong>Konzept-Ansicht aktiv:</strong> Links siehst du den HTML-Code der Formulare, rechts den exakten Netzwerk-Ablauf zwischen Client (Browser) und Server bei HTTP <code>GET</code> und <code>POST</code>.</span>`;
+        } else if (!isStructure && !isReact && !isCss) {
+            html += `<span>💡 <em>Tipp: Schalte oben die Toggles (1. Block &amp; Inline, 2. React Komponenten, 3. CSS Design) ein oder blättere mit den Pfeiltasten ◀ ▶ durch die Schritte.</em></span>`;
+        } else {
+            if (isStructure) {
+                html += `<span><strong class="text-blue-400">■ Block-Elemente:</strong> Erzeugen eine eigene Box (z. B. <code>&lt;figure&gt;</code>, <code>&lt;details&gt;</code>, <code>&lt;form&gt;</code>). <strong class="text-amber-400">▪ Inline / Form-Controls:</strong> <code>&lt;img&gt;</code>, <code>&lt;button&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;a&gt;</code>.</span>`;
+            }
+            if (isReact) {
+                html += `<span><strong class="text-emerald-400">⚡ React-Ansicht aktiv:</strong> Jede semantische Einheit (<code>&lt;figure&gt;</code>, <code>&lt;details&gt;</code>, <code>&lt;form&gt;</code>, <code>&lt;article&gt;</code>) wird später 1:1 zu einer eigenen Komponente!</span>`;
+            }
+            if (isCss) {
+                html += `<span><strong class="text-fuchsia-400">🎨 CSS aktiv:</strong> Beachte, wie ein <code>&lt;a&gt;</code> und ein <code>&lt;button&gt;</code> durch CSS fast gleich aussehen können, aber völlig unterschiedliche Aufgaben haben!</span>`;
+            }
+        }
+
+        html += `</div>`;
+        container.innerHTML = html;
+    }
+
+    /* =======================================================
+       EVENT LISTENERS (KLICK & PFEILTASTEN)
+       ======================================================= */
+    document.getElementById('scenario-select').addEventListener('change', (e) => {
+        currentScenario = e.target.value;
+        currentStep = 0;
+        updateView();
+        e.target.blur();
+    });
+
+    document.getElementById('btn-structure').addEventListener('click', () => {
+        isStructure = !isStructure;
+        updateView();
+    });
+
+    document.getElementById('btn-react').addEventListener('click', () => {
+        isReact = !isReact;
+        updateView();
+    });
+
+    document.getElementById('btn-css').addEventListener('click', () => {
+        isCss = !isCss;
+        updateView();
+    });
+
+    document.getElementById('btn-prev').addEventListener('click', () => {
+        if (currentScenario !== 'merken' && currentStep > 0) {
+            currentStep--;
+            updateView();
+        }
+    });
+
+    document.getElementById('btn-next').addEventListener('click', () => {
+        if (currentScenario !== 'merken') {
+            const max = scenarios[currentScenario].slides.length - 1;
+            if (currentStep < max) {
+                currentStep++;
+                updateView();
+            }
+        }
+    });
+
+    // Pfeiltasten-Navigation (Links / Rechts)
+    window.addEventListener('keydown', (e) => {
+        // Nicht blättern, wenn der User gerade rechts in ein Formularfeld tippt oder das Dropdown offen hat
+        const activeTag = document.activeElement ? document.activeElement.tagName : '';
+        if (['SELECT', 'INPUT', 'TEXTAREA'].includes(activeTag)) return;
+        if (currentScenario === 'merken') return;
+
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            const max = scenarios[currentScenario].slides.length - 1;
+            if (currentStep < max) {
+                currentStep++;
+                updateView();
+            }
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            if (currentStep > 0) {
+                currentStep--;
+                updateView();
+            }
+        }
+    });
+
+    // Initialer Start
+    updateView();
+</script>
+</body>
+</html>
