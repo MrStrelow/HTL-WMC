@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <title>Apfelstrudel mit Staubzucker (Illustration)</title>
+  <rect width="320" height="200" fill="#fdf2f8"/>
+  <ellipse cx="160" cy="120" rx="125" ry="60" fill="#ffffff" stroke="#cbd5e1" stroke-width="4"/>
+  <rect x="95" y="92" width="130" height="44" rx="22" fill="#fbbf24"/>
+  <path d="M110 100 q50 20 100 0" fill="none" stroke="#b45309" stroke-width="4"/>
+  <path d="M110 118 q50 20 100 0" fill="none" stroke="#b45309" stroke-width="4"/>
+  <circle cx="130" cy="96" r="3" fill="#ffffff"/><circle cx="170" cy="94" r="3" fill="#ffffff"/><circle cx="200" cy="98" r="3" fill="#ffffff"/>
+</svg>

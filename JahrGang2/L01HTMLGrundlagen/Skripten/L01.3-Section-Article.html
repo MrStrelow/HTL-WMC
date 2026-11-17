@@ -249,7 +249,63 @@
 </script>
 
 <!-- =========================================================
-     TAB 3: <article> IN <section> – DIE ZEITUNGS-RUBRIK
+     TAB 3: GRUNDIDEE – WANN WAS AUSSEN, WANN WAS INNEN?
+     ========================================================= -->
+<script type="text/plain" id="code-idee">
+@include kopf
+1-1|    <!-- Zwei kleine Beispiele: eine Zeitung und ein Rezept -->
+2|    <section>
+2|        <h2>
+2|            Rubrik: Sport
+2|        </h2>
+3|        <article>
+3|            <h3>
+3|                HTL gewinnt das Fußballturnier
+3|            </h3>
+3|            <p>
+3|                Am Freitag siegte unsere Schulmannschaft mit 3:1.
+3|            </p>
+3|        </article>
+3|        <article>
+3|            <h3>
+3|                Neuer Rekord beim Schullauf
+3|            </h3>
+3|            <p>
+3|                Lena aus der 2BHIF lief die 5 km in 19 Minuten.
+3|            </p>
+3|        </article>
+2|    </section>
+4|
+4|    <article>
+4|        <h2>
+4|            Rezept: Palatschinken
+4|        </h2>
+5|        <p>
+5|            Ein einfaches Rezept für vier Personen.
+5|            Zuerst kommen die Zutaten, danach die Zubereitung.
+5|        </p>
+6|        <section>
+6|            <h3>
+6|                Zutaten
+6|            </h3>
+6|            <p>
+6|                Mehl, Milch, Eier und eine Prise Salz.
+6|            </p>
+6|        </section>
+6|        <section>
+6|            <h3>
+6|                Zubereitung
+6|            </h3>
+6|            <p>
+6|                Alles verrühren und in der Pfanne dünn herausbacken.
+6|            </p>
+6|        </section>
+4|    </article>
+@include fuss
+</script>
+
+<!-- =========================================================
+     TAB 4: <article> IN <section> – DIE ZEITUNGS-RUBRIK
      ========================================================= -->
 <script type="text/plain" id="code-news">
 @include kopf
@@ -327,7 +383,7 @@
 </script>
 
 <!-- =========================================================
-     TAB 4: <section> IN <article> – DAS BUCH MIT KAPITELN
+     TAB 5: <section> IN <article> – DAS BUCH MIT KAPITELN
      ========================================================= -->
 <script type="text/plain" id="code-bericht">
 @include kopf
@@ -407,7 +463,7 @@
 </script>
 
 <!-- =========================================================
-     TAB 5 (OPTIONAL): <header>/<footer> INNERHALB EINER KOMPONENTE
+     TAB 6 (OPTIONAL): <header>/<footer> INNERHALB EINER KOMPONENTE
      ========================================================= -->
 <script type="text/plain" id="code-optional">
 @include kopf
@@ -492,7 +548,27 @@ SlideDeck.init({
             ]
         },
         {
-            id: "news", label: "3 · article in section", code: "code-news",
+            id: "idee", label: "3 · Grundidee", code: "code-idee",
+            components: [{ sel: "body > section", name: "Rubrik" }, { sel: "body > section > article", name: "Beitrag" }, { sel: "body > article", name: "Gesamtwerk" }, { sel: "body > article > section", name: "Kapitel" }],
+            steps: [
+                { base: true, title: "Die Grundfrage: Was steht außen, was innen?",
+                  text: "`<section>` und `<article>` können **beide** ineinander stehen. Welches außen steht, hängt davon ab, **was das Ganze ist**. Wir schauen uns zwei ganz einfache Beispiele an: eine Zeitungsrubrik und ein Rezept." },
+                { title: "Beispiel 1: Die Rubrik „Sport“ ist eine <section>",
+                  text: "Was ist eine **Rubrik**? So nennt man in einer Zeitung oder auf einer Website einen **Themenbereich**, unter dem gleichartige Beiträge gesammelt werden – z. B. *Sport*, *Kultur* oder *Wetter*. Eine Rubrik ist also eine **Schublade**, ein Thema. Ohne ihren Inhalt wäre sie leer und ergibt allein keinen Sinn. **Daumenregel:** Eine `<section>` hat **meistens eine Überschrift** – hier „Rubrik: Sport“." },
+                { title: "Die Meldungen in der Rubrik sind <article>",
+                  text: "Jede Meldung kann man **ausschneiden** und woanders hinkleben, z. B. in einen Newsletter – sie ergibt allein vollständig Sinn. **Daumenregel:** Ein `<article>` ist **einzeln verwendbar** und hat **alle Infos in sich**. Also: **article in section** – eine Rubrik (außen) mit mehreren Beiträgen (innen), wie in einer **Zeitung**." },
+                { title: "Beispiel 2: Das Rezept ist ein <article>",
+                  text: "Ein Rezept ist **ein vollständiges Werk** – man kann es ausdrucken oder weiterschicken, und es ergibt allein Sinn. Deshalb steht diesmal der `<article>` **außen**." },
+                { title: "Ein Text sagt, worum es geht",
+                  text: "**Daumenregel:** Enthält ein `<article>` mehrere `<section>`, steht **vor** den Kapiteln ein Text, der die **Idee** beschreibt und sagt, **was die Kapitel machen**. So bleibt der Artikel einzeln verständlich." },
+                { title: "Zutaten und Zubereitung sind <section>",
+                  text: "„Zutaten“ oder „Zubereitung“ allein ergeben **keinen** Sinn – man weiß nicht, wofür. Sie sind **Kapitel** des Rezepts, also `<section>`. Also: **section in article** – ein Werk (außen) mit Kapiteln (innen), wie ein **Buch**." },
+                { title: "Zusammengefasst: die Daumenregeln",
+                  text: "Frage dich: **Ergibt der Teil allein Sinn?** Ja → `<article>`. Nein, er ist nur ein Kapitel oder eine Rubrik → `<section>`. **Zeitung** = article in section (Rubrik mit Beiträgen). **Buch/Rezept** = section in article (Werk mit Kapiteln, davor ein Einleitungstext). Schalte **section / article** zu (Taste `5`): Schubladen werden blau gestrichelt, Karten grün umrandet – so siehst du die Schachtelung auf einen Blick." }
+            ]
+        },
+        {
+            id: "news", label: "4 · article in section", code: "code-news",
             components: RAHMEN.concat([{ sel: "main section", name: "NewsSection" }, { sel: "article", name: "NewsCard" }]),
             steps: [
                 { base: true, title: "Neue Seite: Neuigkeiten",
@@ -510,7 +586,7 @@ SlideDeck.init({
             ]
         },
         {
-            id: "bericht", label: "4 · section in article", code: "code-bericht",
+            id: "bericht", label: "5 · section in article", code: "code-bericht",
             components: RAHMEN.concat([{ sel: "article", name: "ProjectReport" }, { sel: "article section", name: "ReportChapter" }]),
             steps: [
                 { base: true, title: "Neue Seite: ein Projektbericht",

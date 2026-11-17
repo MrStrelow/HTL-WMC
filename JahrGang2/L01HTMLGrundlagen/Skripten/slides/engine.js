@@ -39,8 +39,56 @@
     const NOTES = {
         styled: "<b>HTML + CSS (Ausblick):</b> exakt dasselbe HTML, nur mit CSS. CSS lernen wir später – hier nur zum Anschauen.",
         blocks: "<b>Block</b> = blau gestrichelt (volle Breite, eigene Zeile) · <b>Inline</b> = gelb mit Tag-Namen (fließt im Text mit).",
+        sa: "<b>section</b> = blau gestrichelte Schublade (Kapitel / Rubrik) · <b>article</b> = grüne Karte (eigenständiger Beitrag).",
         components: "<b>Komponenten (Ausblick):</b> logisch zusammengehörige Teile nennt man später <i>Komponenten</i> (z. B. in React). Wird später behandelt."
     };
+
+    // Zuschaltbare Ebene "section / article": Umrandung und Kennzeichnung
+    const SA_CSS = `/* section = Kapitel/Rubrik: blaue, gestrichelte "Schublade" */
+section {
+    position: relative;
+    background: #eff6ff;
+    border: 2px dashed #60a5fa;
+    border-radius: 10px;
+    padding: 10px 16px 12px;
+    margin: 18px 0;
+}
+
+section::before {
+    content: "section · Kapitel / Rubrik";
+    position: absolute;
+    top: -11px;
+    left: 12px;
+    background: #2563eb;
+    color: white;
+    font: 600 11px/1.6 ui-monospace, Consolas, monospace;
+    padding: 0 8px;
+    border-radius: 999px;
+}
+
+/* article = eigenständiger Beitrag: weiße "Karte" mit grünem Rand */
+article {
+    position: relative;
+    background: white;
+    border: 2px solid #86efac;
+    border-left: 8px solid #16a34a;
+    border-radius: 10px;
+    padding: 10px 16px 12px;
+    margin: 18px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+article::before {
+    content: "article · eigenständig";
+    position: absolute;
+    top: -11px;
+    left: 12px;
+    background: #16a34a;
+    color: white;
+    font: 600 11px/1.6 ui-monospace, Consolas, monospace;
+    padding: 0 8px;
+    border-radius: 999px;
+}`;
 
     const COMP_COLORS = ["#2563eb", "#16a34a", "#9333ea", "#ea580c", "#db2777", "#0891b2", "#ca8a04", "#4f46e5"];
 
@@ -153,7 +201,7 @@
         document.addEventListener("keydown", function (e) {
             const t = e.target && e.target.tagName;
             if (/INPUT|TEXTAREA|SELECT/.test(t)) return;
-            if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "1", "2", "3", "4", "p", "P", "f", "F"].indexOf(e.key) >= 0) {
+            if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "1", "2", "3", "4", "5", "p", "P", "f", "F"].indexOf(e.key) >= 0) {
                 e.preventDefault();
                 send({ type: "key", key: e.key });
             }
@@ -254,6 +302,7 @@
             this.styled = false;      // HTML oder HTML + CSS
             this.blocks = false;      // Block/Inline zugeschaltet?
             this.components = false;  // Komponenten zugeschaltet?
+            this.sa = false;          // section / article hervorheben?
             this.codeMode = "html";
             this.scrollY = 0;
             this.build();
@@ -280,6 +329,7 @@
     </div>
     <button class="sd-view sd-chip" data-v="blocks" title="Block/Inline zuschalten (Taste 3)">Block / Inline<kbd>3</kbd></button>
     <button class="sd-view sd-chip" data-v="components" title="Komponenten zuschalten (Taste 4)">Komponenten<kbd>4</kbd></button>
+    <button class="sd-view sd-chip" data-v="sa" title="section und article umranden und beschriften (Taste 5)">section / article<kbd>5</kbd></button>
     <button class="sd-view sd-fs" data-act="fs" title="Vollbild ein/aus (Taste F)">⛶ Vollbild<kbd>F</kbd></button>
     <div class="sd-pres-group">
       <button class="sd-view sd-chip" data-pres="1" title="Erklärung ausblenden, Code 30 % / Browser 70 % (Taste P)">🎤 Presenter<kbd>P</kbd></button>
@@ -300,6 +350,7 @@
     </div>
     <div class="sd-code"></div>
   </div>
+  <div class="sd-split-v" title="ziehen: Breite von Code / Vorschau (Doppelklick: zurücksetzen)"></div>
   <div class="sd-browser">
     <div class="sd-browser-head"><span class="sd-dots"><i></i><i></i><i></i></span><span class="sd-tabchip"></span><span class="sd-url"></span></div>
     <div class="sd-viewnote" hidden></div>
@@ -308,6 +359,7 @@
     <div class="sd-request" hidden></div>
   </div>
 </div>
+<div class="sd-split-h" title="ziehen: Höhe der Erklärung (Doppelklick: zurücksetzen)"></div>
 <div class="sd-explain">
   <button class="sd-nav-btn" data-dir="-1" title="Zurück (←)">‹</button>
   <div class="sd-explain-body">
@@ -339,6 +391,9 @@
                 b.addEventListener("click", () => this.setView(b.dataset.v));
             });
             if (!this.css) this.el.views.querySelector('[data-v="css"]').style.display = "none";
+            // Knopf "section / article" nur, wenn in den Slides section oder article vorkommt
+            this.hasSA = this.tabs.some((t) => t.lines.some((l) => /<(section|article)\b/.test(l.code)));
+            if (!this.hasSA) this.el.views.querySelector('[data-v="sa"]').style.display = "none";
             this.el.views.querySelector('[data-act="fs"]').addEventListener("click", () => SlideDeck.toggleFullscreen());
             document.querySelectorAll(".sd-code-toggle").forEach((b) => {
                 b.addEventListener("click", () => { this.codeMode = b.dataset.mode; this.renderCode(); });
@@ -355,6 +410,45 @@
             const sync = () => { q(".sd-pnav span").textContent = this.el.label.textContent; };
             new MutationObserver(sync).observe(this.el.label, { childList: true, characterData: true, subtree: true });
             this.applyLayout();
+            this.initSplitters();
+        },
+
+        // Trennlinien mit der Maus verschieben (wie in PoS L05)
+        initSplitters() {
+            const work = document.querySelector(".sd-work");
+            const code = document.querySelector(".sd-code-wrap");
+            const explain = document.querySelector(".sd-explain");
+            const sv = document.querySelector(".sd-split-v");
+            const sh = document.querySelector(".sd-split-h");
+            const place = () => { sv.style.left = (code.offsetWidth - 4) + "px"; };
+            this.placeSplit = place;
+            const drag = (handle, onMove) => handle.addEventListener("pointerdown", (e) => {
+                e.preventDefault();
+                handle.setPointerCapture(e.pointerId);
+                handle.classList.add("drag"); document.body.classList.add("sd-dragging");
+                const mv = (ev) => onMove(ev);
+                const up = () => {
+                    handle.removeEventListener("pointermove", mv); handle.removeEventListener("pointerup", up);
+                    handle.classList.remove("drag"); document.body.classList.remove("sd-dragging");
+                };
+                handle.addEventListener("pointermove", mv); handle.addEventListener("pointerup", up);
+            });
+            drag(sv, (e) => {
+                const r = work.getBoundingClientRect();
+                const pct = Math.max(15, Math.min(80, (e.clientX - r.left) / r.width * 100));
+                work.style.gridTemplateColumns = `minmax(0, ${pct}fr) minmax(0, ${100 - pct}fr)`;
+                place();
+            });
+            drag(sh, (e) => {
+                const h = Math.max(60, Math.min(window.innerHeight * 0.6, window.innerHeight - e.clientY));
+                explain.style.height = h + "px"; explain.style.maxHeight = "none"; explain.style.minHeight = "0";
+                place();
+            });
+            sv.addEventListener("dblclick", () => { work.style.gridTemplateColumns = ""; place(); });
+            sh.addEventListener("dblclick", () => { explain.style.height = ""; explain.style.maxHeight = ""; explain.style.minHeight = ""; place(); });
+            window.addEventListener("resize", place);
+            new ResizeObserver(place).observe(code);
+            place();
         },
 
         togglePresenter() { this.presenter = !this.presenter; this.applyLayout(); },
@@ -367,6 +461,10 @@
             b.toggle("sd-v-code", this.show === "code");
             document.querySelector("[data-pres]").classList.toggle("active", this.presenter);
             document.querySelectorAll("[data-show]").forEach((x) => x.classList.toggle("active", x.dataset.show === this.show));
+            // Presenter und Ansichtswechsel setzen die eigene Spaltenbreite zurück
+            const work = document.querySelector(".sd-work");
+            if (work) work.style.gridTemplateColumns = "";
+            if (this.placeSplit) this.placeSplit();
         },
 
         get tab() { return this.tabs[this.tabIndex]; },
@@ -412,7 +510,7 @@
             if (map[key]) { if (e) e.preventDefault(); map[key](); return; }
             if (key === "p" || key === "P") { this.togglePresenter(); return; }
             if (key === "f" || key === "F") { SlideDeck.toggleFullscreen(); return; }
-            const v = { 1: "html", 2: "css", 3: "blocks", 4: "components" }[key];
+            const v = { 1: "html", 2: "css", 3: "blocks", 4: "components", 5: "sa" }[key];
             if (v) this.setView(v);
         },
 
@@ -429,6 +527,7 @@
             else if (v === "css") this.styled = !!this.css;
             else if (v === "blocks") this.blocks = !this.blocks;
             else if (v === "components") this.components = !this.components;
+            else if (v === "sa") { if (!this.hasSA) return; this.sa = !this.sa; }
             this.render(false);
         },
 
@@ -531,6 +630,7 @@
                 const inl = VOID_INLINE.join(",");
                 inject += "<style>" + blockCss() + "</style><script>window.__SD_INLINE=" + JSON.stringify(inl) + ";<\/script>";
             }
+            if (this.sa) inject += "<style>" + SA_CSS + "</style>";
             if (this.components) {
                 const comps = (this.tab.components || []).map((c, i) => Object.assign({ color: COMP_COLORS[i % COMP_COLORS.length] }, c));
                 inject += "<style>" + BADGE_CSS + "</style><script>window.__SD_COMPONENTS=" + JSON.stringify(comps).replace(/</g, "\\u003c") + ";<\/script>";
@@ -542,7 +642,7 @@
             const t = html.match(/<title>([\s\S]*?)<\/title>/i);
             this.el.chip.textContent = t ? t[1].trim() : "(kein <title>)";
             this.el.url.textContent = this.baseUrl();
-            const notes = ["styled", "blocks", "components"].filter((k) => this[k]).map((k) => NOTES[k]);
+            const notes = ["styled", "blocks", "sa", "components"].filter((k) => this[k]).map((k) => NOTES[k]);
             this.el.note.innerHTML = notes.join("<br>");
             this.el.note.hidden = !notes.length;
             this.el.req.hidden = true;
@@ -551,7 +651,7 @@
         render(stepChanged) {
             this.tabs.forEach((t, i) => this.el.tabs.children[i].classList.toggle("active", i === this.tabIndex));
             const st = this.tab.steps[this.step - 1];
-            const on = { html: !this.styled, css: this.styled, blocks: this.blocks, components: this.components };
+            const on = { html: !this.styled, css: this.styled, blocks: this.blocks, components: this.components, sa: this.sa };
             this.el.views.querySelectorAll("[data-v]").forEach((b) => {
                 b.classList.toggle("active", on[b.dataset.v]);
                 b.setAttribute("aria-pressed", on[b.dataset.v] ? "true" : "false");
@@ -571,7 +671,7 @@
                 }
                 const hint = document.createElement("span");
                 hint.className = "sd-hint";
-                hint.textContent = "← → Schritte · ↑ ↓ Tabs · 1/2 HTML ⇄ HTML + CSS · 3 Block/Inline · 4 Komponenten · F Vollbild";
+                hint.textContent = "← → Schritte · ↑ ↓ Tabs · 1/2 HTML ⇄ HTML + CSS · 3 Block/Inline · 4 Komponenten · 5 section/article · F Vollbild";
                 this.el.progress.appendChild(hint);
                 this.el.prev.disabled = this.tabIndex === 0 && this.step === 1;
                 this.el.next.disabled = this.tabIndex === this.tabs.length - 1 && this.step === n;

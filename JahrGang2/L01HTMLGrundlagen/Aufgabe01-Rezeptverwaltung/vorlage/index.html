@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Kochbuch der 2BHIF – Rezeptverwaltung</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!--
+        Komponente 1: HEADER (id="top")
+        ===============================
+        Hauptüberschrift:   Kochbuch der 2BHIF
+        Hauptnavigation:    Startseite        -> index.html
+                            Alle Rezepte      -> rezepte.html
+                            Rezept einreichen -> einreichen.html
+        Login-Formular:     POST an https://httpbin.org/post
+                            Benutzername:          (type="text",     name="benutzername")
+                            Passwort:              (type="password", name="passwort")
+                            Angemeldet bleiben     (type="checkbox", name="angemeldet_bleiben", value="ja")
+                            Button: Anmelden
+    -->
+
+    <!--
+        Komponente 2: SEITENNAVIGATION (aside links, id="seiten-nav")
+        =============================================================
+        Überschrift:        Auf dieser Seite
+        Links:              Rezeptsuche       -> #suche
+                            Kategorien        -> #kategorien
+                            Neue Rezepte      -> #neue-rezepte
+                            Rezept der Woche  -> #rezept-der-woche
+    -->
+
+    <!--
+        Komponente 3: MAIN
+        ==================
+        Kapitel 1 – section id="suche"
+            Überschrift:    Rezeptsuche
+            GET an https://httpbin.org/get
+            Suchbegriff:    (type="search", name="q", Platzhalter: z. B. Palatschinken)
+            Kategorie:      (select name="kategorie")
+                            Alle Kategorien (alle), Hauptspeise (hauptspeise), Dessert (dessert), Suppe (suppe)
+            Button:         Suchen
+
+        Kapitel 2 – section id="kategorien"
+            Überschrift:    Kategorien
+            Absatz:         Stöbere in unseren Rezepten nach **Kategorie**.
+            Bild 1:         bilder/kuerbiscremesuppe.svg (width 160)
+                            alt: Orange Kürbissuppe in einem weißen Teller
+                            Bildunterschrift = Link: Suppen -> kategorien/suppen.html
+            Bild 2:         bilder/schnitzel.svg (width 160)
+                            alt: Goldbraunes Schnitzel mit einer Zitronenscheibe
+                            Bildunterschrift = Link: Hauptspeisen -> kategorien/hauptspeisen.html
+            Bild 3:         bilder/apfelstrudel.svg (width 160)
+                            alt: Apfelstrudel mit Staubzucker auf einem Teller
+                            Bildunterschrift = Link: Desserts -> kategorien/desserts.html
+
+        Kapitel 3 – section id="neue-rezepte"  (article in section)
+            Überschrift:    Neue Rezepte
+            Jede Karte:     Überschrift, Bild (width 240) mit Bildunterschrift, Text, Datum, Link "Zum Rezept", Button "Merken"
+            Karte 1:        Kürbiscremesuppe
+                            bilder/kuerbiscremesuppe.svg · alt: Orange Kürbissuppe in einem weißen Teller
+                            Bildunterschrift: Kürbiscremesuppe mit Kürbiskernen
+                            Eine **cremige** Suppe für kalte Herbsttage – fertig in *30 Minuten*.
+                            Veröffentlicht am 10. November 2026 (2026-11-10)
+                            Zum Rezept -> rezepte/kuerbiscremesuppe.html
+            Karte 2:        Kaiserschmarrn
+                            bilder/kaiserschmarrn.svg · alt: Zerrissener Kaiserschmarrn mit Rosinen und Staubzucker
+                            Bildunterschrift: Kaiserschmarrn mit Zwetschkenröster
+                            Der **österreichische Klassiker** mit Rosinen und Zwetschkenröster.
+                            Veröffentlicht am 14. November 2026 (2026-11-14)
+                            Zum Rezept -> rezepte/kaiserschmarrn.html
+            Karte 3:        Wiener Schnitzel
+                            bilder/schnitzel.svg · alt: Goldbraunes Schnitzel mit einer Zitronenscheibe
+                            Bildunterschrift: Wiener Schnitzel mit Zitrone
+                            **Dünn** geklopft und *goldbraun* herausgebacken – am besten mit Erdäpfelsalat.
+                            Veröffentlicht am 15. November 2026 (2026-11-15)
+                            Zum Rezept -> rezepte/wiener-schnitzel.html
+            Karte 4:        Apfelstrudel
+                            bilder/apfelstrudel.svg · alt: Apfelstrudel mit Staubzucker auf einem Teller
+                            Bildunterschrift: Apfelstrudel mit Staubzucker
+                            Hauchdünner Teig, viel Apfel und *Zimt* – der **Lieblingsnachtisch** der Klasse.
+                            Veröffentlicht am 16. November 2026 (2026-11-16)
+                            Zum Rezept -> rezepte/apfelstrudel.html
+
+        Kapitel 4 – article id="rezept-der-woche"  (section in article)
+            Überschrift:    Rezept der Woche: Palatschinken
+            Autor:in:       Von **Lena** aus der 2BHIF, 17. November 2026 (2026-11-17)
+            Einleitung:     Palatschinken sind dünne Pfannkuchen und schnell gemacht.
+                            Zuerst findest du die Zutaten für vier Personen, danach die Zubereitung Schritt für Schritt – zu jedem Schritt gibt es ein Bild.
+            Bild:           bilder/palatschinken.svg (width 320)
+                            alt: Drei gefüllte Palatschinken auf einem weißen Teller
+                            Bildunterschrift: Abb. 1: Palatschinken mit Marillenmarmelade
+            Kapitel Zutaten (Tabelle, Spalten Zutat | Menge):
+                            Mehl | 200 g
+                            Milch | 400 ml
+                            Eier | 3 Stück
+                            Salz | 1 Prise
+            Kapitel Zubereitung (nummerierte Liste, jeder Schritt: Absatz + Bild mit width 200):
+                            1. Mehl, Milch, Eier und Salz zu einem *glatten* Teig verrühren.
+                               bilder/teig-ruehren.svg · alt: Schüssel mit hellem Teig und einem Schneebesen
+                               Bildunterschrift: Abb. 2: Teig verrühren
+                            2. Den Teig **10 Minuten** rasten lassen.
+                               bilder/teig-rasten.svg · alt: Schüssel mit Teig neben einer Eieruhr auf 10 Minuten
+                               Bildunterschrift: Abb. 3: Teig rasten lassen
+                            3. In einer heißen Pfanne dünn herausbacken und füllen.
+                               bilder/herausbacken.svg · alt: Goldgelbe Palatschinke in einer dampfenden Pfanne
+                               Bildunterschrift: Abb. 4: In der Pfanne herausbacken
+            Aufklappen:     Nährwerte anzeigen
+                            Energie: 240 kcal pro Stück
+                            Eiweiß: 9 g
+
+        **fett** = <strong>, *kursiv* = <em>
+    -->
+
+    <!--
+        Komponente 4: ZUSATZINFOS (aside rechts, id="zusatz-info")
+        ==========================================================
+        Überschrift:        Küchen-Tipp
+        Absatz:             Teig immer **rasten** lassen. Mehr Tipps findest du bei Chefkoch.
+                            "Chefkoch" ist ein Link auf https://www.chefkoch.de/
+    -->
+
+    <!--
+        Komponente 5: FOOTER
+        ====================
+        1. Absatz:          &copy; 2026 Kochbuch der 2BHIF &bull; Nach oben   ("Nach oben" -> #top)
+        2. Absatz:          HTL Donaustadt
+                            Donaustadtstraße 45
+                            1220 Wien                (Zeilen mit <br> trennen)
+    -->
+</body>
+</html>

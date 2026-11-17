@@ -1,5 +1,7 @@
 # Zettelübung (10 Minuten): GET oder POST?
 
+> **Zugehörige HTML-Slide:** [L01.4.1 · HTTP](../../Skripten/L01.4.1-HTTP.html) – im Browser öffnen.
+
 ## Aufgabe 1 – Wie ist eine URL aufgebaut?
 Ordne jeden Teil der URL zu: ``Protokoll``, ``Host``, ``Pfad``, ``Query-String``, ``Fragment``.
 

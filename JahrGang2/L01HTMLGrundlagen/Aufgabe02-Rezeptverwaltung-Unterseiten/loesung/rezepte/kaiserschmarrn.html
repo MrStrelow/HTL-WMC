@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Kaiserschmarrn – Kochbuch der 2BHIF</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header id="top">
+        <h1>
+            Kochbuch der 2BHIF
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="../index.html">Startseite</a>
+                </li>
+                <li>
+                    <a href="../rezepte.html">Alle Rezepte</a>
+                </li>
+                <li>
+                    <a href="../einreichen.html">Rezept einreichen</a>
+                </li>
+            </ul>
+        </nav>
+        <form action="https://httpbin.org/post" method="POST">
+            <p>
+                <label for="benutzername">Benutzername:</label>
+                <input id="benutzername" type="text" name="benutzername" required>
+            </p>
+            <p>
+                <label for="passwort">Passwort:</label>
+                <input id="passwort" type="password" name="passwort" required>
+            </p>
+            <p>
+                <input id="angemeldet-bleiben" type="checkbox" name="angemeldet_bleiben" value="ja">
+                <label for="angemeldet-bleiben">Angemeldet bleiben</label>
+            </p>
+            <p>
+                <button type="submit">Anmelden</button>
+            </p>
+        </form>
+    </header>
+
+    <aside id="seiten-nav">
+        <h2>
+            Auf dieser Seite
+        </h2>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#zutaten">Zutaten</a>
+                </li>
+                <li>
+                    <a href="#zubereitung">Zubereitung</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <article id="rezept">
+            <h2>
+                Kaiserschmarrn
+            </h2>
+            <p>
+                Von <strong>Sarah</strong> aus der 2BHIF, <time datetime="2026-11-14">14. November 2026</time>
+            </p>
+            <p>
+                Kaiserschmarrn ist eine süße Hauptspeise oder ein großes Dessert. Zuerst findest du die Zutaten für vier Personen, danach die Zubereitung in drei Schritten.
+            </p>
+            <figure>
+                <img src="../bilder/kaiserschmarrn.svg" alt="Zerrissener Kaiserschmarrn mit Rosinen und Staubzucker" width="320">
+                <figcaption>
+                    Abb. 1: Kaiserschmarrn mit Zwetschkenröster
+                </figcaption>
+            </figure>
+            <section id="zutaten">
+                <h3>
+                    Zutaten
+                </h3>
+                <table>
+                    <tr>
+                        <th>
+                            Zutat
+                        </th>
+                        <th>
+                            Menge
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            Mehl
+                        </td>
+                        <td>
+                            150 g
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Milch
+                        </td>
+                        <td>
+                            250 ml
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Eier
+                        </td>
+                        <td>
+                            4 Stück
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Zucker
+                        </td>
+                        <td>
+                            2 EL
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Rosinen
+                        </td>
+                        <td>
+                            40 g
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Butter
+                        </td>
+                        <td>
+                            2 EL
+                        </td>
+                    </tr>
+                </table>
+            </section>
+            <section id="zubereitung">
+                <h3>
+                    Zubereitung
+                </h3>
+                <ol>
+                    <li>
+                        Eier trennen und die Dotter mit Milch und Mehl glatt verrühren.
+                    </li>
+                    <li>
+                        Eiklar mit Zucker <strong>steif</strong> schlagen und vorsichtig unterheben.
+                    </li>
+                    <li>
+                        In Butter backen, wenden, mit zwei Gabeln <em>zerreißen</em> und mit Staubzucker bestreuen.
+                    </li>
+                </ol>
+            </section>
+            <details>
+                <summary>
+                    Nährwerte anzeigen
+                </summary>
+                <ul>
+                    <li>
+                        Energie: 420 kcal pro Portion
+                    </li>
+                    <li>
+                        Eiweiß: 14 g
+                    </li>
+                </ul>
+            </details>
+            <p>
+                <a href="../kategorien/desserts.html">Zurück zu Desserts</a> &bull; <a href="../index.html">Zur Startseite</a>
+            </p>
+        </article>
+    </main>
+
+    <aside id="zusatz-info">
+        <h2>
+            Küchen-Tipp
+        </h2>
+        <p>
+            Mit <strong>Zwetschkenröster</strong> oder Apfelmus servieren.
+        </p>
+    </aside>
+
+    <footer>
+        <p>
+            &copy; 2026 Kochbuch der 2BHIF &bull; <a href="#top">Nach oben</a>
+        </p>
+        <p>
+            HTL Donaustadt<br>
+            Donaustadtstraße 45<br>
+            1220 Wien
+        </p>
+    </footer>
+</body>
+</html>

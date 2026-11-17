@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Hauptspeisen – Kochbuch der 2BHIF</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header id="top">
+        <h1>
+            Kochbuch der 2BHIF
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="../index.html">Startseite</a>
+                </li>
+                <li>
+                    <a href="../rezepte.html">Alle Rezepte</a>
+                </li>
+                <li>
+                    <a href="../einreichen.html">Rezept einreichen</a>
+                </li>
+            </ul>
+        </nav>
+        <form action="https://httpbin.org/post" method="POST">
+            <p>
+                <label for="benutzername">Benutzername:</label>
+                <input id="benutzername" type="text" name="benutzername" required>
+            </p>
+            <p>
+                <label for="passwort">Passwort:</label>
+                <input id="passwort" type="password" name="passwort" required>
+            </p>
+            <p>
+                <input id="angemeldet-bleiben" type="checkbox" name="angemeldet_bleiben" value="ja">
+                <label for="angemeldet-bleiben">Angemeldet bleiben</label>
+            </p>
+            <p>
+                <button type="submit">Anmelden</button>
+            </p>
+        </form>
+    </header>
+
+    <aside id="seiten-nav">
+        <h2>
+            Auf dieser Seite
+        </h2>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#wiener-schnitzel">Wiener Schnitzel</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <section id="rezepte">
+            <h2>
+                Hauptspeisen
+            </h2>
+            <p>
+                Die <strong>Klassiker</strong> der österreichischen Küche für Mittag und Abend.
+            </p>
+            <article id="wiener-schnitzel">
+                <h3>
+                    Wiener Schnitzel
+                </h3>
+                <figure>
+                    <img src="../bilder/schnitzel.svg" alt="Goldbraunes Schnitzel mit einer Zitronenscheibe" width="240">
+                    <figcaption>
+                        Wiener Schnitzel mit Zitrone
+                    </figcaption>
+                </figure>
+                <p>
+                    <strong>Dünn</strong> geklopft und <em>goldbraun</em> herausgebacken – am besten mit Erdäpfelsalat.
+                </p>
+                <p>
+                    Zubereitungszeit: <strong>40 Minuten</strong> &bull; Schwierigkeit: mittel
+                </p>
+                <p>
+                    <a href="../rezepte/wiener-schnitzel.html">Zum Rezept</a>
+                    <button type="button">Merken</button>
+                </p>
+            </article>
+        </section>
+    </main>
+
+    <aside id="zusatz-info">
+        <h2>
+            Küchen-Tipp
+        </h2>
+        <p>
+            Teig immer <strong>rasten</strong> lassen. Mehr Tipps findest du bei <a href="https://www.chefkoch.de/">Chefkoch</a>.
+        </p>
+    </aside>
+
+    <footer>
+        <p>
+            &copy; 2026 Kochbuch der 2BHIF &bull; <a href="#top">Nach oben</a>
+        </p>
+        <p>
+            HTL Donaustadt<br>
+            Donaustadtstraße 45<br>
+            1220 Wien
+        </p>
+    </footer>
+</body>
+</html>

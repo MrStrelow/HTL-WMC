@@ -105,10 +105,6 @@ body > footer a {
     color: #475569;
 }
 
-main section {
-    border-top: 1px solid #e2e8f0;
-}
-
 article {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
@@ -116,6 +112,18 @@ article {
     padding: 2px 16px 10px;
     margin: 12px 0;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Seiten ohne Rahmen (z. B. Tab "Grundidee"): die Beispiele nebeneinander */
+body:not(:has(> header)) {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-areas: none;
+    gap: 24px;
+}
+
+body > section,
+body > article {
+    margin-top: 12px;
 }
 
 figure {

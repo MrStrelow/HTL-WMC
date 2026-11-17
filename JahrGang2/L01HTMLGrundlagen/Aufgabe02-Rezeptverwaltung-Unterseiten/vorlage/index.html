@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Kochbuch der 2BHIF – Rezeptverwaltung</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="top">
+        <h1>
+            Kochbuch der 2BHIF
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="index.html">Startseite</a>
+                </li>
+                <li>
+                    <a href="rezepte.html">Alle Rezepte</a>
+                </li>
+                <li>
+                    <a href="einreichen.html">Rezept einreichen</a>
+                </li>
+            </ul>
+        </nav>
+        <form action="https://httpbin.org/post" method="POST">
+            <p>
+                <label for="benutzername">Benutzername:</label>
+                <input id="benutzername" type="text" name="benutzername" required>
+            </p>
+            <p>
+                <label for="passwort">Passwort:</label>
+                <input id="passwort" type="password" name="passwort" required>
+            </p>
+            <p>
+                <input id="angemeldet-bleiben" type="checkbox" name="angemeldet_bleiben" value="ja">
+                <label for="angemeldet-bleiben">Angemeldet bleiben</label>
+            </p>
+            <p>
+                <button type="submit">Anmelden</button>
+            </p>
+        </form>
+    </header>
+
+    <aside id="seiten-nav">
+        <h2>
+            Auf dieser Seite
+        </h2>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#suche">Rezeptsuche</a>
+                </li>
+                <li>
+                    <a href="#kategorien">Kategorien</a>
+                </li>
+                <li>
+                    <a href="#neue-rezepte">Neue Rezepte</a>
+                </li>
+                <li>
+                    <a href="#rezept-der-woche">Rezept der Woche</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <section id="suche">
+            <h2>
+                Rezeptsuche
+            </h2>
+            <form action="https://httpbin.org/get" method="GET">
+                <p>
+                    <label for="suchbegriff">Suchbegriff:</label>
+                    <input id="suchbegriff" type="search" name="q" placeholder="z. B. Palatschinken">
+                </p>
+                <p>
+                    <label for="kategorie">Kategorie:</label>
+                    <select id="kategorie" name="kategorie">
+                        <option value="alle">Alle Kategorien</option>
+                        <option value="hauptspeise">Hauptspeise</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="suppe">Suppe</option>
+                    </select>
+                </p>
+                <p>
+                    <button type="submit">Suchen</button>
+                </p>
+            </form>
+        </section>
+
+        <section id="kategorien">
+            <h2>
+                Kategorien
+            </h2>
+            <p>
+                Stöbere in unseren Rezepten nach <strong>Kategorie</strong>.
+            </p>
+            <figure>
+                <img src="bilder/kuerbiscremesuppe.svg" alt="Orange Kürbissuppe in einem weißen Teller" width="160">
+                <figcaption>
+                    <a href="kategorien/suppen.html">Suppen</a>
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="bilder/schnitzel.svg" alt="Goldbraunes Schnitzel mit einer Zitronenscheibe" width="160">
+                <figcaption>
+                    <a href="kategorien/hauptspeisen.html">Hauptspeisen</a>
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="bilder/apfelstrudel.svg" alt="Apfelstrudel mit Staubzucker auf einem Teller" width="160">
+                <figcaption>
+                    <a href="kategorien/desserts.html">Desserts</a>
+                </figcaption>
+            </figure>
+        </section>
+
+        <section id="neue-rezepte">
+            <h2>
+                Neue Rezepte
+            </h2>
+            <article>
+                <h3>
+                    Kürbiscremesuppe
+                </h3>
+                <figure>
+                    <img src="bilder/kuerbiscremesuppe.svg" alt="Orange Kürbissuppe in einem weißen Teller" width="240">
+                    <figcaption>
+                        Kürbiscremesuppe mit Kürbiskernen
+                    </figcaption>
+                </figure>
+                <p>
+                    Eine <strong>cremige</strong> Suppe für kalte Herbsttage – fertig in <em>30 Minuten</em>.
+                </p>
+                <p>
+                    Veröffentlicht am <time datetime="2026-11-10">10. November 2026</time>
+                </p>
+                <p>
+                    <a href="rezepte/kuerbiscremesuppe.html">Zum Rezept</a>
+                    <button type="button">Merken</button>
+                </p>
+            </article>
+            <article>
+                <h3>
+                    Kaiserschmarrn
+                </h3>
+                <figure>
+                    <img src="bilder/kaiserschmarrn.svg" alt="Zerrissener Kaiserschmarrn mit Rosinen und Staubzucker" width="240">
+                    <figcaption>
+                        Kaiserschmarrn mit Zwetschkenröster
+                    </figcaption>
+                </figure>
+                <p>
+                    Der <strong>österreichische Klassiker</strong> mit Rosinen und Zwetschkenröster.
+                </p>
+                <p>
+                    Veröffentlicht am <time datetime="2026-11-14">14. November 2026</time>
+                </p>
+                <p>
+                    <a href="rezepte/kaiserschmarrn.html">Zum Rezept</a>
+                    <button type="button">Merken</button>
+                </p>
+            </article>
+            <article>
+                <h3>
+                    Wiener Schnitzel
+                </h3>
+                <figure>
+                    <img src="bilder/schnitzel.svg" alt="Goldbraunes Schnitzel mit einer Zitronenscheibe" width="240">
+                    <figcaption>
+                        Wiener Schnitzel mit Zitrone
+                    </figcaption>
+                </figure>
+                <p>
+                    <strong>Dünn</strong> geklopft und <em>goldbraun</em> herausgebacken – am besten mit Erdäpfelsalat.
+                </p>
+                <p>
+                    Veröffentlicht am <time datetime="2026-11-15">15. November 2026</time>
+                </p>
+                <p>
+                    <a href="rezepte/wiener-schnitzel.html">Zum Rezept</a>
+                    <button type="button">Merken</button>
+                </p>
+            </article>
+            <article>
+                <h3>
+                    Apfelstrudel
+                </h3>
+                <figure>
+                    <img src="bilder/apfelstrudel.svg" alt="Apfelstrudel mit Staubzucker auf einem Teller" width="240">
+                    <figcaption>
+                        Apfelstrudel mit Staubzucker
+                    </figcaption>
+                </figure>
+                <p>
+                    Hauchdünner Teig, viel Apfel und <em>Zimt</em> – der <strong>Lieblingsnachtisch</strong> der Klasse.
+                </p>
+                <p>
+                    Veröffentlicht am <time datetime="2026-11-16">16. November 2026</time>
+                </p>
+                <p>
+                    <a href="rezepte/apfelstrudel.html">Zum Rezept</a>
+                    <button type="button">Merken</button>
+                </p>
+            </article>
+        </section>
+
+        <article id="rezept-der-woche">
+            <h2>
+                Rezept der Woche: Palatschinken
+            </h2>
+            <p>
+                Von <strong>Lena</strong> aus der 2BHIF, <time datetime="2026-11-17">17. November 2026</time>
+            </p>
+            <p>
+                Palatschinken sind dünne Pfannkuchen und schnell gemacht.
+                Zuerst findest du die Zutaten für vier Personen, danach die Zubereitung Schritt für Schritt – zu jedem Schritt gibt es ein Bild.
+            </p>
+            <figure>
+                <img src="bilder/palatschinken.svg" alt="Drei gefüllte Palatschinken auf einem weißen Teller" width="320">
+                <figcaption>
+                    Abb. 1: Palatschinken mit Marillenmarmelade
+                </figcaption>
+            </figure>
+            <section>
+                <h3>
+                    Zutaten
+                </h3>
+                <table>
+                    <tr>
+                        <th>
+                            Zutat
+                        </th>
+                        <th>
+                            Menge
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            Mehl
+                        </td>
+                        <td>
+                            200 g
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Milch
+                        </td>
+                        <td>
+                            400 ml
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Eier
+                        </td>
+                        <td>
+                            3 Stück
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Salz
+                        </td>
+                        <td>
+                            1 Prise
+                        </td>
+                    </tr>
+                </table>
+            </section>
+            <section>
+                <h3>
+                    Zubereitung
+                </h3>
+                <ol>
+                    <li>
+                        <p>
+                            Mehl, Milch, Eier und Salz zu einem <em>glatten</em> Teig verrühren.
+                        </p>
+                        <figure>
+                            <img src="bilder/teig-ruehren.svg" alt="Schüssel mit hellem Teig und einem Schneebesen" width="200">
+                            <figcaption>
+                                Abb. 2: Teig verrühren
+                            </figcaption>
+                        </figure>
+                    </li>
+                    <li>
+                        <p>
+                            Den Teig <strong>10 Minuten</strong> rasten lassen.
+                        </p>
+                        <figure>
+                            <img src="bilder/teig-rasten.svg" alt="Schüssel mit Teig neben einer Eieruhr auf 10 Minuten" width="200">
+                            <figcaption>
+                                Abb. 3: Teig rasten lassen
+                            </figcaption>
+                        </figure>
+                    </li>
+                    <li>
+                        <p>
+                            In einer heißen Pfanne dünn herausbacken und füllen.
+                        </p>
+                        <figure>
+                            <img src="bilder/herausbacken.svg" alt="Goldgelbe Palatschinke in einer dampfenden Pfanne" width="200">
+                            <figcaption>
+                                Abb. 4: In der Pfanne herausbacken
+                            </figcaption>
+                        </figure>
+                    </li>
+                </ol>
+            </section>
+            <details>
+                <summary>
+                    Nährwerte anzeigen
+                </summary>
+                <ul>
+                    <li>
+                        Energie: 240 kcal pro Stück
+                    </li>
+                    <li>
+                        Eiweiß: 9 g
+                    </li>
+                </ul>
+            </details>
+        </article>
+    </main>
+
+    <aside id="zusatz-info">
+        <h2>
+            Küchen-Tipp
+        </h2>
+        <p>
+            Teig immer <strong>rasten</strong> lassen. Mehr Tipps findest du bei <a href="https://www.chefkoch.de/">Chefkoch</a>.
+        </p>
+    </aside>
+
+    <footer>
+        <p>
+            &copy; 2026 Kochbuch der 2BHIF &bull; <a href="#top">Nach oben</a>
+        </p>
+        <p>
+            HTL Donaustadt<br>
+            Donaustadtstraße 45<br>
+            1220 Wien
+        </p>
+    </footer>
+</body>
+</html>

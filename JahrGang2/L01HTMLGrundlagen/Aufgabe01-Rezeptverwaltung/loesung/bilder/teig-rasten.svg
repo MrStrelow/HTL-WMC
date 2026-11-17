@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <title>Teig rastet neben einer Eieruhr (Illustration)</title>
+  <rect width="320" height="200" fill="#f5f3ff"/>
+  <path d="M70 110 h120 q-8 55 -60 55 q-52 0 -60 -55 z" fill="#94a3b8"/>
+  <ellipse cx="130" cy="110" rx="60" ry="12" fill="#fef9c3"/>
+  <circle cx="240" cy="110" r="38" fill="#ffffff" stroke="#7c3aed" stroke-width="5"/>
+  <line x1="240" y1="110" x2="240" y2="84" stroke="#7c3aed" stroke-width="4" stroke-linecap="round"/>
+  <line x1="240" y1="110" x2="258" y2="118" stroke="#7c3aed" stroke-width="4" stroke-linecap="round"/>
+  <text x="240" y="168" font-family="Arial, sans-serif" font-size="16" fill="#4c1d95" text-anchor="middle">10 min</text>
+</svg>

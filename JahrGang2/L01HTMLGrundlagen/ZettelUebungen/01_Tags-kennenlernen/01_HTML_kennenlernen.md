@@ -1,5 +1,7 @@
 # Zettelübung: Markdown und HTML5-tags
 
+> **Zugehörige HTML-Slide:** [L01.1 · HTML-Grundlagen](../../Skripten/L01.1-HTML-Ueberblick.html) – im Browser öffnen.
+
 ## Aufgabe 1
 Schreibe einen HTML Code der den Titel der Website setzt und eine `Überschrift` `Willkommen!` sowie einen `Paragraphen` der einen *sinnlosen* Text beinhaltet soll.
 Verwende dazu [folgenden Link](https://www.lipsum.com/feed/html).

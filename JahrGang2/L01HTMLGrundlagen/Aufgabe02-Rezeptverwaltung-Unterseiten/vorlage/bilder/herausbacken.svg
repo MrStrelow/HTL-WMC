@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <title>Palatschinke in einer Pfanne (Illustration)</title>
+  <rect width="320" height="200" fill="#fef2f2"/>
+  <ellipse cx="150" cy="115" rx="100" ry="45" fill="#1f2937"/>
+  <ellipse cx="150" cy="110" rx="88" ry="38" fill="#374151"/>
+  <ellipse cx="150" cy="108" rx="70" ry="28" fill="#fbbf24"/>
+  <rect x="245" y="105" width="70" height="14" rx="7" fill="#111827"/>
+  <path d="M120 60 q10 -14 0 -28 M150 56 q10 -14 0 -28 M180 60 q10 -14 0 -28" fill="none" stroke="#9ca3af" stroke-width="4" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Rezept einreichen – Kochbuch der 2BHIF</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!--
+        Komponenten Header, Zusatzinfos (außer Tipp) und Footer: wie in index.html – kopieren!
+        Achtung Pfade: Diese Seite liegt im Hauptordner – Pfade wie in index.html.
+    -->
+
+    <!--
+        SEITENNAVIGATION (aside id="seiten-nav"): Auf dieser Seite
+            Formular -> #formular · Hinweise -> #hinweise
+
+        MAIN
+        Kapitel section id="formular"
+            Überschrift: Rezept einreichen
+            Absatz: Teile dein **Lieblingsrezept** mit der Klasse. Felder mit Pflichtangaben musst du ausfüllen.
+            Formular: POST an https://httpbin.org/post
+                Gruppe (fieldset) "Über dich":
+                    Dein Name:            type="text",   name="name",   id="name",   required
+                    E-Mail-Adresse:       type="email",  name="email",  id="email",  required
+                Gruppe (fieldset) "Dein Rezept":
+                    Name des Rezepts:     type="text",   name="titel",  id="titel",  required
+                    Kategorie:            select, name="kategorie", id="kat": Suppe (suppe), Hauptspeise (hauptspeise), Dessert (dessert)
+                    Zubereitungszeit in Minuten:  type="number", name="zeit", id="zeit", min="1"
+                    Portionen:            type="number", name="portionen", id="portionen", min="1", value="4"
+                    Gekocht am:           type="date",   name="datum",  id="datum"
+                    Das Rezept ist vegetarisch.   type="checkbox", name="vegetarisch", value="ja", id="vegetarisch"
+                Gruppe (fieldset) "Schwierigkeit":
+                    Radio-Buttons, name="schwierigkeit": leicht (id s-leicht, checked), mittel (id s-mittel), schwer (id s-schwer)
+                Zutaten (eine pro Zeile):     textarea, name="zutaten", id="zutaten", rows="5"
+                Zubereitung:                  textarea, name="zubereitung", id="schritte", rows="6"
+                Ich stimme der Veröffentlichung meines Rezepts zu.   type="checkbox", name="datenschutz", value="ja", id="datenschutz", required
+                Button: Rezept einreichen
+
+        Kapitel section id="hinweise"
+            Überschrift: Hinweise
+            Liste: Schreibe jede Zutat in eine **eigene Zeile**.
+                   Beschreibe die Zubereitung in *kurzen* Schritten.
+                   Wir prüfen jedes Rezept, bevor es veröffentlicht wird.
+
+        ZUSATZINFOS: Küchen-Tipp
+            Warum **POST**? Dein Rezept wird *gespeichert* – die Daten gehören in den Body, nicht in die URL.
+    -->
+</body>
+</html>

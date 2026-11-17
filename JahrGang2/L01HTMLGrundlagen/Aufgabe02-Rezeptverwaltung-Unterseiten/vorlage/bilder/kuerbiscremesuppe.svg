@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <title>Kürbiscremesuppe in einer Schüssel (Illustration)</title>
+  <rect width="320" height="200" fill="#fff7ed"/>
+  <ellipse cx="160" cy="120" rx="125" ry="60" fill="#ffffff" stroke="#cbd5e1" stroke-width="4"/>
+  <ellipse cx="160" cy="112" rx="88" ry="38" fill="#ea580c"/>
+  <ellipse cx="160" cy="108" rx="80" ry="32" fill="#fb923c"/>
+  <path d="M120 104 q40 -14 80 0" fill="none" stroke="#fef3c7" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="150" cy="100" r="4" fill="#166534"/><circle cx="168" cy="98" r="4" fill="#166534"/><circle cx="182" cy="104" r="4" fill="#166534"/>
+</svg>

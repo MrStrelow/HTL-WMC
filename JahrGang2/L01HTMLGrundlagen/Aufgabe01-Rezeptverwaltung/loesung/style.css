@@ -1,0 +1,228 @@
+/* =========================================================
+   style.css – Kochbuch der 2BHIF
+   Schritt 0: Grundregeln (schon vorgegeben)
+   Die weiteren Blöcke kopierst du nach jeder fertigen
+   Komponente aus der Angabe ans Ende dieser Datei.
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 16px;
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+    color: #1f2937;
+    background: #fff7ed;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ---------- Komponente 1: Header ---------- */
+header {
+    background: #9a3412;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+}
+
+header h1 {
+    margin: 0 0 8px;
+}
+
+#haupt-nav ul {
+    display: flex;
+    gap: 16px;
+    list-style: none;
+    margin: 0 0 12px;
+    padding: 0;
+}
+
+#haupt-nav a {
+    color: #fed7aa;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+header form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+header form p {
+    margin: 0;
+}
+
+input,
+select {
+    font: inherit;
+    padding: 6px 8px;
+    border: 1px solid #fdba74;
+    border-radius: 6px;
+}
+
+button {
+    font: inherit;
+    font-weight: bold;
+    color: white;
+    background: #ea580c;
+    border: 0;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #c2410c;
+}
+
+/* ---------- Komponente 2: Seitennavigation ---------- */
+#seiten-nav {
+    background: #ffedd5;
+    border-radius: 12px;
+    padding: 8px 16px;
+}
+
+#seiten-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+#seiten-nav li {
+    margin: 8px 0;
+}
+
+#seiten-nav a {
+    color: #9a3412;
+    text-decoration: none;
+}
+
+#seiten-nav a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Komponente 3: Main ---------- */
+main {
+    background: white;
+    border-radius: 12px;
+    padding: 8px 24px 24px;
+}
+
+main section {
+    border-top: 2px solid #fed7aa;
+    padding-top: 8px;
+}
+
+#kategorien figure {
+    display: inline-block;
+    margin: 8px 16px 8px 0;
+    text-align: center;
+}
+
+#neue-rezepte article {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 12px;
+    padding: 8px 16px;
+    margin: 16px 0;
+}
+
+figure {
+    margin: 8px 0;
+}
+
+figcaption {
+    color: #78716c;
+    font-size: 0.9em;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #fdba74;
+    padding: 6px 12px;
+    text-align: left;
+}
+
+th {
+    background: #ffedd5;
+}
+
+details {
+    border: 1px solid #fdba74;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* ---------- Komponente 4: Zusatzinfos ---------- */
+#zusatz-info {
+    background: #fef3c7;
+    border-radius: 12px;
+    padding: 8px 16px;
+}
+
+/* ---------- Komponente 5: Footer ---------- */
+footer {
+    text-align: center;
+    color: #78716c;
+    font-size: 0.9em;
+}
+
+footer a {
+    color: #9a3412;
+}
+
+/* ---------- Zum Schluss: das 3-Spalten-Layout ---------- */
+body {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr) 220px;
+    grid-template-areas:
+        "kopf  kopf  kopf"
+        "links mitte rechts"
+        "fuss  fuss  fuss";
+    gap: 16px;
+    align-items: start;
+}
+
+header {
+    grid-area: kopf;
+}
+
+#seiten-nav {
+    grid-area: links;
+}
+
+main {
+    grid-area: mitte;
+}
+
+#zusatz-info {
+    grid-area: rechts;
+}
+
+footer {
+    grid-area: fuss;
+}
+
+/* Schmaler Bildschirm: alles wieder untereinander */
+@media (max-width: 800px) {
+    body {
+        grid-template-columns: 1fr;
+        grid-template-areas: "kopf" "links" "mitte" "rechts" "fuss";
+    }
+}

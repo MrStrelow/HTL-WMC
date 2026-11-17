@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <title>Kaiserschmarrn mit Staubzucker (Illustration)</title>
+  <rect width="320" height="200" fill="#fefce8"/>
+  <ellipse cx="160" cy="120" rx="125" ry="60" fill="#ffffff" stroke="#cbd5e1" stroke-width="4"/>
+  <polygon points="100,120 130,92 160,118" fill="#d97706"/>
+  <polygon points="140,90 175,80 190,110" fill="#f59e0b"/>
+  <polygon points="170,118 205,96 220,124" fill="#d97706"/>
+  <polygon points="125,128 160,108 175,132" fill="#f59e0b"/>
+  <circle cx="140" cy="104" r="3" fill="#ffffff"/><circle cx="180" cy="100" r="3" fill="#ffffff"/><circle cx="160" cy="122" r="3" fill="#ffffff"/>
+  <circle cx="198" cy="112" r="5" fill="#7c2d12"/><circle cx="118" cy="118" r="5" fill="#7c2d12"/>
+</svg>

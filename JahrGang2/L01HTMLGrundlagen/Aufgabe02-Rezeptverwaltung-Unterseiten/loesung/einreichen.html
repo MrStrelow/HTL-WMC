@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Rezept einreichen – Kochbuch der 2BHIF</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="top">
+        <h1>
+            Kochbuch der 2BHIF
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="index.html">Startseite</a>
+                </li>
+                <li>
+                    <a href="rezepte.html">Alle Rezepte</a>
+                </li>
+                <li>
+                    <a href="einreichen.html">Rezept einreichen</a>
+                </li>
+            </ul>
+        </nav>
+        <form action="https://httpbin.org/post" method="POST">
+            <p>
+                <label for="benutzername">Benutzername:</label>
+                <input id="benutzername" type="text" name="benutzername" required>
+            </p>
+            <p>
+                <label for="passwort">Passwort:</label>
+                <input id="passwort" type="password" name="passwort" required>
+            </p>
+            <p>
+                <input id="angemeldet-bleiben" type="checkbox" name="angemeldet_bleiben" value="ja">
+                <label for="angemeldet-bleiben">Angemeldet bleiben</label>
+            </p>
+            <p>
+                <button type="submit">Anmelden</button>
+            </p>
+        </form>
+    </header>
+
+    <aside id="seiten-nav">
+        <h2>
+            Auf dieser Seite
+        </h2>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#formular">Formular</a>
+                </li>
+                <li>
+                    <a href="#hinweise">Hinweise</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <section id="formular">
+            <h2>
+                Rezept einreichen
+            </h2>
+            <p>
+                Teile dein <strong>Lieblingsrezept</strong> mit der Klasse. Felder mit Pflichtangaben musst du ausfüllen.
+            </p>
+            <form action="https://httpbin.org/post" method="POST">
+                <fieldset>
+                    <legend>
+                        Über dich
+                    </legend>
+                    <p>
+                        <label for="name">Dein Name:</label>
+                        <input id="name" type="text" name="name" required>
+                    </p>
+                    <p>
+                        <label for="email">E-Mail-Adresse:</label>
+                        <input id="email" type="email" name="email" required>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        Dein Rezept
+                    </legend>
+                    <p>
+                        <label for="titel">Name des Rezepts:</label>
+                        <input id="titel" type="text" name="titel" required>
+                    </p>
+                    <p>
+                        <label for="kat">Kategorie:</label>
+                        <select id="kat" name="kategorie">
+                            <option value="suppe">Suppe</option>
+                            <option value="hauptspeise">Hauptspeise</option>
+                            <option value="dessert">Dessert</option>
+                        </select>
+                    </p>
+                    <p>
+                        <label for="zeit">Zubereitungszeit in Minuten:</label>
+                        <input id="zeit" type="number" name="zeit" min="1">
+                    </p>
+                    <p>
+                        <label for="portionen">Portionen:</label>
+                        <input id="portionen" type="number" name="portionen" min="1" value="4">
+                    </p>
+                    <p>
+                        <label for="datum">Gekocht am:</label>
+                        <input id="datum" type="date" name="datum">
+                    </p>
+                    <p>
+                        <input id="vegetarisch" type="checkbox" name="vegetarisch" value="ja">
+                        <label for="vegetarisch">Das Rezept ist vegetarisch.</label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        Schwierigkeit
+                    </legend>
+                    <p>
+                        <input id="s-leicht" type="radio" name="schwierigkeit" value="leicht" checked>
+                        <label for="s-leicht">leicht</label>
+                    </p>
+                    <p>
+                        <input id="s-mittel" type="radio" name="schwierigkeit" value="mittel">
+                        <label for="s-mittel">mittel</label>
+                    </p>
+                    <p>
+                        <input id="s-schwer" type="radio" name="schwierigkeit" value="schwer">
+                        <label for="s-schwer">schwer</label>
+                    </p>
+                </fieldset>
+                <p>
+                    <label for="zutaten">Zutaten (eine pro Zeile):</label>
+                    <textarea id="zutaten" name="zutaten" rows="5"></textarea>
+                </p>
+                <p>
+                    <label for="schritte">Zubereitung:</label>
+                    <textarea id="schritte" name="zubereitung" rows="6"></textarea>
+                </p>
+                <p>
+                    <input id="datenschutz" type="checkbox" name="datenschutz" value="ja" required>
+                    <label for="datenschutz">Ich stimme der Veröffentlichung meines Rezepts zu.</label>
+                </p>
+                <p>
+                    <button type="submit">Rezept einreichen</button>
+                </p>
+            </form>
+        </section>
+        <section id="hinweise">
+            <h2>
+                Hinweise
+            </h2>
+            <ul>
+                <li>
+                    Schreibe jede Zutat in eine <strong>eigene Zeile</strong>.
+                </li>
+                <li>
+                    Beschreibe die Zubereitung in <em>kurzen</em> Schritten.
+                </li>
+                <li>
+                    Wir prüfen jedes Rezept, bevor es veröffentlicht wird.
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <aside id="zusatz-info">
+        <h2>
+            Küchen-Tipp
+        </h2>
+        <p>
+            Warum <strong>POST</strong>? Dein Rezept wird <em>gespeichert</em> – die Daten gehören in den Body, nicht in die URL.
+        </p>
+    </aside>
+
+    <footer>
+        <p>
+            &copy; 2026 Kochbuch der 2BHIF &bull; <a href="#top">Nach oben</a>
+        </p>
+        <p>
+            HTL Donaustadt<br>
+            Donaustadtstraße 45<br>
+            1220 Wien
+        </p>
+    </footer>
+</body>
+</html>

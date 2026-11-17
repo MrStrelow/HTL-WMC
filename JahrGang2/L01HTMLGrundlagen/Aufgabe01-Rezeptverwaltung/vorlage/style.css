@@ -1,0 +1,24 @@
+/* =========================================================
+   style.css – Kochbuch der 2BHIF
+   Schritt 0: Grundregeln (schon vorgegeben)
+   Die weiteren Blöcke kopierst du nach jeder fertigen
+   Komponente aus der Angabe ans Ende dieser Datei.
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 16px;
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+    color: #1f2937;
+    background: #fff7ed;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}

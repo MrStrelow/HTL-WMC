@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Kürbiscremesuppe – Kochbuch der 2BHIF</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header id="top">
+        <h1>
+            Kochbuch der 2BHIF
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="../index.html">Startseite</a>
+                </li>
+                <li>
+                    <a href="../rezepte.html">Alle Rezepte</a>
+                </li>
+                <li>
+                    <a href="../einreichen.html">Rezept einreichen</a>
+                </li>
+            </ul>
+        </nav>
+        <form action="https://httpbin.org/post" method="POST">
+            <p>
+                <label for="benutzername">Benutzername:</label>
+                <input id="benutzername" type="text" name="benutzername" required>
+            </p>
+            <p>
+                <label for="passwort">Passwort:</label>
+                <input id="passwort" type="password" name="passwort" required>
+            </p>
+            <p>
+                <input id="angemeldet-bleiben" type="checkbox" name="angemeldet_bleiben" value="ja">
+                <label for="angemeldet-bleiben">Angemeldet bleiben</label>
+            </p>
+            <p>
+                <button type="submit">Anmelden</button>
+            </p>
+        </form>
+    </header>
+
+    <aside id="seiten-nav">
+        <h2>
+            Auf dieser Seite
+        </h2>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#zutaten">Zutaten</a>
+                </li>
+                <li>
+                    <a href="#zubereitung">Zubereitung</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <article id="rezept">
+            <h2>
+                Kürbiscremesuppe
+            </h2>
+            <p>
+                Von <strong>Jonas</strong> aus der 2BHIF, <time datetime="2026-11-10">10. November 2026</time>
+            </p>
+            <p>
+                Diese Suppe wärmt an kalten Tagen und braucht nur wenige Zutaten. Zuerst findest du die Zutaten für vier Personen, danach die Zubereitung in drei Schritten.
+            </p>
+            <figure>
+                <img src="../bilder/kuerbiscremesuppe.svg" alt="Orange Kürbissuppe in einem weißen Teller" width="320">
+                <figcaption>
+                    Abb. 1: Kürbiscremesuppe mit Kürbiskernen
+                </figcaption>
+            </figure>
+            <section id="zutaten">
+                <h3>
+                    Zutaten
+                </h3>
+                <table>
+                    <tr>
+                        <th>
+                            Zutat
+                        </th>
+                        <th>
+                            Menge
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            Hokkaido-Kürbis
+                        </td>
+                        <td>
+                            800 g
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Zwiebel
+                        </td>
+                        <td>
+                            1 Stück
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Gemüsesuppe
+                        </td>
+                        <td>
+                            750 ml
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Schlagobers
+                        </td>
+                        <td>
+                            125 ml
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Kürbiskerne
+                        </td>
+                        <td>
+                            2 EL
+                        </td>
+                    </tr>
+                </table>
+            </section>
+            <section id="zubereitung">
+                <h3>
+                    Zubereitung
+                </h3>
+                <ol>
+                    <li>
+                        Kürbis und Zwiebel würfeln und in etwas Öl <em>anrösten</em>.
+                    </li>
+                    <li>
+                        Mit der Gemüsesuppe aufgießen und <strong>20 Minuten</strong> kochen lassen.
+                    </li>
+                    <li>
+                        Pürieren, Schlagobers einrühren und mit Kürbiskernen servieren.
+                    </li>
+                </ol>
+            </section>
+            <details>
+                <summary>
+                    Nährwerte anzeigen
+                </summary>
+                <ul>
+                    <li>
+                        Energie: 180 kcal pro Teller
+                    </li>
+                    <li>
+                        Eiweiß: 4 g
+                    </li>
+                </ul>
+            </details>
+            <p>
+                <a href="../kategorien/suppen.html">Zurück zu Suppen</a> &bull; <a href="../index.html">Zur Startseite</a>
+            </p>
+        </article>
+    </main>
+
+    <aside id="zusatz-info">
+        <h2>
+            Küchen-Tipp
+        </h2>
+        <p>
+            Der Hokkaido-Kürbis muss <strong>nicht geschält</strong> werden – die Schale wird beim Kochen weich.
+        </p>
+    </aside>
+
+    <footer>
+        <p>
+            &copy; 2026 Kochbuch der 2BHIF &bull; <a href="#top">Nach oben</a>
+        </p>
+        <p>
+            HTL Donaustadt<br>
+            Donaustadtstraße 45<br>
+            1220 Wien
+        </p>
+    </footer>
+</body>
+</html>

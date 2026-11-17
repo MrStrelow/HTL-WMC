@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <title>Wiener Schnitzel mit Zitrone (Illustration)</title>
+  <rect width="320" height="200" fill="#f0fdf4"/>
+  <ellipse cx="160" cy="120" rx="125" ry="60" fill="#ffffff" stroke="#cbd5e1" stroke-width="4"/>
+  <ellipse cx="150" cy="116" rx="80" ry="36" fill="#b45309"/>
+  <ellipse cx="150" cy="112" rx="74" ry="31" fill="#f59e0b"/>
+  <circle cx="232" cy="112" r="18" fill="#fde047" stroke="#ca8a04" stroke-width="3"/>
+  <path d="M232 94 v36 M214 112 h36" stroke="#ca8a04" stroke-width="2"/>
+</svg>

@@ -53,7 +53,7 @@
         .hx-inspect .ln { display: flex; gap: 10px; white-space: pre-wrap; word-break: break-all; padding: 1px 4px; border-radius: 4px; }
         .hx-inspect .tag { flex: 0 0 120px; font-family: system-ui, sans-serif; font-size: 0.72rem; color: var(--muted); text-align: right; padding-top: 2px; }
         .p-start { color: #93c5fd; } .p-header { color: #c4b5fd; } .p-blank { color: #475569; } .p-body { color: #86efac; }
-        .p-proto { color: #f9a8d4; } .p-host { color: #93c5fd; } .p-port { color: #c4b5fd; } .p-path { color: #fde68a; } .p-query { color: #86efac; } .p-frag { color: #fca5a5; }
+        .p-proto { color: #f9a8d4; } .p-host, .p-dot { color: #93c5fd; } .p-sub { color: #7dd3fc; } .p-sld { color: #a5b4fc; } .p-tld { color: #60a5fa; } .p-port { color: #c4b5fd; } .p-path { color: #fde68a; } .p-query { color: #86efac; } .p-frag { color: #fca5a5; }
         .hx-inspect .hl { background: rgba(245, 158, 11, .18); outline: 1px solid rgba(245, 158, 11, .6); }
         .hx-legend span { white-space: nowrap; }
 
@@ -142,7 +142,11 @@ const START = `<h4>HTL Lernportal</h4><p>Willkommen! Lorem ipsum dolor sit amet.
 const REQ_START = [["start", "GET /index.html HTTP/1.1"], ["header", "Host: lernportal.htl.at"], ["header", "Accept: text/html"], ["blank", ""], ["body", "(leer)"]];
 const RES_START = [["start", "HTTP/1.1 200 OK"], ["header", "Content-Type: text/html; charset=UTF-8"], ["header", "Content-Length: 1532"], ["blank", ""],
     ["body", "<!DOCTYPE html>"], ["body", "<html lang=\"de\">"], ["body", "    …  (genau der Inhalt der Datei index.html)"], ["body", "</html>"]];
-const RES_404 = [["start", "HTTP/1.1 404 Not Found"], ["header", "Content-Type: text/html; charset=UTF-8"], ["blank", ""], ["body", "<h1>Seite nicht gefunden</h1>"]];
+const REQ_404 = [["start", "GET /gibtsnicht.html HTTP/1.1"], ["header", "Host: lernportal.htl.at"], ["header", "Accept: text/html"], ["blank", ""], ["body", "(leer)"]];
+const RES_404 = [["start", "HTTP/1.1 404 Not Found"], ["header", "Content-Type: text/html; charset=UTF-8"], ["header", "Content-Length: 236"], ["blank", ""],
+    ["body", "<!DOCTYPE html>"], ["body", "<html lang=\"de\">"], ["body", "<head>"], ["body", "    <title>404 – Seite nicht gefunden</title>"], ["body", "</head>"], ["body", "<body>"],
+    ["body", "    <h4>"], ["body", "        Seite nicht gefunden"], ["body", "    </h4>"], ["body", "    <p>"], ["body", "        Die Adresse /gibtsnicht.html gibt es auf diesem Server nicht."], ["body", "    </p>"], ["body", "</body>"], ["body", "</html>"]];
+const SEITE_404 = `<h4>Seite nicht gefunden</h4><p>Die Adresse /gibtsnicht.html gibt es auf diesem Server nicht.</p>`;
 const REQ_GET = [["start", "GET /search?q=htl HTTP/1.1"], ["header", "Host: lernportal.htl.at"], ["header", "Accept: text/html"], ["blank", ""], ["body", "(leer – bei GET gibt es keinen Body)"]];
 const RES_GET = [["start", "HTTP/1.1 200 OK"], ["header", "Content-Type: text/html; charset=UTF-8"], ["header", "Content-Length: 412"], ["blank", ""],
     ["body", "<!DOCTYPE html>"], ["body", "<html lang=\"de\">"], ["body", "<head>"], ["body", "    <title>Suche – HTL Lernportal</title>"], ["body", "</head>"], ["body", "<body>"],
@@ -151,8 +155,12 @@ const RES_GET = [["start", "HTTP/1.1 200 OK"], ["header", "Content-Type: text/ht
 const REQ_POST = [["start", "POST /anmeldung HTTP/1.1"], ["header", "Host: lernportal.htl.at"], ["header", "Content-Type: application/x-www-form-urlencoded"], ["header", "Content-Length: 50"], ["blank", ""], ["body", "titel=Wetterstation&email=max%40htl.at&abteilung=if"]];
 const RES_POST = [["start", "HTTP/1.1 200 OK"], ["header", "Content-Type: text/html; charset=UTF-8"], ["blank", ""], ["body", "<h4>Danke für die Anmeldung!</h4> …"]];
 
-const URL_TEILE = [["proto", "https://"], ["host", "lernportal.htl.at"], ["port", ":443"], ["path", "/search"], ["query", "?q=htl&seite=2"], ["frag", "#treffer"]];
-const URL_NAMEN = { proto: "Protokoll", host: "Host (Server)", port: "Port", path: "Pfad (Ressource)", query: "Query-String", frag: "Fragment (Anker)" };
+const URL_TEILE = [["proto", "https://"], ["sub", "lernportal"], ["dot", "."], ["sld", "htl"], ["dot", "."], ["tld", "at"], ["port", ":443"], ["path", "/search"], ["query", "?q=htl"], ["query2", "&seite=2"], ["frag", "#treffer"]];
+const URL_NAMEN = { proto: "Protokoll", sub: "Subdomain", sld: "Domain (Second-Level)", tld: "Top-Level-Domain", dot: "", port: "Port", path: "Pfad (Ressource)", query: "Query-String", query2: "weiterer Parameter", frag: "Fragment (Anker)" };
+const HOST = ["sub", "dot", "sld", "tld"];
+const SUCHSEITE = `<h4>HTL Lernportal – Suche</h4><div class="row">Suchbegriff: <span class="fake-input">&nbsp;</span><span class="fake-btn">Suchen</span></div>`;
+const ERGEBNIS2 = `<h4>Suchergebnisse für „htl“ – Seite 2</h4><ul><li>HTL Lernportal – Modul CSS</li><li>HTL Lernportal – Formulare</li></ul>`;
+const ERGEBNIS2_TREFFER = `<h4>Suchergebnisse für „htl“ – Seite 2</h4><ul><li>HTL Lernportal – Modul CSS</li><li style="background:#fde047;outline:2px solid #f59e0b;border-radius:4px">⭐ id="treffer": HTL Lernportal – Formulare</li></ul>`;
 const TEIL_NAMEN = { start: "Start-/Statuszeile", header: "Header", blank: "Leerzeile", body: "Body" };
 
 const DB_LEER = { title: "Datenbank: Anmeldungen", rows: [] };
@@ -188,36 +196,71 @@ const TABS = [
             { title: "Der Server schickt eine Response (Antwort)",
               text: "Die **Response** ist genauso aufgebaut: **Statuszeile** mit **Statuscode** (`200 OK` = alles in Ordnung), **Header** (`Content-Type: text/html` = „im Body folgt HTML“), **Leerzeile** und **Body**. Im **Body steht das HTML der Seite** – genau der Code aus `index.html`. Der Browser liest ihn und zeichnet daraus die Seite links.", hl: ["body"],
               addr: "https://lernportal.htl.at/index.html", page: START, server: IDLE, db: LOG(["GET /index.html → 200 OK"]), send: "res", packet: "200 OK + HTML", ins: RES_START, insTitle: "📩 Response (Server → Client)" },
-            { title: "Gibt es die Seite nicht: 404",
-              text: "Fragen wir nach `/gibtsnicht.html`, antwortet der Server trotzdem – mit dem Statuscode `404 Not Found`. Der Statuscode sagt, **ob** die Anfrage geklappt hat: `2xx` = ok, `3xx` = Weiterleitung, `4xx` = Fehler des Clients, `5xx` = Fehler des Servers.",
-              addr: "https://lernportal.htl.at/gibtsnicht.html", page: "<h4>Seite nicht gefunden</h4>", server: IDLE, db: LOG(["GET /index.html → 200 OK", "GET /gibtsnicht.html → 404 Not Found"]), send: "res", packet: "404 Not Found", ins: RES_404, insTitle: "📩 Response (Server → Client)" },
             { title: "Das Wesentliche an HTTP",
               text: "**1. Request → Response:** Der Client fragt, der Server antwortet – immer genau eine Antwort pro Anfrage, nie umgekehrt. **2. Zustandslos:** Jeder Request steht für sich, der Server merkt sich von sich aus nichts zwischen zwei Anfragen. **3. Textbasiert:** Startzeile, Header, Leerzeile, Body – lesbarer Text. **4. Methoden** sagen, *was* der Client will (`GET`, `POST`, …), **Statuscodes**, *wie* es ausgegangen ist.",
-              addr: "https://lernportal.htl.at/index.html", page: START, server: IDLE, db: LOG(["GET /index.html → 200 OK", "GET /gibtsnicht.html → 404 Not Found"]), ins: [["start", "<Methode> <Pfad> HTTP/1.1          bzw.   HTTP/1.1 <Statuscode> <Text>"], ["header", "Name: Wert"], ["blank", ""], ["body", "Inhalt (z. B. HTML oder Formulardaten)"]], insTitle: "🧩 Aufbau jeder HTTP-Nachricht" }
+              addr: "https://lernportal.htl.at/index.html", page: START, server: IDLE, db: LOG(["GET /index.html → 200 OK"]), ins: [["start", "<Methode> <Pfad> HTTP/1.1          bzw.   HTTP/1.1 <Statuscode> <Text>"], ["header", "Name: Wert"], ["blank", ""], ["body", "Inhalt (z. B. HTML oder Formulardaten)"]], insTitle: "🧩 Aufbau jeder HTTP-Nachricht" }
         ]
     },
     {
-        id: "url", label: "2 · Aufbau einer URL",
+        id: "fehler", label: "2 · Fehler 404",
         steps: [
-            { title: "Eine URL besteht aus Teilen",
-              text: "Die Adresse in der Adresszeile heißt **URL**. Unten ist sie in ihre Teile zerlegt – in den nächsten Schritten schauen wir sie einzeln an.",
-              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2#treffer", page: ERGEBNIS, server: IDLE, db: LOG([]), url: true, insTitle: "🔗 Die Teile einer URL" },
-            { title: "Protokoll, Host und Port",
-              text: "`https://` ist das **Protokoll** – HTTP, verschlüsselt (das S steht für *secure*). Der **Host** `lernportal.htl.at` sagt, **welcher Server** gefragt wird. Der **Port** `:443` ist die „Tür“ am Server; bei https ist 443 Standard und wird meistens weggelassen.",
-              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2#treffer", page: ERGEBNIS, server: IDLE, db: LOG([]), url: true, hl: ["proto", "host", "port"], insTitle: "🔗 Die Teile einer URL" },
-            { title: "Pfad: welche Ressource?",
-              text: "Der **Pfad** `/search` sagt dem Server, **was** wir wollen – eine Datei oder eine Funktion. Er landet in der Startzeile des Requests: `GET /search?q=htl&seite=2 HTTP/1.1`.",
-              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2#treffer", page: ERGEBNIS, server: IDLE, db: LOG([]), url: true, hl: ["path"], insTitle: "🔗 Die Teile einer URL" },
-            { title: "Query-String: Daten in der URL",
-              text: "Alles nach dem `?` ist der **Query-String**: Paare aus **Schlüssel=Wert**, getrennt mit `&`. Genau hier landen bei **GET** die Formulardaten – `q` ist der `name` des Eingabefelds, `htl` der eingetippte Wert.",
-              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2#treffer", page: ERGEBNIS, server: IDLE, db: LOG([]), url: true, hl: ["query"], insTitle: "🔗 Die Teile einer URL" },
-            { title: "Fragment: der Anker",
-              text: "Das **Fragment** `#treffer` kennen wir aus L01.3: Es springt zum Element mit `id=\"treffer\"`. Das Fragment wird **nie an den Server geschickt** – der Browser erledigt den Sprung allein.",
-              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2#treffer", page: ERGEBNIS, server: IDLE, db: LOG([]), url: true, hl: ["frag"], insTitle: "🔗 Die Teile einer URL" }
+            { title: "Ausgangspunkt: Die Startseite ist geladen",
+              text: "Der Browser zeigt die Startseite. Jetzt vertippen wir uns in der Adresszeile – die Datei `gibtsnicht.html` liegt **nicht** am Server. Was passiert?",
+              addr: "https://lernportal.htl.at/index.html", page: START, server: IDLE, db: LOG(["GET /index.html → 200 OK"]), ins: null, insTitle: "Noch kein neuer Request." },
+            { title: "Ein ganz normaler Request",
+              text: "Die URL ändert sich, und der Browser schickt einen **ganz normalen GET-Request** mit dem Pfad `/gibtsnicht.html`. Der Browser weiß nicht, dass es die Datei nicht gibt – das kann nur der Server wissen.",
+              addr: "https://lernportal.htl.at/gibtsnicht.html", page: "<p style='color:#64748b'>⏳ lädt …</p>", server: IDLE, db: LOG(["GET /index.html → 200 OK"]), send: "req", packet: "GET /gibtsnicht.html", ins: REQ_404, hl: ["start"], insTitle: "📤 Request (Client → Server)" },
+            { title: "Der Server sucht – und findet nichts",
+              text: "Der Server bekommt den Request und sucht die Datei `gibtsnicht.html`. Sie existiert nicht. Trotzdem gilt: **Auf jeden Request kommt eine Response** – der Server schweigt nie.",
+              addr: "https://lernportal.htl.at/gibtsnicht.html", page: "<p style='color:#64748b'>⏳ lädt …</p>", server: BUSY("sucht /gibtsnicht.html … nicht gefunden!"), busy: true, db: LOG(["GET /index.html → 200 OK", "GET /gibtsnicht.html"]), ins: REQ_404, hl: ["start"], insTitle: "📥 Request angekommen" },
+            { title: "Die Response mit Statuscode 404",
+              text: "Die **Statuszeile** sagt `404 Not Found`. Der **Statuscode** zeigt, **ob** die Anfrage geklappt hat: `2xx` = ok, `3xx` = Weiterleitung, `4xx` = Fehler des Clients (hier: falsche Adresse), `5xx` = Fehler am Server.",
+              addr: "https://lernportal.htl.at/gibtsnicht.html", page: SEITE_404, server: IDLE, db: LOG(["GET /index.html → 200 OK", "GET /gibtsnicht.html → 404 Not Found"]), send: "res", packet: "404 Not Found", ins: RES_404, hl: ["start"], insTitle: "📩 Response (Server → Client)" },
+            { title: "Auch eine Fehler-Response hat Header und Body",
+              text: "Die Response hat **eigene Header** (`Content-Type: text/html` – im Body steckt HTML) und einen **eigenen Body**: eine kleine **Fehlerseite**. Genau die zeigt der Browser links an. Request und Response sind also zwei getrennte Nachrichten, jede mit Startzeile, Headern, Leerzeile und Body.",
+              addr: "https://lernportal.htl.at/gibtsnicht.html", page: SEITE_404, server: IDLE, db: LOG(["GET /index.html → 200 OK", "GET /gibtsnicht.html → 404 Not Found"]), ins: RES_404, hl: ["header", "body"], insTitle: "📩 Response – Header und Body der Fehlerseite" }
         ]
     },
     {
-        id: "get", label: "3 · GET-Request",
+        id: "url", label: "3 · Aufbau einer URL",
+        steps: [
+            { title: "Eine leere Adresszeile",
+              text: "Wir bauen eine **URL** Stück für Stück auf und schauen bei jedem Teil, **was im Browser passiert**. Noch steht nichts in der Adresszeile – der Browser weiß nicht, wen er fragen soll.",
+              addr: "", page: "<p style='color:#64748b'>(leer)</p>", server: IDLE, db: LOG([]), url: [], hl: [], insTitle: "🔗 Die URL wächst" },
+            { title: "Das Protokoll: https://",
+              text: "`https://` ist das **Protokoll**: Es sagt, **wie** gesprochen wird – HTTP, verschlüsselt (das S steht für *secure*). Es passiert aber noch **nichts**: Der Browser weiß noch nicht, **welcher Server** gemeint ist.",
+              addr: "https://", page: "<p style='color:#64748b'>(leer)</p>", server: IDLE, db: LOG([]), url: ["proto"], hl: ["proto"], insTitle: "🔗 Die URL wächst" },
+            { title: "Der Host: lernportal.htl.at – jetzt geht es los!",
+              text: "Mit dem **Host** weiß der Browser, **welchen Server** er fragen soll, und schickt einen Request. Ohne Pfad fragt er nach `/` – der Server liefert die **Startseite** (meist `index.html`).",
+              addr: "https://lernportal.htl.at", page: START, server: IDLE, db: LOG(["GET / → 200 OK"]), url: ["proto", "sub", "sld", "tld"], hl: HOST, insTitle: "🔗 Die URL wächst", send: "req", packet: "GET /" },
+            { title: "Den Host von rechts lesen: Top-Level-Domain .at",
+              text: "Einen Host liest man **von rechts nach links**, vom Großen zum Kleinen. Ganz rechts steht die **Top-Level-Domain** (TLD): `.at` für Österreich. Andere Beispiele: `.de`, `.com`, `.org`.",
+              addr: "https://lernportal.htl.at", page: START, server: IDLE, db: LOG(["GET / → 200 OK"]), url: ["proto", "sub", "sld", "tld"], hl: ["tld"], insTitle: "🔗 Die URL wächst" },
+            { title: "Die Domain: htl",
+              text: "Links davon steht die **Domain** (*Second-Level-Domain*) `htl`. Zusammen mit der TLD ergibt `htl.at` den Namen, den jemand für die Website **registriert** hat.",
+              addr: "https://lernportal.htl.at", page: START, server: IDLE, db: LOG(["GET / → 200 OK"]), url: ["proto", "sub", "sld", "tld"], hl: ["sld"], insTitle: "🔗 Die URL wächst" },
+            { title: "Die Subdomain: lernportal",
+              text: "Ganz links steht die **Subdomain** `lernportal`. Damit kann `htl.at` mehrere Bereiche anbieten, z. B. `lernportal.htl.at` oder `www.htl.at`. Auch `www` ist nur eine Subdomain.",
+              addr: "https://lernportal.htl.at", page: START, server: IDLE, db: LOG(["GET / → 200 OK"]), url: ["proto", "sub", "sld", "tld"], hl: ["sub"], insTitle: "🔗 Die URL wächst" },
+            { title: "Der Port: :443 – sichtbar ändert sich nichts",
+              text: "Der **Port** ist die „Tür“ am Server. Bei `https` ist `443` der Standard – deshalb schreibt man ihn meist **nicht** dazu. Die Seite bleibt gleich, weil der Browser ohnehin schon Tür 443 benutzt hat.",
+              addr: "https://lernportal.htl.at:443", page: START, server: IDLE, db: LOG(["GET / → 200 OK"]), url: ["proto", "sub", "sld", "tld", "port"], hl: ["port"], insTitle: "🔗 Die URL wächst" },
+            { title: "Der Pfad: /search – eine andere Seite",
+              text: "Der **Pfad** sagt dem Server, **welche Ressource** wir wollen. Der Browser schickt einen neuen Request mit `GET /search` und bekommt die **Suchseite**.",
+              addr: "https://lernportal.htl.at:443/search", page: SUCHSEITE, server: IDLE, db: LOG(["GET / → 200 OK", "GET /search → 200 OK"]), url: ["proto", "sub", "sld", "tld", "port", "path"], hl: ["path"], insTitle: "🔗 Die URL wächst", send: "req", packet: "GET /search" },
+            { title: "Der Query-String: ?q=htl – Daten an den Server",
+              text: "Nach dem `?` beginnt der **Query-String** mit **Schlüssel=Wert**: `q=htl`. Der Server liest den Suchbegriff und schickt **passende Ergebnisse**. Genau so schickt ein Formular mit `method=\"GET\"` seine Daten.",
+              addr: "https://lernportal.htl.at:443/search?q=htl", page: ERGEBNIS, server: IDLE, db: LOG(["GET / → 200 OK", "GET /search → 200 OK", "GET /search?q=htl → 200 OK"]), url: ["proto", "sub", "sld", "tld", "port", "path", "query"], hl: ["query"], insTitle: "🔗 Die URL wächst", send: "req", packet: "GET /search?q=htl" },
+            { title: "Ein weiterer Parameter: &seite=2",
+              text: "Mehrere Parameter werden mit `&` verbunden. `seite=2` sagt dem Server, dass wir die **zweite Ergebnisseite** wollen – wieder ein neuer Request, wieder eine neue Seite.",
+              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2", page: ERGEBNIS2, server: IDLE, db: LOG(["GET / → 200 OK", "GET /search → 200 OK", "GET /search?q=htl → 200 OK", "GET /search?q=htl&seite=2 → 200 OK"]), url: ["proto", "sub", "sld", "tld", "port", "path", "query", "query2"], hl: ["query2"], insTitle: "🔗 Die URL wächst", send: "req", packet: "GET /search?q=htl&seite=2" },
+            { title: "Das Fragment: #treffer – KEIN neuer Request!",
+              text: "Das **Fragment** `#treffer` kennen wir aus L01.3: Der Browser springt zum Element mit `id=\"treffer\"` und hebt es hervor. Schau auf den Server: **kein Paket, kein neuer Eintrag im Protokoll** – das Fragment wird **nie** an den Server geschickt.",
+              addr: "https://lernportal.htl.at:443/search?q=htl&seite=2#treffer", page: ERGEBNIS2_TREFFER, server: IDLE, db: LOG(["GET / → 200 OK", "GET /search → 200 OK", "GET /search?q=htl → 200 OK", "GET /search?q=htl&seite=2 → 200 OK"]), url: ["proto", "sub", "sld", "tld", "port", "path", "query", "query2", "frag"], hl: ["frag"], insTitle: "🔗 Die URL wächst" }
+        ]
+    },
+    {
+        id: "get", label: "4 · GET-Request",
         steps: [
             { title: "Ein Suchformular mit method=\"GET\"",
               text: "Unser Formular aus L01.4: `<form action=\"/search\" method=\"GET\">` mit einem Feld `name=\"q\"`. Die Benutzerin tippt „htl“ ein. Der Server wartet – noch hat ihn niemand gefragt.",
@@ -237,7 +280,7 @@ const TABS = [
         ]
     },
     {
-        id: "post", label: "4 · POST-Request",
+        id: "post", label: "5 · POST-Request",
         steps: [
             { title: "Ein Anmeldeformular mit method=\"POST\"",
               text: "Jetzt sollen Daten **gespeichert** werden: `<form action=\"/anmeldung\" method=\"POST\">`. Rechts die Datenbank des Servers – sie ist noch leer.",
@@ -257,7 +300,7 @@ const TABS = [
         ]
     },
     {
-        id: "idempotent", label: "5 · Idempotent?",
+        id: "idempotent", label: "6 · Idempotent?",
         steps: [
             { title: "Was heißt idempotent?",
               text: "Ein Request ist **idempotent**, wenn es **egal ist, wie oft** man ihn schickt: Einmal oder zehnmal – am Server kommt **derselbe Zustand** heraus. Wir testen das: Zuerst schicken wir die Suche dreimal.",
@@ -271,7 +314,7 @@ const TABS = [
         ]
     },
     {
-        id: "vergleich", label: "6 · GET vs. POST",
+        id: "vergleich", label: "7 · GET vs. POST",
         steps: [
             { title: "Der Vergleich", text: "Zum Schluss alles nebeneinander. Mit → kommt Zeile für Zeile dazu.", table: 1 },
             { title: "Wo liegen die Daten?", text: "**GET:** in der URL (Query-String nach `?`). **POST:** im Body des Requests.", table: 2 },
@@ -312,12 +355,18 @@ function buildTabs() {
 function inspector(st) {
     const body = $("#ins-body");
     $("#ins-title").innerHTML = "<span>" + (st.insTitle || "") + "</span>" + (st.table ? "" : st.url
-        ? '<span class="hx-legend">' + URL_TEILE.map(([k]) => `<span class="p-${k}">■ ${URL_NAMEN[k]}</span>`).join(" ") + "</span>"
+        ? '<span class="hx-legend">' + ["proto", "sub", "sld", "tld", "port", "path", "query", "frag"].map((k) => `<span class="p-${k}">■ ${URL_NAMEN[k]}</span>`).join(" ") + "</span>"
         : '<span class="hx-legend"><span class="p-start">■ Startzeile</span> <span class="p-header">■ Header</span> <span class="p-blank">■ Leerzeile</span> <span class="p-body">■ Body</span></span>');
     if (st.url) {
-        body.innerHTML = '<div class="ln" style="font-size:1.05rem">' + URL_TEILE.map(([k, v]) =>
-            `<span class="p-${k}${st.hl && st.hl.includes(k) ? " hl" : ""}" title="${URL_NAMEN[k]}">${esc(v)}</span>`).join("") + "</div>"
-            + '<div class="ln" style="margin-top:6px;color:var(--muted)">' + (st.hl ? st.hl.map((k) => URL_NAMEN[k]).join(" · ") : "Protokoll · Host · Port · Pfad · Query-String · Fragment") + "</div>";
+        const teile = URL_TEILE.filter(([k]) => st.url.includes(k) || (k === "dot" && st.url.includes("sld")));
+        body.innerHTML = '<div class="ln" style="font-size:1.15rem"><span>' + (teile.length ? teile.map(([k, v]) =>
+            `<span class="p-${k.replace("2", "")}${st.hl && st.hl.includes(k) ? " hl" : ""}" title="${URL_NAMEN[k]}">${esc(v)}</span>`).join("") : '<span style="color:var(--muted)">(leer)</span>') + "</span></div>";
+        const host = st.url.includes("tld") ? "lernportal.htl.at" : null;
+        const pfad = (st.url.includes("path") ? "/search" : "/") + (st.url.includes("query") ? "?q=htl" : "") + (st.url.includes("query2") ? "&seite=2" : "");
+        body.innerHTML += '<div class="ln" style="margin-top:8px;color:var(--muted)">' + (st.hl ? st.hl.filter((k) => URL_NAMEN[k]).map((k) => URL_NAMEN[k]).join(" · ") : "") + "</div>"
+            + (host ? `<div class="ln" style="margin-top:6px"><span class="tag">daraus wird</span><span class="p-start">GET ${esc(pfad)} HTTP/1.1</span></div><div class="ln"><span class="tag"></span><span class="p-header">Host: ${host}</span></div>`
+                + (st.url.includes("frag") ? '<div class="ln"><span class="tag"></span><span style="color:#fca5a5">#treffer wird NICHT mitgeschickt – das erledigt der Browser allein</span></div>' : "")
+                : '<div class="ln" style="margin-top:6px;color:var(--muted)">Noch kein Server bekannt – es kann kein Request losgehen.</div>');
         return;
     }
     if (st.table) {

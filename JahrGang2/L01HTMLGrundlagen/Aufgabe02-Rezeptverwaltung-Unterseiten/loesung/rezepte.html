@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Alle Rezepte – Kochbuch der 2BHIF</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="top">
+        <h1>
+            Kochbuch der 2BHIF
+        </h1>
+        <nav id="haupt-nav">
+            <ul>
+                <li>
+                    <a href="index.html">Startseite</a>
+                </li>
+                <li>
+                    <a href="rezepte.html">Alle Rezepte</a>
+                </li>
+                <li>
+                    <a href="einreichen.html">Rezept einreichen</a>
+                </li>
+            </ul>
+        </nav>
+        <form action="https://httpbin.org/post" method="POST">
+            <p>
+                <label for="benutzername">Benutzername:</label>
+                <input id="benutzername" type="text" name="benutzername" required>
+            </p>
+            <p>
+                <label for="passwort">Passwort:</label>
+                <input id="passwort" type="password" name="passwort" required>
+            </p>
+            <p>
+                <input id="angemeldet-bleiben" type="checkbox" name="angemeldet_bleiben" value="ja">
+                <label for="angemeldet-bleiben">Angemeldet bleiben</label>
+            </p>
+            <p>
+                <button type="submit">Anmelden</button>
+            </p>
+        </form>
+    </header>
+
+    <aside id="seiten-nav">
+        <h2>
+            Auf dieser Seite
+        </h2>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#uebersicht">Übersicht</a>
+                </li>
+                <li>
+                    <a href="#suppen">Suppen</a>
+                </li>
+                <li>
+                    <a href="#hauptspeisen">Hauptspeisen</a>
+                </li>
+                <li>
+                    <a href="#desserts">Desserts</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <section id="uebersicht">
+            <h2>
+                Übersicht
+            </h2>
+            <p>
+                Alle <strong>fünf</strong> Rezepte auf einen Blick.
+            </p>
+            <table>
+                <tr>
+                    <th>
+                        Rezept
+                    </th>
+                    <th>
+                        Kategorie
+                    </th>
+                    <th>
+                        Zeit
+                    </th>
+                    <th>
+                        Schwierigkeit
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="rezepte/kuerbiscremesuppe.html">Kürbiscremesuppe</a>
+                    </td>
+                    <td>
+                        Suppen
+                    </td>
+                    <td>
+                        30 min
+                    </td>
+                    <td>
+                        leicht
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="rezepte/wiener-schnitzel.html">Wiener Schnitzel</a>
+                    </td>
+                    <td>
+                        Hauptspeisen
+                    </td>
+                    <td>
+                        40 min
+                    </td>
+                    <td>
+                        mittel
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="rezepte/kaiserschmarrn.html">Kaiserschmarrn</a>
+                    </td>
+                    <td>
+                        Desserts
+                    </td>
+                    <td>
+                        25 min
+                    </td>
+                    <td>
+                        mittel
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="rezepte/apfelstrudel.html">Apfelstrudel</a>
+                    </td>
+                    <td>
+                        Desserts
+                    </td>
+                    <td>
+                        90 min
+                    </td>
+                    <td>
+                        schwer
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="index.html#rezept-der-woche">Palatschinken</a>
+                    </td>
+                    <td>
+                        Desserts
+                    </td>
+                    <td>
+                        20 min
+                    </td>
+                    <td>
+                        leicht
+                    </td>
+                </tr>
+            </table>
+        </section>
+        <section id="suppen">
+            <h2>
+                Suppen
+            </h2>
+            <article>
+                <h3>
+                    Kürbiscremesuppe
+                </h3>
+                <figure>
+                    <img src="bilder/kuerbiscremesuppe.svg" alt="Orange Kürbissuppe in einem weißen Teller" width="240">
+                    <figcaption>
+                        Kürbiscremesuppe mit Kürbiskernen
+                    </figcaption>
+                </figure>
+                <p>
+                    Eine <strong>cremige</strong> Suppe für kalte Herbsttage – fertig in <em>30 Minuten</em>.
+                </p>
+                <p>
+                    Zubereitungszeit: <strong>30 Minuten</strong> &bull; Schwierigkeit: leicht
+                </p>
+                <p>
+                    <a href="rezepte/kuerbiscremesuppe.html">Zum Rezept</a>
+                    <button type="button">Merken</button>
+                </p>
+            </article>
+        </section>
+        <section id="hauptspeisen">
+            <h2>
+                Hauptspeisen
+            </h2>
+            <article>
+                <h3>
+                    Wiener Schnitzel
+                </h3>
+                <figure>
+                    <img src="bilder/schnitzel.svg" alt="Goldbraunes Schnitzel mit einer Zitronenscheibe" width="240">
+                    <figcaption>
+                        Wiener Schnitzel mit Zitrone
+                    </figcaption>
+                </figure>
+                <p>
+                    <strong>Dünn</strong> geklopft und <em>goldbraun</em> herausgebacken – am besten mit Erdäpfelsalat.
+                </p>
+                <p>
+                    Zubereitungszeit: <strong>40 Minuten</strong> &bull; Schwierigkeit: mittel
+                </p>
+                <p>
+                    <a href="rezepte/wiener-schnitzel.html">Zum Rezept</a>
+                    <button type="button">Merken</button>
+                </p>
+            </article>
+        </section>
+        <section id="desserts">
+            <h2>
+                Desserts
+            </h2>
+            <article>
+                <h3>
+                    Kaiserschmarrn
+                </h3>
+                <figure>
+                    <img src="bilder/kaiserschmarrn.svg" alt="Zerrissener Kaiserschmarrn mit Rosinen und Staubzucker" width="240">
+                    <figcaption>
+                        Kaiserschmarrn mit Zwetschkenröster
+                    </figcaption>
+                </figure>
+                <p>
+                    Der <strong>österreichische Klassiker</strong> mit Rosinen und Zwetschkenröster.
+                </p>
+                <p>
+                    Zubereitungszeit: <strong>25 Minuten</strong> &bull; Schwierigkeit: mittel
+                </p>
+                <p>
+                    <a href="rezepte/kaiserschmarrn.html">Zum Rezept</a>
+                    <button type="button">Merken</button>
+                </p>
+            </article>
+            <article>
+                <h3>
+                    Apfelstrudel
+                </h3>
+                <figure>
+                    <img src="bilder/apfelstrudel.svg" alt="Apfelstrudel mit Staubzucker auf einem Teller" width="240">
+                    <figcaption>
+                        Apfelstrudel mit Staubzucker
+                    </figcaption>
+                </figure>
+                <p>
+                    Hauchdünner Teig, viel Apfel und <em>Zimt</em> – der <strong>Lieblingsnachtisch</strong> der Klasse.
+                </p>
+                <p>
+                    Zubereitungszeit: <strong>90 Minuten</strong> &bull; Schwierigkeit: schwer
+                </p>
+                <p>
+                    <a href="rezepte/apfelstrudel.html">Zum Rezept</a>
+                    <button type="button">Merken</button>
+                </p>
+            </article>
+            <article>
+                <h3>
+                    Palatschinken
+                </h3>
+                <figure>
+                    <img src="bilder/palatschinken.svg" alt="Drei gefüllte Palatschinken auf einem weißen Teller" width="240">
+                    <figcaption>
+                        Palatschinken mit Marillenmarmelade
+                    </figcaption>
+                </figure>
+                <p>
+                    Dünne Pfannkuchen, schnell gemacht – unser <strong>Rezept der Woche</strong>.
+                </p>
+                <p>
+                    Zubereitungszeit: <strong>20 Minuten</strong> &bull; Schwierigkeit: leicht
+                </p>
+                <p>
+                    <a href="index.html#rezept-der-woche">Zum Rezept</a>
+                    <button type="button">Merken</button>
+                </p>
+            </article>
+        </section>
+    </main>
+
+    <aside id="zusatz-info">
+        <h2>
+            Küchen-Tipp
+        </h2>
+        <p>
+            Teig immer <strong>rasten</strong> lassen. Mehr Tipps findest du bei <a href="https://www.chefkoch.de/">Chefkoch</a>.
+        </p>
+    </aside>
+
+    <footer>
+        <p>
+            &copy; 2026 Kochbuch der 2BHIF &bull; <a href="#top">Nach oben</a>
+        </p>
+        <p>
+            HTL Donaustadt<br>
+            Donaustadtstraße 45<br>
+            1220 Wien
+        </p>
+    </footer>
+</body>
+</html>

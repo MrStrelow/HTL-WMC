@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <title>Schüssel mit Teig und Schneebesen (Illustration)</title>
+  <rect width="320" height="200" fill="#eff6ff"/>
+  <path d="M80 100 h160 q-10 70 -80 70 q-70 0 -80 -70 z" fill="#94a3b8"/>
+  <ellipse cx="160" cy="100" rx="80" ry="16" fill="#fef9c3"/>
+  <line x1="200" y1="30" x2="170" y2="100" stroke="#475569" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="168" cy="98" rx="10" ry="16" fill="none" stroke="#475569" stroke-width="3"/>
+</svg>
